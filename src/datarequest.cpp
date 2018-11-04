@@ -45,11 +45,27 @@ bool DataRequestPrivate::startRequest(int type, const QUrl &url)
     if (reply == NULL)
         return false;
 
+    reply->setReadBufferSize(0);
+    reply->setTextModeEnabled(true);
+    qDebug()<<"REQUEST:" << url.toString() << "\n\t> Header:" << reply->rawHeaderList();
     Q_Q(DataRequest);
-    QObject::connect(reply, &QNetworkReply::finished, [=](){ emit q->dataReady(type, reply->readAll()); });
+
+    QObject::connect(m_network, &QNetworkAccessManager::finished, reply, [=](QNetworkReply *nr){
+        if (nr != reply) return ;
+        qDebug()<<"NETWORK:" <<nr->readAll();
+    });
+    //    QObject::connect(reply, &QNetworkReply::finished, [=](){ emit q->dataReady(type, reply->readAll()); });
+    QObject::connect(reply, &QNetworkReply::readyRead, [=](){
+
+        while (!reply->atEnd())
+            qDebug() << reply->readAll();
+
+//        emit q->dataReady(type, reply->readAll());
+    });
     QObject::connect(reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
                      [=](QNetworkReply::NetworkError code) {
 
+        qDebug()<<"REQUEST:" << url.toString() << "\n\t ERROR: #" << code << ">" << reply->errorString();
     });
     QObject::connect(reply, &QNetworkReply::downloadProgress, [=](qint64 bytesReceived, qint64 bytesTotal) {
         if (bytesTotal == 0)

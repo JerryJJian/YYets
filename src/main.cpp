@@ -3,6 +3,7 @@
 #include <QNetworkAccessManager>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include "dataparser.h"
 #include "datarequest.h"
 #include "listmodel.h"
 #include "movielistitem.h"
@@ -16,19 +17,20 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
+    // network request & parser
     QNetworkAccessManager *network = new QNetworkAccessManager(&app);
     DataRequest *dataRequest = new DataRequest(network, &app);
+    DataParser  *dataParser  = new DataParser(dataRequest);
+    QObject::connect(dataRequest, &DataRequest::dataReady, dataParser, &DataParser::dataReceived);
+
     ListModel *indexModel = new ListModel(new MovieListItem, dataRequest);
 
-    QObject::connect(dataRequest, &DataRequest::dataReady, dataRequest, [=](int type, const QByteArray &data){
-        qDebug()<<Q_FUNC_INFO << ">" << type << data;
+    QObject::connect(dataParser, &DataParser::updateData, [=](int type, const QList<ListItem*> &items){
         switch (type)
         {
         case DataRequest::INDEX:
         {
-            QJsonDocument doc = QJsonDocument::fromJson(data);
-
-
+            indexModel->updateRows(items);
         } break;
         }
     });

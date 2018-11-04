@@ -28,12 +28,10 @@ public:
         PosterSmallRole,
     };
 
-    int id() const;
-    QHash<int, QByteArray> roleNames() const;
+    QString id() const;
 
 private:
     void initRoles();
-    QHash<int, QByteArray> m_roleNames;
 };
 
 #endif // MOVIELISTITEM_H

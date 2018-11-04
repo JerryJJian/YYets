@@ -12,7 +12,9 @@ ApplicationWindow {
         anchors.fill: parent
         currentIndex: tabBar.currentIndex
 
-        IndexPage {}
+        IndexPage {
+
+        }
     }
 
     footer: TabBar {

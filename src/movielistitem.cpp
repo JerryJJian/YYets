@@ -11,16 +11,18 @@ MovieListItem::MovieListItem(QObject *parent)
 MovieListItem::MovieListItem(const QVariantMap &data, QObject *parent)
 {
     initRoles();
+
+    QMapIterator<QString, QVariant> it(data);
+    while (it.hasNext())
+    {
+        it.next();
+        setData(role(it.key()), it.value());
+    }
 }
 
-int MovieListItem::id() const
+QString MovieListItem::id() const
 {
-    return data(IdRole).toInt();
-}
-
-QHash<int, QByteArray> MovieListItem::roleNames() const
-{
-    return m_roleNames;
+    return data(IdRole).toString();
 }
 
 void MovieListItem::initRoles()

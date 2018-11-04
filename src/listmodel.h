@@ -48,18 +48,27 @@ class ListItem: public QObject
 
 public:
     ListItem(QObject* parent = 0)
-        : QObject(parent)
+        : QObject(parent),
+          m_isSelected(false)
     {}
 
     ListItem(const QMap<int, QVariant> &data, QObject* parent = 0)
-        : QObject(parent), m_data(data)
+        : QObject(parent), m_data(data),
+          m_isSelected(false)
     {}
 
     virtual ~ListItem() { }
 
-    virtual int id() const = 0;
-//    virtual bool selected() const = 0;
-//    virtual void setSelected(bool selected) = 0;
+    virtual QString id() const = 0;
+    virtual bool selected() const { return m_isSelected; }
+    virtual void setSelected(bool selected)
+    {
+        if (m_isSelected == selected)
+            return ;
+
+        m_isSelected = selected;
+        emit dataChanged();
+    }
 
     QVariant data(int role) const
     {
@@ -77,13 +86,17 @@ public:
         return true;
     }
 
-    virtual QHash<int, QByteArray> roleNames() const = 0;
+    QHash<int, QByteArray> roleNames() const { return m_roleNames; }
+    int role(const QString &name) const { return m_roleNames.key(name.toUtf8(), -1); }
+    QByteArray roleName(int role) const { return m_roleNames.value(role, "None"); }
 
 signals:
     void dataChanged();
 
-private:
+protected:
     QMap<int, QVariant> m_data;
+    QHash<int, QByteArray> m_roleNames;
+    bool m_isSelected;
 };
 
 class ListModel : public QAbstractListModel

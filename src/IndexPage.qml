@@ -1,20 +1,30 @@
 import QtQuick 2.11
 import QtQuick.Controls 2.4
 
-Item {
+ListView {
+    model: indexModel
+    delegate: Rectangle {
 
+        color: gray
+        width: parent.width - 10
+        height: 120
 
-    ListView {
-        anchors.fill: parent
-        model: indexModel
-        delegate: Rectangle {
+        Image {
+            id: posterImg
+            anchors.left: parent.left
+            anchors.leftMargin: 15
+            anchors.verticalCenter: parent.verticalCenter
+            width: 66
+            height: 100
+            source: poster
+        }
 
-            color: gray
-            width: parent.width - 10
-            height: 80
-
-
+        Label {
+            anchors.left: posterImg.right
+            anchors.leftMargin: 20
+            anchors.top: posterImg.top
+            text: cnname
         }
     }
-
 }
+
