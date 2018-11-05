@@ -40,64 +40,7 @@
 #include <QAbstractListModel>
 #include <QList>
 #include <QVariant>
-#include <QDebug>
-
-class ListItem: public QObject
-{
-    Q_OBJECT
-
-public:
-    ListItem(QObject* parent = 0)
-        : QObject(parent),
-          m_isSelected(false)
-    {}
-
-    ListItem(const QMap<int, QVariant> &data, QObject* parent = 0)
-        : QObject(parent), m_data(data),
-          m_isSelected(false)
-    {}
-
-    virtual ~ListItem() { }
-
-    virtual QString id() const = 0;
-    virtual bool selected() const { return m_isSelected; }
-    virtual void setSelected(bool selected)
-    {
-        if (m_isSelected == selected)
-            return ;
-
-        m_isSelected = selected;
-        emit dataChanged();
-    }
-
-    QVariant data(int role) const
-    {
-        return m_data.value(role, QVariant());
-    }
-
-    bool setData(int role, const QVariant &value)
-    {
-        if (!roleNames().contains(role))
-            return false;
-
-        m_data.insert(role, value);
-        emit dataChanged();
-
-        return true;
-    }
-
-    QHash<int, QByteArray> roleNames() const { return m_roleNames; }
-    int role(const QString &name) const { return m_roleNames.key(name.toUtf8(), -1); }
-    QByteArray roleName(int role) const { return m_roleNames.value(role, "None"); }
-
-signals:
-    void dataChanged();
-
-protected:
-    QMap<int, QVariant> m_data;
-    QHash<int, QByteArray> m_roleNames;
-    bool m_isSelected;
-};
+#include "listitem.h"
 
 class ListModel : public QAbstractListModel
 {
@@ -109,11 +52,8 @@ public:
     explicit ListModel(ListItem *prototype, QObject* parent = 0);
     ~ListModel();
     Q_INVOKABLE int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    Q_INVOKABLE int columnCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole);
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-    bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role = Qt::EditRole);
 
     ListItem *takeRow(int row);
     ListItem *find(const QString &id) const;
@@ -140,7 +80,6 @@ public slots:
     void clear();
     void cancelSlectectMode();
     void removeSelectedItems();
-    void setColumnIconTranslate(int column, int role, const QString &iconpath);
 
 signals:
     void dataModelUpdated();
@@ -156,12 +95,8 @@ private slots:
 
 private:
     ListItem *m_prototype;
-    QMap<int, int> m_header;
     QList<ListItem *> m_list;
     QHash<ListItem *, int> m_selectedItem;
-    QHash<QString, ListItem *> m_index;
-    // < column, <role, icon path> >
-    QMap<int, QPair<int, QString> > m_iconTrans;
     int m_effectCount;
 };
 

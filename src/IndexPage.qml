@@ -1,11 +1,11 @@
 import QtQuick 2.11
 import QtQuick.Controls 2.4
 
-ListView {
+GridView {
     model: indexModel
     delegate: Rectangle {
-
-        color: gray
+        id: delegate
+        color: "#F2F2F2"
         width: parent.width - 10
         height: 120
 
@@ -19,7 +19,7 @@ ListView {
             source: poster
         }
 
-        Label {
+        Text {
             anchors.left: posterImg.right
             anchors.leftMargin: 20
             anchors.top: posterImg.top

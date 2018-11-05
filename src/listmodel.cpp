@@ -36,7 +36,6 @@
 
 #include "listmodel.h"
 #include <QDebug>
-#include <QIcon>
 #include <QTimer>
 
 ListModel::ListModel(ListItem *prototype, QObject *parent) :
@@ -50,28 +49,16 @@ int ListModel::rowCount(const QModelIndex &parent) const
     return m_list.size();
 }
 
-int ListModel::columnCount(const QModelIndex &parent) const
-{
-    return m_header.size();
-}
-
 QVariant ListModel::data(const QModelIndex &index, int role) const
 {
     if(index.row() < 0 || index.row() >= m_list.size())
         return QVariant();
 
     ListItem *item = m_list.at(index.row());
-    if (item == NULL) return QVariant();
+    if (item == NULL)
+        return QVariant();
 
-    switch (role)
-    {
-    case Qt::DisplayRole:    return item->data(m_header.value(index.column()));
-    case Qt::DecorationRole: return m_iconTrans.contains(index.column())
-                ? QIcon(m_iconTrans.value(index.column()).second
-                         .arg(item->data(m_iconTrans.value(index.column()).first).toString()))
-                : QVariant();
-    }
-    return item->data(role == Qt::DisplayRole ? m_header.value(index.column()) : role);
+    return item->data(role);
 }
 
 bool ListModel::setData(const QModelIndex &index, const QVariant &value, int role)
@@ -84,29 +71,6 @@ bool ListModel::setData(const QModelIndex &index, const QVariant &value, int rol
         return false;
 
     return item->setData(role, value);
-}
-
-QVariant ListModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
-    if (role != Qt::DisplayRole)
-        return QVariant();
-
-    if (orientation != Qt::Horizontal)
-        return QVariant(section);
-
-    return m_prototype->data(m_header.value(section));
-}
-
-bool ListModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
-{
-    if (orientation != Qt::Horizontal)
-        return false;
-
-    beginInsertColumns(QModelIndex(), section, section);
-    m_header.insert(section, role);
-    m_prototype->setData(role, value);
-    endInsertColumns();
-    return true;
 }
 
 ListModel::~ListModel()
@@ -125,9 +89,6 @@ void ListModel::updateRows(const QList<ListItem *> &items)
 
 void ListModel::prependRows(const QList<ListItem *> &items)
 {
-    if (items.isEmpty())
-        return ;
-
     beginResetModel();
     for (int i=items.size() - 1; i>=0; i--)
     {
@@ -136,7 +97,6 @@ void ListModel::prependRows(const QList<ListItem *> &items)
             continue;
         connect(item, SIGNAL(dataChanged()), SLOT(handleItemChange()));
         m_list.prepend(item);
-        m_index.insert(item->id(), item);
     }
     endResetModel();
 
@@ -154,7 +114,6 @@ void ListModel::appendRow(ListItem *item)
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
     connect(item, SIGNAL(dataChanged()), SLOT(handleItemChange()));
     m_list.append(item);
-    m_index.insert(item->id(), item);
     endInsertRows();
 
     emit dataModelChanged();
@@ -165,8 +124,6 @@ void ListModel::appendRow(ListItem *item)
 
 void ListModel::appendRows(const QList<ListItem *> &items)
 {
-    if (items.isEmpty())
-        return ;
     beginInsertRows(QModelIndex(), rowCount(), rowCount()+items.size()-1);
     foreach(ListItem *item, items)
     {
@@ -174,7 +131,6 @@ void ListModel::appendRows(const QList<ListItem *> &items)
             continue;
         connect(item, SIGNAL(dataChanged()), SLOT(handleItemChange()));
         m_list.append(item);
-        m_index.insert(item->id(), item);
     }
     endInsertRows();
     emit dataModelChanged();
@@ -191,7 +147,6 @@ void ListModel::insertRow(int row, ListItem *item)
     beginInsertRows(QModelIndex(), row, row);
     connect(item, SIGNAL(dataChanged()), SLOT(handleItemChange()));
     m_list.insert(row, item);
-    m_index.insert(item->id(), item);
     endInsertRows();
     emit dataModelChanged();
     emit countChanged(rowCount());
@@ -223,7 +178,13 @@ void ListModel::handleItemChange()
 
 ListItem *ListModel::find(const QString &id) const
 {
-    return m_index.value(id, NULL);
+    foreach(ListItem *item, m_list)
+    {
+        if(item != NULL && item->id() == id)
+            return item;
+    }
+
+    return 0;
 }
 
 QModelIndex ListModel::indexFromItem(const ListItem *item) const
@@ -231,16 +192,11 @@ QModelIndex ListModel::indexFromItem(const ListItem *item) const
     if (item == NULL)
         return QModelIndex();
 
-//    for(int row=0; row<m_list.size(); ++row)
-//    {
-//        if(m_list.at(row) == item)
-//            return index(row);
-//    }
-
-    int row = m_list.indexOf(const_cast<ListItem *> (item));
-
-    if (row >=0 && row < m_list.size())
-        return this->index(row);
+    for(int row=0; row<m_list.size(); ++row)
+    {
+        if(m_list.at(row) == item)
+            return index(row);
+    }
 
     return QModelIndex();
 }
@@ -253,7 +209,6 @@ void ListModel::clear()
     beginResetModel();
     qDeleteAll(m_list);
     m_list.clear();
-    m_index.clear();
     m_selectedItem.clear();
     endResetModel();
 }
@@ -282,7 +237,6 @@ bool ListModel::removeRow(int row, const QModelIndex &parent)
     beginRemoveRows(QModelIndex(), row, row);
     ListItem *item = m_list.takeAt(row);
     m_selectedItem.remove(item);
-    m_index.remove(item->id());
     if (item != NULL)
         item->deleteLater();
 
@@ -305,7 +259,6 @@ bool ListModel::removeRows(int row, int count, const QModelIndex &parent)
     {
         ListItem *item = m_list.takeAt(row);
         m_selectedItem.remove(item);
-        m_index.remove(item->id());
         if (item != NULL)
             item->deleteLater();
     }
@@ -324,21 +277,19 @@ QHash<int, QByteArray> ListModel::roleNames() const
 
 QString ListModel::data(int index, QString roleName)
 {
-    return data(this->index(index), roleNames().key(roleName.toUtf8())).toString();
+    QHashIterator<int, QByteArray> it(m_prototype->roleNames());
 
-//    QHashIterator<int, QByteArray> it(m_prototype->roleNames());
+    while (it.hasNext())
+    {
+        it.next();
+        if (it.value() == roleName)
+        {
+            int role = it.key();
+            return data(this->index(index), role).toString();
+        }
+    }
 
-//    while (it.hasNext())
-//    {
-//        it.next();
-//        if (it.value() == roleName)
-//        {
-//            int role = it.key();
-//            return data(this->index(index), role).toString();
-//        }
-//    }
-
-//    return QString();
+    return QString();
 }
 
 bool ListModel::selectedMode() const
@@ -380,17 +331,10 @@ void ListModel::removeSelectedItems()
     cancelSlectectMode();
 }
 
-void ListModel::setColumnIconTranslate(int column, int role, const QString &iconpath)
-{
-    m_iconTrans.insert(column, qMakePair<int, QString> (role, iconpath));
-}
-
 ListItem *ListModel::takeRow(int row)
 {
     beginRemoveRows(QModelIndex(), row, row);
     ListItem *item = m_list.takeAt(row);
-    m_selectedItem.remove(item);
-    m_index.remove(item->id());
     endRemoveRows();
 
     return item;

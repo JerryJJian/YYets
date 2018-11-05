@@ -17,7 +17,8 @@ SOURCES += \
     listmodel.cpp \
     datarequest.cpp \
     movielistitem.cpp \
-    dataparser.cpp
+    dataparser.cpp \
+    listitem.cpp
 
 RESOURCES += qml.qrc
 
@@ -37,4 +38,5 @@ HEADERS += \
     datarequest.h \
     datarequest_p.h \
     movielistitem.h \
-    dataparser.h
+    dataparser.h \
+    listitem.h

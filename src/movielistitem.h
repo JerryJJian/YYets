@@ -1,7 +1,7 @@
 #ifndef MOVIELISTITEM_H
 #define MOVIELISTITEM_H
 
-#include "listmodel.h"
+#include "listitem.h"
 
 #include <QObject>
 
@@ -11,11 +11,11 @@ class MovieListItem : public ListItem
     Q_ENUMS(Status)
 public:
     explicit MovieListItem(QObject *parent = 0);
-    explicit MovieListItem(const QVariantMap &data, QObject *parent = 0);
+    explicit MovieListItem(const QVariantHash &data, QObject *parent = 0);
 
     enum Roles
     {
-        IdRole = Qt::UserRole + 1,
+        IdRole = UserRole + 1,
         NameRole,
         ChannelRole,
         AreaRole,
@@ -25,7 +25,7 @@ public:
         PosterRole,
         PosterBigRole,
         PosterMiddleRole,
-        PosterSmallRole,
+        PosterSmallRole
     };
 
     QString id() const;

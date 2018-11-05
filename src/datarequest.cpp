@@ -37,9 +37,9 @@ DataRequestPrivate::~DataRequestPrivate()
 bool DataRequestPrivate::startRequest(int type, const QUrl &url)
 {
     QNetworkRequest request(url);
-    request.setRawHeader("Accept-Encoding", "gzip");
-    request.setRawHeader("Connection",      "Keep-Alive");
-    request.setRawHeader("User-Agent",      "okhttp/3.5.0");
+//    request.setRawHeader("Accept-Encoding", "gzip");
+//    request.setRawHeader("Connection",      "Keep-Alive");
+//    request.setRawHeader("User-Agent",      "okhttp/3.5.0");
 
     QNetworkReply *reply = m_network->get(request);
     if (reply == NULL)
@@ -50,18 +50,8 @@ bool DataRequestPrivate::startRequest(int type, const QUrl &url)
     qDebug()<<"REQUEST:" << url.toString() << "\n\t> Header:" << reply->rawHeaderList();
     Q_Q(DataRequest);
 
-    QObject::connect(m_network, &QNetworkAccessManager::finished, reply, [=](QNetworkReply *nr){
-        if (nr != reply) return ;
-        qDebug()<<"NETWORK:" <<nr->readAll();
-    });
-    //    QObject::connect(reply, &QNetworkReply::finished, [=](){ emit q->dataReady(type, reply->readAll()); });
-    QObject::connect(reply, &QNetworkReply::readyRead, [=](){
 
-        while (!reply->atEnd())
-            qDebug() << reply->readAll();
-
-//        emit q->dataReady(type, reply->readAll());
-    });
+    QObject::connect(reply, &QNetworkReply::finished, [=](){ emit q->dataReady(type, reply->readAll()); });
     QObject::connect(reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
                      [=](QNetworkReply::NetworkError code) {
 

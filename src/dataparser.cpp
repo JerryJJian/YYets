@@ -7,6 +7,8 @@
 #include <QJsonValue>
 #include <QJsonParseError>
 #include "movielistitem.h"
+#include <QDebug>
+
 
 DataParser::DataParser(QObject *parent)
     : QObject(parent)
@@ -31,15 +33,11 @@ void DataParser::dataReceived(int type, const QByteArray &data)
             return ;
         }
 
-        qDebug() << doc.toVariant();
-        qDebug() << doc.object().keys();
         QJsonArray objects = doc.object().value("data").toObject().value("top").toArray();
-
         for (auto object : objects)
         {
-            ListItem *item = new MovieListItem(object.toVariant().toMap());
+            ListItem *item = new MovieListItem(object.toVariant().toHash());
             items << item;
-            qDebug() << "item #" << item->id() << ":" << item->data(MovieListItem::NameRole).toString();
         }
 
         emit updateData(type, items);

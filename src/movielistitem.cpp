@@ -8,16 +8,10 @@ MovieListItem::MovieListItem(QObject *parent)
     initRoles();
 }
 
-MovieListItem::MovieListItem(const QVariantMap &data, QObject *parent)
+MovieListItem::MovieListItem(const QVariantHash &data, QObject *parent)
+    : ListItem(data, parent)
 {
     initRoles();
-
-    QMapIterator<QString, QVariant> it(data);
-    while (it.hasNext())
-    {
-        it.next();
-        setData(role(it.key()), it.value());
-    }
 }
 
 QString MovieListItem::id() const
@@ -27,15 +21,15 @@ QString MovieListItem::id() const
 
 void MovieListItem::initRoles()
 {
-    m_roleNames.insert(IdRole,              "id"          );
-    m_roleNames.insert(NameRole,            "cnname"      );
-    m_roleNames.insert(ChannelRole,         "channel"     );
-    m_roleNames.insert(AreaRole,            "area"        );
-    m_roleNames.insert(CategoryRole,        "category"    );
-    m_roleNames.insert(PublishYearRole,     "publish_year");
-    m_roleNames.insert(PlayStatusRole,      "play_status" );
-    m_roleNames.insert(PosterRole,          "poster"      );
-    m_roleNames.insert(PosterBigRole,       "poster_b"    );
-    m_roleNames.insert(PosterMiddleRole,    "poster_m"    );
-    m_roleNames.insert(PosterSmallRole,     "poster_s"    );
+    setRoleName(IdRole,              "id"          );
+    setRoleName(NameRole,            "cnname"      );
+    setRoleName(ChannelRole,         "channel"     );
+    setRoleName(AreaRole,            "area"        );
+    setRoleName(CategoryRole,        "category"    );
+    setRoleName(PublishYearRole,     "publish_year");
+    setRoleName(PlayStatusRole,      "play_status" );
+    setRoleName(PosterRole,          "poster"      );
+    setRoleName(PosterBigRole,       "poster_b"    );
+    setRoleName(PosterMiddleRole,    "poster_m"    );
+    setRoleName(PosterSmallRole,     "poster_s"    );
 }
