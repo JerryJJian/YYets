@@ -15,6 +15,8 @@ ApplicationWindow {
         IndexPage {
 
         }
+
+
     }
 
     footer: TabBar {

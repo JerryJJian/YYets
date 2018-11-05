@@ -3,5 +3,7 @@
         <file>main.qml</file>
         <file>qtquickcontrols2.conf</file>
         <file>IndexPage.qml</file>
+        <file>ResourcePage.qml</file>
+        <file>ResourcePageForm.ui.qml</file>
     </qresource>
 </RCC>
