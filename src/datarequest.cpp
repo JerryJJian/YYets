@@ -23,6 +23,13 @@ void DataRequest::requestIndex(int mediaSize, int articleSize)
     d->startRequest(INDEX, QUrl(url.arg(mediaSize).arg(articleSize)));
 }
 
+void DataRequest::requestReource(int id)
+{
+    Q_D(DataRequest);
+    QString url(DataRequestPrivate::RequestURL.arg("a=resource&m=index&id=%1"));
+    d->startRequest(RESOURCE, QUrl(url.arg(id)));
+}
+
 DataRequestPrivate::DataRequestPrivate(QNetworkAccessManager *network)
     : m_network(network)
 {
@@ -37,9 +44,6 @@ DataRequestPrivate::~DataRequestPrivate()
 bool DataRequestPrivate::startRequest(int type, const QUrl &url)
 {
     QNetworkRequest request(url);
-//    request.setRawHeader("Accept-Encoding", "gzip");
-//    request.setRawHeader("Connection",      "Keep-Alive");
-//    request.setRawHeader("User-Agent",      "okhttp/3.5.0");
 
     QNetworkReply *reply = m_network->get(request);
     if (reply == NULL)

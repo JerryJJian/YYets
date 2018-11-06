@@ -18,21 +18,19 @@ DataParser::DataParser(QObject *parent)
 
 void DataParser::dataReceived(int type, const QByteArray &data)
 {
+    QJsonParseError error;
+    QJsonDocument doc = QJsonDocument::fromJson(data, &error);
+    if (error.error != QJsonParseError::NoError)
+    {
+        qDebug() << "ERROR:" << type << error.errorString();
+        return ;
+    }
+
     QList<ListItem *> items;
     switch (type)
     {
     case DataRequest::INDEX:
     {
-        QJsonParseError error;
-        QJsonDocument doc = QJsonDocument::fromJson(data, &error);
-
-        qDebug() << data << "\n" << doc.object();
-        if (error.error != QJsonParseError::NoError)
-        {
-            qDebug() << "ERROR:" << type << error.errorString();
-            return ;
-        }
-
         QJsonArray objects = doc.object().value("data").toObject().value("top").toArray();
         for (auto object : objects)
         {
@@ -40,7 +38,12 @@ void DataParser::dataReceived(int type, const QByteArray &data)
             items << item;
         }
 
-        emit updateData(type, items);
+        emit updateData(type, objects.toVariantList(), items);
+    } break;
+    case DataRequest::RESOURCE:
+    {
+        QJsonObject object = doc.object().value("data").toObject().value("resource").toObject();
+        emit updateData(type, object.toVariantHash());
     } break;
     case DataRequest::ITEM:
     {

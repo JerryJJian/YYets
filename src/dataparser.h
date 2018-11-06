@@ -13,7 +13,7 @@ public:
     explicit DataParser(QObject *parent = nullptr);
 
 signals:
-    void updateData(int type, const QList<ListItem*> &items);
+    void updateData(int type, const QVariant &rawdata, const QList<ListItem*> &items = QList<ListItem*>());
 
 public slots:
     void dataReceived(int type, const QByteArray &data);

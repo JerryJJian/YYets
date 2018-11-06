@@ -8,6 +8,7 @@
 #include "datarequest.h"
 #include "listmodel.h"
 #include "movielistitem.h"
+#include "dataset.h"
 #include <QDebug>
 
 int main(int argc, char *argv[])
@@ -26,20 +27,29 @@ int main(int argc, char *argv[])
     QObject::connect(dataRequest, &DataRequest::dataReady, dataParser, &DataParser::dataReceived);
 
     ListModel *indexModel = new ListModel(new MovieListItem, dataRequest);
-    QObject::connect(dataParser, &DataParser::updateData, [=](int type, const QList<ListItem*> &items){
+    DataSet *resourceData = new DataSet(dataParser);
+
+    QObject::connect(dataParser, &DataParser::updateData, [=](int type, const QVariant &rawdata, const QList<ListItem*> &items){
         switch (type)
         {
         case DataRequest::INDEX:
         {
             indexModel->updateRows(items);
         } break;
+        case DataRequest::RESOURCE:
+        {
+            resourceData->update(rawdata.toHash());
+        } break;
         }
     });
 
+
     dataRequest->requestIndex();
 
-    engine.rootContext()->setContextProperty("dataRequest", dataRequest);
-    engine.rootContext()->setContextProperty("indexModel",  indexModel);
+
+    engine.rootContext()->setContextProperty("dataRequest",   dataRequest);
+    engine.rootContext()->setContextProperty("indexModel",    indexModel);
+    engine.rootContext()->setContextProperty("resourceData",  resourceData);
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())

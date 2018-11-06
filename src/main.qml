@@ -7,33 +7,50 @@ ApplicationWindow {
     height: 480
     title: qsTr("Tabs")
 
-    SwipeView {
-        id: swipeView
-        anchors.fill: parent
-        currentIndex: tabBar.currentIndex
+    header: ToolBar {
+        contentHeight: toolButton.implicitHeight
 
-        IndexPage {
-
+        ToolButton {
+            id: toolButton
+            text: stackView.depth > 1 ? "\u25C0" : "\u2630"
+            font.pixelSize: Qt.application.font.pixelSize * 1.6
+            onClicked: {
+                if (stackView.depth > 1) {
+                    stackView.pop()
+                } else {
+                    drawer.open()
+                }
+            }
         }
 
-
+        Label {
+            text: stackView.currentItem.title
+            anchors.centerIn: parent
+        }
     }
 
-    footer: TabBar {
-        id: tabBar
-        currentIndex: swipeView.currentIndex
+    Drawer {
+        id: drawer
+        width: window.width * 0.66
+        height: window.height
 
-        TabButton {
-            text: qsTr("Top")
+        Column {
+            anchors.fill: parent
+
+            ItemDelegate {
+                text: qsTr("Top")
+                width: parent.width
+                onClicked: {
+                    stackView.push("IndexPage.qml")
+                    drawer.close()
+                }
+            }
         }
-        TabButton {
-            text: qsTr("Search")
-        }
-        TabButton {
-            text: qsTr("Favirout")
-        }
-        TabButton {
-            text: qsTr("Updated")
-        }
+    }
+
+    StackView {
+        id: stackView
+        anchors.fill: parent
+        initialItem: "IndexPage.qml"
     }
 }
