@@ -16,8 +16,11 @@ public:
 
     bool startRequest(int type, const QUrl &url);
 
+    bool m_isUpdatingIndex;
+
     QNetworkAccessManager *m_network;
     QNetworkRequest *m_request;
+
 
     const static QString RequestURL;
 };

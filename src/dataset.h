@@ -13,6 +13,7 @@ public:
     Q_INVOKABLE QString data(const QString &key) const;
 
 signals:
+    void refreshView();
 
 public slots:
     void setData(const QString &key, const QVariant &data);
@@ -22,6 +23,7 @@ private:
     struct PrivateData
     {
         QHash<QString, QString> printableData;
+        bool enableRefresh;
     } d;
 };
 

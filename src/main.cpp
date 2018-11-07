@@ -35,6 +35,7 @@ int main(int argc, char *argv[])
         case DataRequest::INDEX:
         {
             indexModel->updateRows(items);
+            dataRequest->setIsUpdatingIndex(false);
         } break;
         case DataRequest::RESOURCE:
         {

@@ -2,6 +2,7 @@ import QtQuick 2.11
 import QtQuick.Controls 2.4
 
 ApplicationWindow {
+    id: window
     visible: true
     width: 640
     height: 480
@@ -41,16 +42,31 @@ ApplicationWindow {
                 text: qsTr("Top")
                 width: parent.width
                 onClicked: {
-                    stackView.push("IndexPage.qml")
+                    while (stackView.depth > 0) stackView.pop()
+                    stackView.push(indexPage)
                     drawer.close()
                 }
             }
         }
     }
 
+    property Component resourcePage: ResourcePage { }
+
+    property Component indexPage: IndexPage {
+        onOpenResource: {
+            stackView.push(resourcePage)
+            stackView.currentItem.forceActiveFocus()
+            dataRequest.requestReource(id)
+        }
+    }
+
     StackView {
         id: stackView
         anchors.fill: parent
-        initialItem: "IndexPage.qml"
+        initialItem: indexPage
+
+        onCurrentItemChanged: {
+            currentItem.forceActiveFocus();
+        }
     }
 }

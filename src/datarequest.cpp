@@ -20,7 +20,7 @@ void DataRequest::requestIndex(int mediaSize, int articleSize)
     Q_D(DataRequest);
 
     QString url(DataRequestPrivate::RequestURL.arg("a=index&m=index&tlimit=%1&alimit=%2"));
-    d->startRequest(INDEX, QUrl(url.arg(mediaSize).arg(articleSize)));
+    setIsUpdatingIndex(d->startRequest(INDEX, QUrl(url.arg(mediaSize).arg(articleSize))));
 }
 
 void DataRequest::requestReource(int id)
@@ -30,8 +30,25 @@ void DataRequest::requestReource(int id)
     d->startRequest(RESOURCE, QUrl(url.arg(id)));
 }
 
+bool DataRequest::getIsUpdatingIndex() const
+{
+    Q_D(const DataRequest);
+    return d->m_isUpdatingIndex;
+}
+
+void DataRequest::setIsUpdatingIndex(bool value)
+{
+    Q_D(DataRequest);
+    if (d->m_isUpdatingIndex == value)
+        return ;
+
+    d->m_isUpdatingIndex = value;
+    emit isUpdatingIndexChanged(d->m_isUpdatingIndex);
+}
+
 DataRequestPrivate::DataRequestPrivate(QNetworkAccessManager *network)
-    : m_network(network)
+    : m_isUpdatingIndex(false),
+      m_network(network)
 {
 
 }

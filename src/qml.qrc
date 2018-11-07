@@ -4,5 +4,6 @@
         <file>qtquickcontrols2.conf</file>
         <file>IndexPage.qml</file>
         <file>ResourcePage.qml</file>
+        <file>images/loading.png</file>
     </qresource>
 </RCC>

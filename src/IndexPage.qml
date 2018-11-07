@@ -2,10 +2,16 @@ import QtQuick 2.11
 import QtQuick.Controls 2.4
 
 Page {
+    id: root
     title: qsTr("Top")
+    signal openResource(int id)
 
     ListView {
-        anchors.fill: parent
+        id: topList
+        anchors.left: parent.left
+        anchors.right: parent.right
+        y: 0
+        height: parent.height
         model: indexModel
 
         delegate: Rectangle {
@@ -58,7 +64,7 @@ Page {
             MouseArea {
                 id: ma
                 anchors.fill: parent
-                onClicked: console.log("open item #" + id)
+                onClicked: openResource(id)
             }
 
             Rectangle {
@@ -69,7 +75,17 @@ Page {
                 color: "#CACACA"
             }
         }
+
+        BusyIndicator {
+            id: busyIndicator
+            anchors.centerIn: parent
+            visible: running
+            running: dataRequest.isUpdatingIndex
+        }
     }
+
+
+
 }
 
 
