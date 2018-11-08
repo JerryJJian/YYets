@@ -41,6 +41,10 @@ int main(int argc, char *argv[])
         {
             resourceData->update(rawdata.toHash());
         } break;
+        case DataRequest::ITEM:
+        {
+
+        } break;
         }
     });
 

@@ -11,6 +11,9 @@ public:
     explicit DataSet(QObject *parent = nullptr);
 
     Q_INVOKABLE QString data(const QString &key) const;
+    Q_INVOKABLE QStringList dataList(const QString &key, const QString &splitBy = StringListSeparator) const;
+    Q_INVOKABLE int dataListSize(const QString &key, const QString &splitBy = StringListSeparator) const;
+    Q_INVOKABLE QString dataListAt(const QString &key, int index, const QString &splitBy = StringListSeparator) const;
 
 signals:
     void refreshView();
@@ -25,6 +28,8 @@ private:
         QHash<QString, QString> printableData;
         bool enableRefresh;
     } d;
+
+    static const QString StringListSeparator;
 };
 
 #endif // DATASET_H

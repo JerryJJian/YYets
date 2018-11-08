@@ -32,7 +32,8 @@ signals:
 
 public slots:
     void requestIndex(int mediaSize = 10, int articleSize = 10);
-    void requestReource(int id);
+    void requestResource(int id);
+    void requestResourceItem(int id, int season = -1, int episode = -1);
 
 };
 

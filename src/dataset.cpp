@@ -2,6 +2,8 @@
 
 #include <QDateTime>
 
+const QString DataSet::StringListSeparator(QLatin1Literal("|"));
+
 DataSet::DataSet(QObject *parent)
     : QObject(parent)
 {
@@ -11,6 +13,30 @@ DataSet::DataSet(QObject *parent)
 QString DataSet::data(const QString &key) const
 {
     return d.printableData.value(key);
+}
+
+QStringList DataSet::dataList(const QString &key, const QString &splitBy) const
+{
+    if (d.printableData.value(key).isEmpty())
+        return QStringList();
+
+    return d.printableData.value(key).split(splitBy);
+}
+
+int DataSet::dataListSize(const QString &key, const QString &splitBy) const
+{
+    if (d.printableData.value(key).isEmpty())
+        return 0;
+
+    return d.printableData.value(key).split(splitBy).size();
+}
+
+QString DataSet::dataListAt(const QString &key, int index, const QString &splitBy) const
+{
+    if (d.printableData.value(key).isEmpty())
+        return QString();
+
+    return d.printableData.value(key).split(splitBy).value(index);
 }
 
 void DataSet::setData(const QString &key, const QVariant &data)
@@ -28,7 +54,7 @@ void DataSet::setData(const QString &key, const QVariant &data)
         for (auto item : data.toList())
             items << item.toString();
 
-        d.printableData.insert(key, items.join("/"));
+        d.printableData.insert(key, items.join(StringListSeparator));
         if (d.enableRefresh) emit refreshView();
         return ;
     }
@@ -53,6 +79,7 @@ void DataSet::setData(const QString &key, const QVariant &data)
 void DataSet::update(const QVariantHash &data)
 {
     d.enableRefresh = false;
+    d.printableData.clear();
     QHashIterator<QString, QVariant> it(data);
     while (it.hasNext())
     {

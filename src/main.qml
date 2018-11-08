@@ -56,7 +56,7 @@ ApplicationWindow {
         onOpenResource: {
             stackView.push(resourcePage)
             stackView.currentItem.forceActiveFocus()
-            dataRequest.requestReource(id)
+            dataRequest.requestResource(id)
         }
     }
 

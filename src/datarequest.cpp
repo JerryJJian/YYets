@@ -23,11 +23,18 @@ void DataRequest::requestIndex(int mediaSize, int articleSize)
     setIsUpdatingIndex(d->startRequest(INDEX, QUrl(url.arg(mediaSize).arg(articleSize))));
 }
 
-void DataRequest::requestReource(int id)
+void DataRequest::requestResource(int id)
 {
     Q_D(DataRequest);
     QString url(DataRequestPrivate::RequestURL.arg("a=resource&m=index&id=%1"));
     d->startRequest(RESOURCE, QUrl(url.arg(id)));
+}
+
+void DataRequest::requestResourceItem(int id, int season, int episode)
+{
+    Q_D(DataRequest);
+    QString url(DataRequestPrivate::RequestURL.arg("a=resource_item&m=index%1&id=%2"));
+    d->startRequest(ITEM, QUrl(url.arg(season >= 0 ? QString("&season=%1&episode=%2").arg(season).arg(episode) : "").arg(id)));
 }
 
 bool DataRequest::getIsUpdatingIndex() const

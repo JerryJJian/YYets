@@ -12,17 +12,32 @@ Page {
             title = resourceData.data("cnname") === "" ? resourceData.data("enname") : resourceData.data("cnname")
             img.source = resourceData.data("poster_b")
             ennameLabel.text = resourceData.data("enname")
-            categoryLabel.text = resourceData.data("channel_cn") + (resourceData.data("tvstation") === "" ? "" : " - ") + resourceData.data("tvstation") + " @" + resourceData.data("premiere")
-            statusLabel.text = resourceData.data("play_status")
-            itemupdateLabel.text = resourceData.data("updatetime")
+            categoryLabel.text = resourceData.data("channel_cn") +" " + resourceData.data("category") + " " + resourceData.data("area") +"/"+ resourceData.data("lang")
+            statusLabel.text = resourceData.data("tvstation") + " @" + resourceData.data("premiere") + " - " + resourceData.data("play_status")
+            itemupdateLabel.text = "\u231A " + resourceData.data("updatetime")
             remarkLabel.text = resourceData.data("remark")
-            prevueLabel.text = "Prevue @" + resourceData.data("pre_play_time") + " " + resourceData.data("pre_week")
-            favoritesLabel.text = "\u2764 " + resourceData.data("favorites")
+            prevueLabel.text = "\u23F3 " + resourceData.data("prevue/play_time") + " " + resourceData.data("prevue/week") + " S" + resourceData.data("prevue/season") + "E" + resourceData.data("prevue/episode")
+            favoritesLabel.text = "No." + resourceData.data("rank") + " \u2665 " + resourceData.data("favorites")
             scoreLabel.text = resourceData.data("score")
             content.text = resourceData.data("content")
-            prevueLabel.visible = resourceData.data("pre_play_time") !== ""
+            prevueLabel.visible = resourceData.data("prevue/play_time") !== ""
             busyIndicator.running = false
+
+            for (var i=0; i<resourceData.dataListSize("season"); ++i) {
+                var episode = new Array();
+                var season = resourceData.dataListAt("season", i);
+                for (var j=0; j<resourceData.dataListSize("season/"+season); ++j)
+                    episode[j] = resourceData.dataListAt("season/"+season, j);
+
+                seasonModel.append({"season": resourceData.dataListAt("season", i), "episode": episode })
+            }
+
+            resourceArea.state = (seasonModel.count > 0 ? "tv" : "movie")
         }
+    }
+
+    ListModel {
+        id: seasonModel
     }
 
     Item {
@@ -46,7 +61,7 @@ Page {
         anchors.left: posterImg.right; anchors.leftMargin: 10
         anchors.right: parent.right;   anchors.rightMargin: 10
         anchors.top: parent.top;       anchors.topMargin: 30
-//        anchors.bottom: posterImg.bottom
+        //        anchors.bottom: posterImg.bottom
         spacing: ennameLabel.height
 
         Label { id: ennameLabel     }
@@ -75,11 +90,11 @@ Page {
         anchors.right: parent.right
 
         TabButton {
-            text: qsTr("Contents")
+            text: qsTr("Resources")
         }
 
         TabButton {
-            text: qsTr("Resources")
+            text: qsTr("Contents")
         }
 
         TabButton {
@@ -93,14 +108,102 @@ Page {
         anchors.right: parent.right; anchors.rightMargin: 10
         anchors.bottom: parent.bottom
         currentIndex: tabbar.currentIndex
-        Label {
-            id: content
+
+        ScrollView {
+            id: resourceArea
+            width: parent.width
+            height: parent.height
+            contentWidth: width
+            clip: true
+            ScrollBar.horizontal.interactive: true
+            ScrollBar.vertical.interactive: true
+            state: "none"
+            states: [
+                State {
+                    name: "none"
+                },
+                State {
+                    name: "tv"
+                    PropertyChanges { target: seasonResource;        visible: true }
+                    PropertyChanges { target: singleEpisodeResource; visible: false }
+                },
+                State {
+                    name: "movie"
+                    PropertyChanges { target: seasonResource;        visible: false }
+                    PropertyChanges { target: singleEpisodeResource; visible: true }
+                    StateChangeScript { script: dataRequest.requestResourceItem(resourceData.data("id"))}
+                }
+            ]
+
+            Rectangle {
+                id: singleEpisodeResource
+                anchors.fill: parent
+                visible: false
+            }
+
+            Column {
+                id: seasonResource
+                anchors.fill: parent
+                visible: false
+
+                Repeater {
+                    id: seasonRepeator
+                    width: parent.width
+                    model: seasonModel
+
+                    Item {
+                        width: parent.width
+                        height: seasonLabel.height + epsiodFlow.height
+
+                        Rectangle {
+                            id: flag
+                            color: "#4B8BD3"
+                            width: 3
+                            height: seasonLabel.height
+                        }
+
+                        Label {
+                            id: seasonLabel
+                            text: "Season " + season
+                            color: "#4B8BD3"
+                            anchors.left: flag.right; anchors.leftMargin: 2
+                            anchors.top: parent.top
+                        }
+
+                        Flow {
+                            id: epsiodFlow
+                            anchors.top: seasonLabel.bottom
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            Repeater {
+                                id: episodeRepeator
+                                model: episode
+                                delegate: ToolButton {
+                                    text: resourceData.dataListAt("season/"+season, index)
+                                    onClicked: console.log("S" + season + "E" + text)
+                                }
+                            }
+                        }
+                    }
+
+
+                }
+            }
         }
-        Rectangle {
-            color: 'plum'
-            implicitWidth: 300
-            implicitHeight: 200
+
+        ScrollView {
+            contentWidth: width
+            clip: true
+            ScrollBar.horizontal.interactive: true
+            ScrollBar.vertical.interactive: true
+
+            Label {
+                id: content
+                anchors.fill: parent
+                wrapMode: Label.WordWrap
+            }
         }
+
     }
 
 

@@ -6,6 +6,7 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QJsonParseError>
+#include "dataset.h"
 #include "movielistitem.h"
 #include <QDebug>
 
@@ -42,8 +43,23 @@ void DataParser::dataReceived(int type, const QByteArray &data)
     } break;
     case DataRequest::RESOURCE:
     {
-        QJsonObject object = doc.object().value("data").toObject().value("resource").toObject();
-        emit updateData(type, object.toVariantHash());
+        QVariantHash resHash = doc.object().value("data").toObject().value("resource").toObject().toVariantHash();
+        QVariantList seasonList = doc.object().value("data").toObject().value("season").toArray().toVariantList();
+        QStringList seasons;
+        for (auto season : seasonList)
+        {
+            QVariantMap seasonMap(season.toMap());
+            QString seasonNum(seasonMap.value("season").toString());
+            seasons.append(seasonNum);
+            QStringList episodeList;
+            for (auto ep : seasonMap.value("episode").toList())
+                episodeList << ep.toString();
+            resHash.insert(QString("season/%1").arg(seasonNum), episodeList.join("|"));
+        }
+        if (seasonList.size() > 0)
+            resHash.insert("season", seasons.join("|"));
+
+        emit updateData(type, resHash);
     } break;
     case DataRequest::ITEM:
     {
