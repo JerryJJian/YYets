@@ -32,7 +32,7 @@ Page {
                     anchors.centerIn: parent
                     width:  sourceSize.width > sourceSize.height ? 100 : sourceSize.width * height / sourceSize.height
                     height: sourceSize.width < sourceSize.height ? 100 : sourceSize.height * width / sourceSize.width
-                    source: poster
+                    source: poster_m
                     cache: true
                 }
             }
@@ -83,8 +83,6 @@ Page {
             running: dataRequest.isUpdatingIndex
         }
     }
-
-
 
 }
 

@@ -63,13 +63,13 @@ Page {
         anchors.top: parent.top;       anchors.topMargin: 30
         spacing: ennameLabel.height
 
-        Label { id: ennameLabel     }
-        Label { id: categoryLabel   }
-        Label { id: statusLabel     }
-        Label { id: itemupdateLabel }
-        Label { id: remarkLabel     }
-        Label { id: prevueLabel     }
-        Label { id: favoritesLabel  }
+        Label { id: ennameLabel    ; color: "#ADADAD" }
+        Label { id: categoryLabel  ; color: "#ADADAD" }
+        Label { id: statusLabel    ; color: "#ADADAD" }
+        Label { id: itemupdateLabel; color: "#ADADAD" }
+        Label { id: remarkLabel    ; color: "#ADADAD" }
+        Label { id: prevueLabel    ; color: "#ADADAD" }
+        Label { id: favoritesLabel ; color: "#ADADAD" }
     }
 
     Label {
@@ -154,40 +154,50 @@ Page {
 
                     Item {
                         width: parent.width
-                        height: seasonLabel.height + epsiodFlow.height
+                        height: seasonLabel.height + epsiodFlow.height + 30
 
                         Rectangle {
                             id: flag
                             color: "#4B8BD3"
                             width: 3
                             height: seasonLabel.height
+                            anchors.top: seasonLabel.top
                         }
 
                         Label {
                             id: seasonLabel
                             text: "Season " + season
                             color: "#4B8BD3"
-                            anchors.left: flag.right; anchors.leftMargin: 2
-                            anchors.top: parent.top
+                            font.bold: true
+                            anchors.left: flag.right; anchors.leftMargin: 5
+                            anchors.top: parent.top; anchors.topMargin: 15
+                            font.pixelSize: Qt.application.font.pixelSize * 1.2
                         }
 
                         Flow {
                             id: epsiodFlow
-                            anchors.top: seasonLabel.bottom
+                            spacing: 5
+                            anchors.top: seasonLabel.bottom; anchors.topMargin: 10
                             anchors.left: parent.left
                             anchors.right: parent.right
                             Repeater {
                                 id: episodeRepeator
                                 model: episode
-                                delegate: ToolButton {
+                                delegate: RoundButton {
+                                    flat: true
+                                    width: height
+                                    background: Rectangle {
+                                        radius: parent.width / 2
+                                        anchors.fill: parent
+                                        color: hovered || pressed ? "#e3e3e3" : "#F3F3F3"
+                                    }
+                                    hoverEnabled: true
                                     text: resourceData.dataListAt("season/"+season, index)
-                                    onClicked: console.log("S" + season + "E" + text)
+                                    onClicked: dataRequest.requestResourceItem(resourceData.data("id"), season, text)
                                 }
                             }
                         }
                     }
-
-
                 }
             }
         }

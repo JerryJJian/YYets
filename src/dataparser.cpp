@@ -63,6 +63,10 @@ void DataParser::dataReceived(int type, const QByteArray &data)
     } break;
     case DataRequest::ITEM:
     {
+        QStringList formatList;
+        for (auto item : doc.object().value("data").toObject().value("item_list").toArray().toVariantList())
+        {
+        }
 
     } break;
     }
