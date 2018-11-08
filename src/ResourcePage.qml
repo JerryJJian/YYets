@@ -61,7 +61,6 @@ Page {
         anchors.left: posterImg.right; anchors.leftMargin: 10
         anchors.right: parent.right;   anchors.rightMargin: 10
         anchors.top: parent.top;       anchors.topMargin: 30
-        //        anchors.bottom: posterImg.bottom
         spacing: ennameLabel.height
 
         Label { id: ennameLabel     }
@@ -126,11 +125,13 @@ Page {
                     name: "tv"
                     PropertyChanges { target: seasonResource;        visible: true }
                     PropertyChanges { target: singleEpisodeResource; visible: false }
+                    PropertyChanges { target: resourceArea; contentHeight: seasonResource.implicitHeight }
                 },
                 State {
                     name: "movie"
                     PropertyChanges { target: seasonResource;        visible: false }
                     PropertyChanges { target: singleEpisodeResource; visible: true }
+                    PropertyChanges { target: resourceArea; contentHeight: singleEpisodeResource.implicitHeight }
                     StateChangeScript { script: dataRequest.requestResourceItem(resourceData.data("id"))}
                 }
             ]
