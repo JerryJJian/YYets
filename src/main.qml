@@ -49,8 +49,15 @@ ApplicationWindow {
             }
         }
     }
+    property Component resourceItemPage: ResourceItemPage { }
 
-    property Component resourcePage: ResourcePage { }
+    property Component resourcePage: ResourcePage {
+        onOpenResourceItem: {
+            stackView.push(resourceItemPage)
+            stackView.currentItem.forceActiveFocus()
+            dataRequest.requestResourceItem(id, season, episode)
+        }
+    }
 
     property Component indexPage: IndexPage {
         onOpenResource: {

@@ -66,6 +66,8 @@ void DataParser::dataReceived(int type, const QByteArray &data)
         QStringList formatList;
         for (auto item : doc.object().value("data").toObject().value("item_list").toArray().toVariantList())
         {
+            QVariantMap itemMap(item.toMap());
+            formatList <<
         }
 
     } break;

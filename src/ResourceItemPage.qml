@@ -4,4 +4,14 @@ import QtQuick.Controls 2.4
 Page {
     title: qsTr("Resource Page")
 
+
+    ListModel {
+        id: itemModel
+
+    }
+
+
+
+
+
 }

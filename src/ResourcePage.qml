@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.3
 Page {
 
     title: qsTr("Resource Name")
+    signal openResourceItem(int id, int season, int episode)
 
     Connections {
         target: resourceData
@@ -140,6 +141,12 @@ Page {
                 id: singleEpisodeResource
                 anchors.fill: parent
                 visible: false
+                Button {
+                    anchors.top: parent.top; anchors.topMargin: 20
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: qsTr("Open the resource")
+                    onClicked: openResourceItem(resourceData.data("id"), -1, -1)
+                }
             }
 
             Column {
@@ -193,7 +200,7 @@ Page {
                                     }
                                     hoverEnabled: true
                                     text: resourceData.dataListAt("season/"+season, index)
-                                    onClicked: dataRequest.requestResourceItem(resourceData.data("id"), season, text)
+                                    onClicked: openResourceItem(resourceData.data("id"), season, text)
                                 }
                             }
                         }
