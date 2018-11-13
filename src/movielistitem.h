@@ -8,7 +8,6 @@
 class MovieListItem : public ListItem
 {
     Q_OBJECT
-    Q_ENUMS(Status)
 public:
     explicit MovieListItem(QObject *parent = 0);
     explicit MovieListItem(const QVariantHash &data, QObject *parent = 0);

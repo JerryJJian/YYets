@@ -9,6 +9,8 @@
 #include "listmodel.h"
 #include "movielistitem.h"
 #include "dataset.h"
+#include "resitemlistitem.h"
+#include "resitemfilelistitem.h"
 #include <QDebug>
 
 int main(int argc, char *argv[])
@@ -28,7 +30,7 @@ int main(int argc, char *argv[])
 
     ListModel *indexModel = new ListModel(new MovieListItem, dataRequest);
     DataSet *resourceData = new DataSet(dataParser);
-    DataSet *resItemData  = new DataSet(dataParser);
+    ListModel *resItemModel = new ListModel(new ResItemListItem, dataParser);
 
     QObject::connect(dataParser, &DataParser::updateData, [=](int type, const QVariant &rawdata, const QList<ListItem*> &items){
         switch (type)
@@ -44,19 +46,17 @@ int main(int argc, char *argv[])
         } break;
         case DataRequest::ITEM:
         {
-            resItemData->update(rawdata.toHash());
+            resItemModel->updateRows(items);
         } break;
         }
     });
 
-
     dataRequest->requestIndex();
 
-
-    engine.rootContext()->setContextProperty("dataRequest",  dataRequest);
-    engine.rootContext()->setContextProperty("indexModel",   indexModel);
-    engine.rootContext()->setContextProperty("resourceData", resourceData);
-    engine.rootContext()->setContextProperty("resItemData",  resItemData);
+    engine.rootContext()->setContextProperty("dataRequest",   dataRequest);
+    engine.rootContext()->setContextProperty("indexModel",    indexModel);
+    engine.rootContext()->setContextProperty("resourceData",  resourceData);
+    engine.rootContext()->setContextProperty("resItemModel",  resItemModel);
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())

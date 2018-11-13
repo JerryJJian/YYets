@@ -8,6 +8,7 @@
 #include <QJsonParseError>
 #include "dataset.h"
 #include "movielistitem.h"
+#include "resitemlistitem.h"
 #include <QDebug>
 
 
@@ -63,13 +64,14 @@ void DataParser::dataReceived(int type, const QByteArray &data)
     } break;
     case DataRequest::ITEM:
     {
-        QStringList formatList;
-        for (auto item : doc.object().value("data").toObject().value("item_list").toArray().toVariantList())
+        QJsonArray objects = doc.object().value("data").toObject().value("item_list").toArray();
+        for (auto object : objects)
         {
-            QVariantMap itemMap(item.toMap());
-            formatList <<
+            ListItem *item = new ResItemListItem(object.toVariant().toHash());
+            items << item;
         }
 
+        emit updateData(type, objects.toVariantList(), items);
     } break;
     }
 
