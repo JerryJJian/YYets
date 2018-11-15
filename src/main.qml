@@ -42,19 +42,22 @@ ApplicationWindow {
                 text: qsTr("Top")
                 width: parent.width
                 onClicked: {
-                    while (stackView.depth > 0) stackView.pop()
+                    while (stackView.depth > 0)
+                        stackView.pop()
                     stackView.push(indexPage)
                     drawer.close()
                 }
             }
         }
     }
-    property Component resourceItemPage: ResourceItemPage { }
+    property Component resourceItemPage: ResourceItemPage {
+    }
 
     property Component resourcePage: ResourcePage {
         onOpenResourceItem: {
             stackView.push(resourceItemPage)
             stackView.currentItem.forceActiveFocus()
+            resItemModel.clear()
             dataRequest.requestResourceItem(id, season, episode)
         }
     }

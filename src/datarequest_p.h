@@ -17,6 +17,7 @@ public:
     bool startRequest(int type, const QUrl &url);
 
     bool m_isUpdatingIndex;
+    bool m_isUpdatingResItem;
 
     QNetworkAccessManager *m_network;
     QNetworkRequest *m_request;

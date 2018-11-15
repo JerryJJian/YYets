@@ -64,13 +64,13 @@ Page {
         anchors.top: parent.top;       anchors.topMargin: 30
         spacing: ennameLabel.height
 
-        Label { id: ennameLabel    ; color: "#ADADAD" }
-        Label { id: categoryLabel  ; color: "#ADADAD" }
-        Label { id: statusLabel    ; color: "#ADADAD" }
-        Label { id: itemupdateLabel; color: "#ADADAD" }
-        Label { id: remarkLabel    ; color: "#ADADAD" }
-        Label { id: prevueLabel    ; color: "#ADADAD" }
-        Label { id: favoritesLabel ; color: "#ADADAD" }
+        Label { id: ennameLabel    ; }
+        Label { id: categoryLabel  ; color: "#FFFFFF"; background: Rectangle { color: "#eb8c16" } }
+        Label { id: statusLabel    ; color: "#ADADAD"; }
+        Label { id: itemupdateLabel; color: "#ADADAD"; }
+        Label { id: remarkLabel    ; color: "#ADADAD"; }
+        Label { id: prevueLabel    ; color: "#ADADAD"; }
+        Label { id: favoritesLabel ; color: "#ADADAD"; }
     }
 
     Label {

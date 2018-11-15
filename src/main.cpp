@@ -48,6 +48,7 @@ int main(int argc, char *argv[])
         case DataRequest::ITEM:
         {
             resItemModel->updateRows(items);
+            dataRequest->setIsUpdatingResItem(false);
         } break;
         }
     });

@@ -35,6 +35,23 @@ void DataRequest::requestResourceItem(int id, int season, int episode)
     Q_D(DataRequest);
     QString url(DataRequestPrivate::RequestURL.arg("a=resource_item&m=index%1&id=%2"));
     d->startRequest(ITEM, QUrl(url.arg(season >= 0 ? QString("&season=%1&episode=%2").arg(season).arg(episode) : "").arg(id)));
+    setIsUpdatingResItem(true);
+}
+
+bool DataRequest::getIsUpdatingResItem() const
+{
+    Q_D(const DataRequest);
+    return d->m_isUpdatingResItem;
+}
+
+void DataRequest::setIsUpdatingResItem(bool isUpdatingResItem)
+{
+    Q_D(DataRequest);
+    if (d->m_isUpdatingResItem == isUpdatingResItem)
+        return ;
+
+    d->m_isUpdatingResItem = isUpdatingResItem;
+    emit isUpdatingResItemChanged(d->m_isUpdatingResItem);
 }
 
 bool DataRequest::getIsUpdatingIndex() const
@@ -55,6 +72,7 @@ void DataRequest::setIsUpdatingIndex(bool value)
 
 DataRequestPrivate::DataRequestPrivate(QNetworkAccessManager *network)
     : m_isUpdatingIndex(false),
+      m_isUpdatingResItem(false),
       m_network(network)
 {
 

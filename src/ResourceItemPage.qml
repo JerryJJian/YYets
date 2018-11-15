@@ -2,7 +2,7 @@ import QtQuick 2.11
 import QtQuick.Controls 2.4
 
 Page {
-    title: qsTr("Resource Page")
+    title: resourceData.data("cnname") === "" ? resourceData.data("enname") : resourceData.data("cnname")
 
     ListView {
 
@@ -15,7 +15,7 @@ Page {
             id: delegate
             color: "#F2F2F2"
             width: parent.width
-            height: labelRow.height + addressFlow.implicitHeight + 30
+            height: labelRow.height + addressFlow.height + 20
 
             Row {
                 id: labelRow
@@ -45,8 +45,16 @@ Page {
             Label {
                 id: sizeLabel
                 anchors.verticalCenter: labelRow.verticalCenter
-                anchors.right: parent.right
+                anchors.right: parent.right; anchors.rightMargin: 15
                 text: size
+            }
+
+            MouseArea {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.bottom: addressFlow.top
+                onPressed: addressFlow.state = (addressFlow.state === "open" ? "close" : "open")
             }
 
             Flow {
@@ -54,6 +62,36 @@ Page {
                 anchors.left: parent.left; anchors.leftMargin: 20
                 anchors.top: labelRow.bottom; anchors.topMargin: 10
                 spacing: 10
+                clip: true
+                state: "close"
+
+                states: [
+                    State {
+                        name: "open"
+                        PropertyChanges {
+                            target: addressFlow
+                            height: addressFlow.implicitHeight
+                        }
+                    },
+                    State {
+                        name: "close"
+                        PropertyChanges {
+                            target: addressFlow
+                            height: 0
+                        }
+                    }
+                ]
+
+                transitions: [
+                    Transition {
+                        from: "close"; to: "open"
+                        NumberAnimation { property: "height"; duration: 300; easing.type: Easing.InOutQuad }
+                    },
+                    Transition {
+                        from: "open"; to: "close"
+                        NumberAnimation { property: "height"; duration: 300; easing.type: Easing.InOutQuad }
+                    }
+                ]
 
                 Repeater {
                     model: filelist
@@ -76,10 +114,13 @@ Page {
                 height: 1
                 color: "#FDFDFD"
             }
-
-
         }
+    }
 
-
+    // ---------------------------------------------------------------
+    BusyIndicator {
+        id: busyIndicator
+        anchors.centerIn: parent
+        running: dataRequest.isUpdatingResItem
     }
 }
