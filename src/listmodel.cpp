@@ -36,6 +36,7 @@
 
 #include "listmodel.h"
 #include <QDebug>
+#include <QStringList>
 #include <QTimer>
 
 ListModel::ListModel(ListItem *prototype, QObject *parent) :
@@ -275,7 +276,7 @@ QHash<int, QByteArray> ListModel::roleNames() const
     return m_prototype->roleNames();
 }
 
-QString ListModel::data(int index, QString roleName)
+QVariant ListModel::data(int index, QString roleName)
 {
     QHashIterator<int, QByteArray> it(m_prototype->roleNames());
 
@@ -285,9 +286,49 @@ QString ListModel::data(int index, QString roleName)
         if (it.value() == roleName)
         {
             int role = it.key();
-            return data(this->index(index), role).toString();
+            return data(this->index(index), role);
         }
     }
+
+    return QVariant();
+}
+
+QVariant ListModel::query(int index, QString roleName, QString path)
+{
+    QHashIterator<int, QByteArray> it(m_prototype->roleNames());
+
+    while (it.hasNext())
+    {
+        it.next();
+        if (it.value() == roleName)
+        {
+            QVariant d(data(this->index(index), it.key()));
+            if (path.isEmpty())
+                return d;
+
+            QStringList keys(path.split("/", QString::SkipEmptyParts));
+            for (auto key : keys)
+            {
+                if (d.type() == QVariant::Map)
+                    d = d.toMap().value(key);
+                else if (d.type() == QVariant::Hash)
+                    d = d.toHash().value(key);
+                else if (d.type() == QVariant::List)
+                    d = d.toList().value(key.toInt());
+            }
+            return d;
+        }
+    }
+
+    return QVariant();
+}
+
+QString ListModel::convertToString(QVariant data)
+{
+    if (data.canConvert(QVariant::String))
+        return data.toString();
+    else if (data.convert(QVariant::StringList))
+        return data.toStringList().join(",");
 
     return QString();
 }

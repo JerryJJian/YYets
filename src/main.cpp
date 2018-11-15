@@ -11,6 +11,7 @@
 #include "dataset.h"
 #include "resitemlistitem.h"
 #include "resitemfilelistitem.h"
+#include "clipboardproxy.h"
 #include <QDebug>
 
 int main(int argc, char *argv[])
@@ -53,6 +54,7 @@ int main(int argc, char *argv[])
 
     dataRequest->requestIndex();
 
+    engine.rootContext()->setContextProperty("clipboard",     new ClipBoardProxy(&app));
     engine.rootContext()->setContextProperty("dataRequest",   dataRequest);
     engine.rootContext()->setContextProperty("indexModel",    indexModel);
     engine.rootContext()->setContextProperty("resourceData",  resourceData);

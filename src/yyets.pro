@@ -21,7 +21,8 @@ SOURCES += \
     listitem.cpp \
     dataset.cpp \
     resitemlistitem.cpp \
-    resitemfilelistitem.cpp
+    resitemfilelistitem.cpp \
+    clipboardproxy.cpp
 
 RESOURCES += qml.qrc
 
@@ -45,4 +46,5 @@ HEADERS += \
     listitem.h \
     dataset.h \
     resitemlistitem.h \
-    resitemfilelistitem.h
+    resitemfilelistitem.h \
+    clipboardproxy.h

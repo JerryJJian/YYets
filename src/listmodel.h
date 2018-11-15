@@ -63,7 +63,9 @@ public:
 
     virtual QHash<int, QByteArray> roleNames() const;
 
-    Q_INVOKABLE QString data(int index, QString roleName);
+    Q_INVOKABLE QVariant data(int index, QString roleName);
+    Q_INVOKABLE QVariant query(int index, QString roleName, QString path);
+    Q_INVOKABLE QString convertToString(QVariant data);
 
     Q_INVOKABLE bool selectedMode() const;
     Q_INVOKABLE int getEffectCount() const;

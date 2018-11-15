@@ -13,12 +13,12 @@ public:
     ResItemListItem(QObject *parent = nullptr);
     ResItemListItem(const QVariantHash &data, QObject *parent = nullptr);
 
-
     enum Roles
     {
         FormatRole = UserRole + 1,
         FormatTipRole,
         SizeRole,
+        FilesListRole,
         FilesRole,
         CommentsCountRole
     };
