@@ -1,4 +1,4 @@
-QT += quick core gui widgets network core-private webengine
+QT += quick core gui widgets network core-private
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
