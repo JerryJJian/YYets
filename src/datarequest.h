@@ -11,6 +11,8 @@ class DataRequest : public QObject
     Q_DECLARE_PRIVATE(DataRequest)
     Q_PROPERTY(bool isUpdatingIndex READ getIsUpdatingIndex NOTIFY isUpdatingIndexChanged)
     Q_PROPERTY(bool isUpdatingResItem READ getIsUpdatingResItem NOTIFY isUpdatingResItemChanged)
+    Q_PROPERTY(bool isUpdatingArticle READ getIsUpdatingArticle NOTIFY isUpdatingArticleChanged)
+    Q_PROPERTY(int  articlePage READ getArticlePage WRITE setArticlePage NOTIFY articlePageChanged)
 public:
     explicit DataRequest(QNetworkAccessManager *network, QObject *parent = nullptr);
 
@@ -19,6 +21,8 @@ public:
         INDEX = 0,
         RESOURCE,
         ITEM,
+        ARTICLELIST,
+        ARTICLE,
         SEARCH
     };
     Q_ENUM(Type)
@@ -29,16 +33,27 @@ public:
     bool getIsUpdatingResItem() const;
     void setIsUpdatingResItem(bool isUpdatingResItem);
 
+    bool getIsUpdatingArticle() const;
+    void setIsUpdatingArticle(bool isUpdatingArticle);
+
+    int getArticlePage() const;
+    void setArticlePage(int articlePage);
+
 signals:
     void dataReady(int type, const QByteArray &data);
     void downloadProgress(int type, float process);
     void isUpdatingIndexChanged(bool isUpdating);
     void isUpdatingResItemChanged(bool isUpdating);
+    void isUpdatingArticleChanged(bool isUpdating);
+    void articlePageChanged(int page);
 
 public slots:
     void requestIndex(int mediaSize = 10, int articleSize = 10);
     void requestResource(int id);
     void requestResourceItem(int id, int season = -1, int episode = -1);
+    void requestArticleList(int page);
+    void requestArticle(int id);
+
 };
 
 #endif // DATAREQUEST_H

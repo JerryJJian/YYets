@@ -10,7 +10,7 @@
 #include "movielistitem.h"
 #include "dataset.h"
 #include "resitemlistitem.h"
-#include "resitemfilelistitem.h"
+#include "articlelistitem.h"
 #include "clipboardproxy.h"
 #include <QDebug>
 
@@ -30,8 +30,10 @@ int main(int argc, char *argv[])
     QObject::connect(dataRequest, &DataRequest::dataReady, dataParser, &DataParser::dataReceived);
 
     ListModel *indexModel = new ListModel(new MovieListItem, dataRequest);
+    ListModel *articlesModel = new ListModel(new ArticleListItem, dataRequest);
     DataSet *resourceData = new DataSet(dataParser);
     ListModel *resItemModel = new ListModel(new ResItemListItem, dataParser);
+    DataSet *articleData = new DataSet(dataParser);
 
     QObject::connect(dataParser, &DataParser::updateData, [=](int type, const QVariant &rawdata, const QList<ListItem*> &items){
         switch (type)
@@ -50,6 +52,14 @@ int main(int argc, char *argv[])
             resItemModel->updateRows(items);
             dataRequest->setIsUpdatingResItem(false);
         } break;
+        case DataRequest::ARTICLELIST:
+        {
+            articlesModel->appendRows(items);
+        } break;
+        case DataRequest::ARTICLE:
+        {
+            articleData->update(rawdata.toHash());
+        } break;
         }
     });
 
@@ -60,6 +70,8 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("indexModel",    indexModel);
     engine.rootContext()->setContextProperty("resourceData",  resourceData);
     engine.rootContext()->setContextProperty("resItemModel",  resItemModel);
+    engine.rootContext()->setContextProperty("articlesModel", articlesModel);
+    engine.rootContext()->setContextProperty("articleData",   articleData);
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())

@@ -38,6 +38,52 @@ void DataRequest::requestResourceItem(int id, int season, int episode)
     setIsUpdatingResItem(true);
 }
 
+void DataRequest::requestArticleList(int page)
+{
+    Q_D(DataRequest);
+    QString url(DataRequestPrivate::RequestURL.arg("a=article_list&page=%1"));
+    d->startRequest(ARTICLELIST, QUrl(url.arg(page)));
+}
+
+void DataRequest::requestArticle(int id)
+{
+    Q_D(DataRequest);
+    QString url(DataRequestPrivate::RequestURL.arg("a=article&id=%1"));
+    d->startRequest(ARTICLE, QUrl(url.arg(id)));
+}
+
+int DataRequest::getArticlePage() const
+{
+    Q_D(const DataRequest);
+    return d->m_articlePage;
+}
+
+void DataRequest::setArticlePage(int articlePage)
+{
+    Q_D(DataRequest);
+    if (d->m_articlePage == articlePage)
+        return ;
+
+    d->m_articlePage = articlePage;
+    emit articlePageChanged(d->m_articlePage);
+}
+
+bool DataRequest::getIsUpdatingArticle() const
+{
+    Q_D(const DataRequest);
+    return d->m_isUpdatingArticle;
+}
+
+void DataRequest::setIsUpdatingArticle(bool isUpdatingArticle)
+{
+    Q_D(DataRequest);
+    if (d->m_isUpdatingArticle == isUpdatingArticle)
+        return ;
+
+    d->m_isUpdatingArticle = isUpdatingArticle;
+    emit isUpdatingArticleChanged(d->m_isUpdatingArticle);
+}
+
 bool DataRequest::getIsUpdatingResItem() const
 {
     Q_D(const DataRequest);

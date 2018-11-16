@@ -84,7 +84,6 @@ void ListModel::updateRows(const QList<ListItem *> &items)
 {
     clear();
     appendRows(items);
-//    emit dataModelUpdated();
     QTimer::singleShot(0, this, SIGNAL(dataModelUpdated()));
 }
 

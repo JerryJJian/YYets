@@ -26,8 +26,9 @@ Page {
                     id: formatLabel;
                     height: implicitHeight * 1.5
                     width: implicitWidth * 1.2
-                    background: Rectangle { color: "#F08619" }
+                    background: Rectangle { color: "#5B5B5B" }
                     text: foramt
+                    color: "#FFFFFF"
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                 }
@@ -35,8 +36,9 @@ Page {
                     id: formatTipLabel;
                     height: implicitHeight * 1.5
                     width: implicitWidth * 1.2
-                    background: Rectangle { color: "#01AFEC" }
+                    background: Rectangle { color: "#4EC720" }
                     text: format_tip
+                    color: "#FFFFFF"
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                 }
@@ -99,7 +101,7 @@ Page {
                         text: modelData
                         ToolTip.visible: pressed
                         ToolTip.delay: 3
-                        ToolTip.text: qsTr("The item address has copied!")
+                        ToolTip.text: qsTr("Copied to clipboard!")
                         onClicked: {
                             clipboard.text = resItemModel.convertToString(resItemModel.query(resItemModel.index, "files", index+"/address"))
                         }

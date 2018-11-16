@@ -6,6 +6,8 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QJsonParseError>
+#include <QDateTime>
+#include "articlelistitem.h"
 #include "dataset.h"
 #include "movielistitem.h"
 #include "resitemlistitem.h"
@@ -33,14 +35,26 @@ void DataParser::dataReceived(int type, const QByteArray &data)
     {
     case DataRequest::INDEX:
     {
+        // update top resources
         QJsonArray objects = doc.object().value("data").toObject().value("top").toArray();
         for (auto object : objects)
         {
             ListItem *item = new MovieListItem(object.toVariant().toHash());
             items << item;
         }
-
         emit updateData(type, objects.toVariantList(), items);
+
+        items.clear();
+        // update articles
+        QJsonArray articles = doc.object().value("data").toObject().value("article").toArray();
+        for (auto object : articles)
+        {
+            QVariantHash articleData(object.toVariant().toHash());
+            articleData.insert("dateline", QDateTime::fromSecsSinceEpoch(articleData.value("dateline").toInt()).toString("yyyy-MM-dd hh:mm:ss"));
+            ListItem *item = new ArticleListItem(articleData);
+            items << item;
+        }
+        emit updateData(DataRequest::ARTICLELIST, articles.toVariantList(), items);
     } break;
     case DataRequest::RESOURCE:
     {
@@ -73,6 +87,29 @@ void DataParser::dataReceived(int type, const QByteArray &data)
 
         emit updateData(type, objects.toVariantList(), items);
     } break;
+    case DataRequest::ARTICLELIST:
+    {
+        QJsonArray objects = doc.object().value("data").toArray();
+        for (auto object : objects)
+        {
+            QVariantHash articleData(object.toVariant().toHash());
+            articleData.insert("dateline", QDateTime::fromSecsSinceEpoch(articleData.value("dateline").toInt()).toString("yyyy-MM-dd hh:mm:ss"));
+            ListItem *item = new ArticleListItem(articleData);
+            items << item;
+        }
+        emit updateData(type, objects.toVariantList(), items);
+    } break;
+    case DataRequest::ARTICLE:
+    {
+        QJsonObject object = doc.object().value("data").toObject();
+        QVariantHash articleData(object.toVariantHash());
+        articleData.insert("dateline", QDateTime::fromSecsSinceEpoch(articleData.value("dateline").toInt()).toString("yyyy-MM-dd hh:mm:ss"));
+
+
+
+        emit updateData(type, articleData, items);
+    } break;
     }
 
 }
+

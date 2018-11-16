@@ -50,6 +50,10 @@ ApplicationWindow {
             }
         }
     }
+
+    property Component articlePage: ArticlePage {
+    }
+
     property Component resourceItemPage: ResourceItemPage {
     }
 
@@ -67,6 +71,11 @@ ApplicationWindow {
             stackView.push(resourcePage)
             stackView.currentItem.forceActiveFocus()
             dataRequest.requestResource(id)
+        }
+        onOpenArticle: {
+            stackView.push(articlePage)
+            stackView.currentItem.forceActiveFocus()
+            dataRequest.requestArticle(id)
         }
     }
 

@@ -43,7 +43,7 @@ Page {
 
     Item {
         id: posterImg
-        width: metaInfo.height + 30 < 240 ? 240 : metaInfo.height + 30
+        width: metaInfo.height + 30 < 200 ? 200 : metaInfo.height + 30
         height: width
         anchors.left: parent.left
         anchors.top: parent.top

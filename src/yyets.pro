@@ -1,4 +1,4 @@
-QT += quick core gui widgets network core-private
+QT += quick core gui widgets network core-private webengine
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -21,8 +21,8 @@ SOURCES += \
     listitem.cpp \
     dataset.cpp \
     resitemlistitem.cpp \
-    resitemfilelistitem.cpp \
-    clipboardproxy.cpp
+    clipboardproxy.cpp \
+    articlelistitem.cpp
 
 RESOURCES += qml.qrc
 
@@ -46,5 +46,5 @@ HEADERS += \
     listitem.h \
     dataset.h \
     resitemlistitem.h \
-    resitemfilelistitem.h \
-    clipboardproxy.h
+    clipboardproxy.h \
+    articlelistitem.h

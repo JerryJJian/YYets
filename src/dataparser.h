@@ -17,6 +17,7 @@ signals:
 
 public slots:
     void dataReceived(int type, const QByteArray &data);
+
 };
 
 #endif // DATAPARSER_H
