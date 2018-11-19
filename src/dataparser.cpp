@@ -11,6 +11,7 @@
 #include "dataset.h"
 #include "movielistitem.h"
 #include "resitemlistitem.h"
+#include "resourcelistitem.h"
 #include <QDebug>
 
 
@@ -35,6 +36,7 @@ void DataParser::dataReceived(int type, const QByteArray &data)
     {
     case DataRequest::INDEX:
     {
+        items.clear();
         // update top resources
         QJsonArray objects = doc.object().value("data").toObject().value("top").toArray();
         for (auto object : objects)
@@ -56,8 +58,40 @@ void DataParser::dataReceived(int type, const QByteArray &data)
         }
         emit updateData(DataRequest::ARTICLELIST, articles.toVariantList(), items);
     } break;
+    case DataRequest::RESOURCELIST:
+    {
+        items.clear();
+        QVariantHash filters;
+        QJsonArray resArray = doc.object().value("data").toObject().value("list").toArray();
+        for (auto res : resArray)
+        {
+            ListItem *item = new ResourceListItem(res.toObject().toVariantHash());
+            items << item;
+        }
+
+        QJsonArray areaArray = doc.object().value("data").toObject().value("area").toArray();
+        QStringList areas;
+        for (auto area : areaArray)
+            areas << area.toString();
+        filters.insert("area", areas.join("|"));
+
+        QJsonArray yearArray = doc.object().value("data").toObject().value("year").toArray();
+        QStringList years;
+        for (auto year : yearArray)
+            years << year.toString();
+        filters.insert("year", years.join("|"));
+
+        QJsonArray channelArray = doc.object().value("data").toObject().value("channel").toArray();
+        filters.insert("channel", channelArray.toVariantList());
+
+        QJsonArray sortArray = doc.object().value("data").toObject().value("sort").toArray();
+        filters.insert("sort", sortArray.toVariantList());
+
+        emit updateData(type, filters, items);
+    } break;
     case DataRequest::RESOURCE:
     {
+        items.clear();
         QVariantHash resHash = doc.object().value("data").toObject().value("resource").toObject().toVariantHash();
         QVariantList seasonList = doc.object().value("data").toObject().value("season").toArray().toVariantList();
         QStringList seasons;
@@ -78,6 +112,7 @@ void DataParser::dataReceived(int type, const QByteArray &data)
     } break;
     case DataRequest::ITEM:
     {
+        items.clear();
         QJsonArray objects = doc.object().value("data").toObject().value("item_list").toArray();
         for (auto object : objects)
         {
@@ -89,6 +124,7 @@ void DataParser::dataReceived(int type, const QByteArray &data)
     } break;
     case DataRequest::ARTICLELIST:
     {
+        items.clear();
         QJsonArray objects = doc.object().value("data").toArray();
         for (auto object : objects)
         {
@@ -101,12 +137,10 @@ void DataParser::dataReceived(int type, const QByteArray &data)
     } break;
     case DataRequest::ARTICLE:
     {
+        items.clear();
         QJsonObject object = doc.object().value("data").toObject();
         QVariantHash articleData(object.toVariantHash());
         articleData.insert("dateline", QDateTime::fromSecsSinceEpoch(articleData.value("dateline").toInt()).toString("yyyy-MM-dd hh:mm:ss"));
-
-
-
         emit updateData(type, articleData, items);
     } break;
     }

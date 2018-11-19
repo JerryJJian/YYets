@@ -7,8 +7,13 @@ ApplicationWindow {
     width: 640
     height: 480
     title: qsTr("Tabs")
+    readonly property bool inPortrait: window.width < window.height
 
     header: ToolBar {
+        anchors.left: parent.left
+        anchors.leftMargin: !inPortrait && drawer.position == 1 ? drawer.width : 0
+        anchors.right: parent.right
+
         contentHeight: toolButton.implicitHeight
 
         ToolButton {
@@ -19,7 +24,10 @@ ApplicationWindow {
                 if (stackView.depth > 1) {
                     stackView.pop()
                 } else {
-                    drawer.open()
+                    if (inPortrait)
+                        drawer.open()
+                    else
+                        drawer.position = drawer.position == 0 ? 1 : 0
                 }
             }
         }
@@ -27,27 +35,6 @@ ApplicationWindow {
         Label {
             text: stackView.currentItem.title
             anchors.centerIn: parent
-        }
-    }
-
-    Drawer {
-        id: drawer
-        width: window.width * 0.66
-        height: window.height
-
-        Column {
-            anchors.fill: parent
-
-            ItemDelegate {
-                text: qsTr("Top")
-                width: parent.width
-                onClicked: {
-                    while (stackView.depth > 0)
-                        stackView.pop()
-                    stackView.push(indexPage)
-                    drawer.close()
-                }
-            }
         }
     }
 
@@ -60,7 +47,6 @@ ApplicationWindow {
     property Component resourcePage: ResourcePage {
         onOpenResourceItem: {
             stackView.push(resourceItemPage)
-            stackView.currentItem.forceActiveFocus()
             resItemModel.clear()
             dataRequest.requestResourceItem(id, season, episode)
         }
@@ -69,23 +55,59 @@ ApplicationWindow {
     property Component indexPage: IndexPage {
         onOpenResource: {
             stackView.push(resourcePage)
-            stackView.currentItem.forceActiveFocus()
             dataRequest.requestResource(id)
         }
         onOpenArticle: {
             stackView.push(articlePage)
-            stackView.currentItem.forceActiveFocus()
             dataRequest.requestArticle(id)
+        }
+    }
+
+    property Component resourceListPage: ResourceListPage {
+        onOpenResource: {
+            stackView.push(resourcePage)
+            dataRequest.requestResource(id)
+        }
+    }
+
+    Drawer {
+        id: drawer
+        width: 150
+        height: window.height
+        modal: inPortrait
+        interactive: inPortrait
+        position: inPortrait ? 0 : 1
+        visible: !inPortrait
+        dragMargin: Qt.styleHints.startDragDistance
+
+        Column {
+            anchors.fill: parent
+
+            ItemDelegate {
+                text: qsTr("Resource")
+                width: parent.width
+                onClicked: {
+                    stackView.push(resourceListPage)
+                    if (inPortrait) drawer.close()
+                    dataRequest.requestResourceList()
+                }
+            }
         }
     }
 
     StackView {
         id: stackView
-        anchors.fill: parent
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.leftMargin: !inPortrait && drawer.position == 1  ? drawer.width : 0
+        anchors.right: parent.right
         initialItem: indexPage
 
         onCurrentItemChanged: {
-            currentItem.forceActiveFocus();
+            if (currentItem) currentItem.forceActiveFocus();
         }
     }
+
+    Component.onCompleted: dataRequest.requestIndex()
 }

@@ -12,6 +12,7 @@
 #include "resitemlistitem.h"
 #include "articlelistitem.h"
 #include "clipboardproxy.h"
+#include "resourcelistitem.h"
 #include <QDebug>
 
 int main(int argc, char *argv[])
@@ -35,6 +36,9 @@ int main(int argc, char *argv[])
     ListModel *resItemModel = new ListModel(new ResItemListItem, dataParser);
     DataSet *articleData = new DataSet(dataParser);
 
+    ListModel *resourceListModel = new ListModel(new ResourceListItem, dataRequest);
+    DataSet *resourceListFilterData = new DataSet(dataParser);
+
     QObject::connect(dataParser, &DataParser::updateData, [=](int type, const QVariant &rawdata, const QList<ListItem*> &items){
         switch (type)
         {
@@ -42,6 +46,14 @@ int main(int argc, char *argv[])
         {
             indexModel->updateRows(items);
             dataRequest->setIsUpdatingIndex(false);
+        } break;
+        case DataRequest::RESOURCELIST:
+        {
+            if (dataRequest->getResourcePage() == 0)
+                resourceListModel->updateRows(items);
+            else
+                resourceListModel->appendRows(items);
+
         } break;
         case DataRequest::RESOURCE:
         {
@@ -63,15 +75,15 @@ int main(int argc, char *argv[])
         }
     });
 
-    dataRequest->requestIndex();
-
-    engine.rootContext()->setContextProperty("clipboard",     new ClipBoardProxy(&app));
-    engine.rootContext()->setContextProperty("dataRequest",   dataRequest);
-    engine.rootContext()->setContextProperty("indexModel",    indexModel);
-    engine.rootContext()->setContextProperty("resourceData",  resourceData);
-    engine.rootContext()->setContextProperty("resItemModel",  resItemModel);
-    engine.rootContext()->setContextProperty("articlesModel", articlesModel);
-    engine.rootContext()->setContextProperty("articleData",   articleData);
+    engine.rootContext()->setContextProperty("clipboard",              new ClipBoardProxy(&app));
+    engine.rootContext()->setContextProperty("dataRequest",            dataRequest);
+    engine.rootContext()->setContextProperty("indexModel",             indexModel);
+    engine.rootContext()->setContextProperty("resourceData",           resourceData);
+    engine.rootContext()->setContextProperty("resItemModel",           resItemModel);
+    engine.rootContext()->setContextProperty("articlesModel",          articlesModel);
+    engine.rootContext()->setContextProperty("articleData",            articleData);
+    engine.rootContext()->setContextProperty("resourceListModel",      resourceListModel);
+    engine.rootContext()->setContextProperty("resourceListFilterData", resourceListFilterData);
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())

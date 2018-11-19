@@ -19,7 +19,9 @@ public:
     bool m_isUpdatingIndex;
     bool m_isUpdatingResItem;
     bool m_isUpdatingArticle;
+    bool m_isUpdatingResList;
     int  m_articlePage;
+    int  m_resourcePage;
 
     QNetworkAccessManager *m_network;
     QNetworkRequest *m_request;

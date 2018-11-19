@@ -135,7 +135,6 @@ Page {
         target: articlesModel
         onDataModelAppended: {
             dataRequest.articlePage = Math.ceil(articlesModel.count / 10)
-            console.log("ListModel: " + articlesModel.count + "  " + dataRequest.articlePage)
         }
     }
 
@@ -146,8 +145,8 @@ Page {
             StateChangeScript {
                 script: {
                     console.log("loadmore")
-                    articleList.y = -64
-                    dataRequest.requestArticleList(dataRequest.articlePage + 1)
+                    if (!dataRequest.isUpdatingIndex)
+                        dataRequest.requestArticleList(dataRequest.articlePage + 1)
                 }
             }
         },
@@ -157,8 +156,8 @@ Page {
             StateChangeScript {
                 script: {
                     console.log("refresh")
-                    articleList.y = 64
-                    dataRequest.requestIndex()
+                    if (!dataRequest.isUpdatingIndex)
+                        dataRequest.requestIndex()
                 }
             }
         }

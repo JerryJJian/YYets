@@ -6,5 +6,8 @@
         <file>ResourcePage.qml</file>
         <file>ResourceItemPage.qml</file>
         <file>ArticlePage.qml</file>
+        <file>ResourceListPage.qml</file>
+        <file>images/empty_filter.png</file>
+        <file>images/filled_filter.png</file>
     </qresource>
 </RCC>

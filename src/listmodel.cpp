@@ -130,8 +130,6 @@ void ListModel::appendRows(const QList<ListItem *> &items)
         if (item == NULL)
             continue;
         connect(item, SIGNAL(dataChanged()), SLOT(handleItemChange()));
-        qDebug() << "ROW#" << m_list.size() << ">";
-        item->print();
         m_list.append(item);
     }
     endInsertRows();

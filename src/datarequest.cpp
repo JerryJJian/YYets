@@ -52,6 +52,44 @@ void DataRequest::requestArticle(int id)
     d->startRequest(ARTICLE, QUrl(url.arg(id)));
 }
 
+void DataRequest::requestResourceList(int page, int countPerPage, QString area, QString sort, QString channel, QString year)
+{
+    Q_D(DataRequest);
+    QString url(DataRequestPrivate::RequestURL.arg("a=resource_list&page=%1&limit=%2&area=%3&sort=%4&channel=%5&year=%6"));
+    d->startRequest(RESOURCELIST, QUrl(url.arg(page).arg(countPerPage).arg(area).arg(sort).arg(channel).arg(year)));
+}
+
+bool DataRequest::getIsUpdatingResList() const
+{
+    Q_D(const DataRequest);
+    return d->m_isUpdatingResList;
+}
+
+void DataRequest::setIsUpdatingResList(bool isUpdatingResList)
+{
+    Q_D(DataRequest);
+    if (d->m_isUpdatingResList == isUpdatingResList)
+        return ;
+    d->m_isUpdatingResList = isUpdatingResList;
+    emit isUpdatingResListChanged(d->m_isUpdatingResList);
+}
+
+int DataRequest::getResourcePage() const
+{
+    Q_D(const DataRequest);
+    return d->m_resourcePage;
+}
+
+void DataRequest::setResourcePage(int resourcePage)
+{
+    Q_D(DataRequest);
+    if (d->m_resourcePage == resourcePage)
+        return ;
+
+    d->m_resourcePage = resourcePage;
+    emit resourcePageChanged(d->m_resourcePage);
+}
+
 int DataRequest::getArticlePage() const
 {
     Q_D(const DataRequest);
@@ -119,6 +157,9 @@ void DataRequest::setIsUpdatingIndex(bool value)
 DataRequestPrivate::DataRequestPrivate(QNetworkAccessManager *network)
     : m_isUpdatingIndex(false),
       m_isUpdatingResItem(false),
+      m_isUpdatingResList(false),
+      m_articlePage(0),
+      m_resourcePage(0),
       m_network(network)
 {
 
