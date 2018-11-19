@@ -8,6 +8,8 @@ ApplicationWindow {
     height: 480
     title: qsTr("Tabs")
     readonly property bool inPortrait: window.width < window.height
+    property alias inResourceListView: filterButton.visible
+    signal showFilterPopup()
 
     header: ToolBar {
         anchors.left: parent.left
@@ -36,15 +38,27 @@ ApplicationWindow {
             text: stackView.currentItem.title
             anchors.centerIn: parent
         }
+
+        ToolButton {
+            id: filterButton
+            icon.source: "images/empty_filter.png"
+            anchors.right: parent.right
+            visible: false
+            onClicked: showFilterPopup()
+        }
+
     }
 
     property Component articlePage: ArticlePage {
+        property string pageType: "articlePage"
     }
 
     property Component resourceItemPage: ResourceItemPage {
+        property string pageType: "resourceItemPage"
     }
 
     property Component resourcePage: ResourcePage {
+        property string pageType: "resourcePage"
         onOpenResourceItem: {
             stackView.push(resourceItemPage)
             resItemModel.clear()
@@ -53,6 +67,7 @@ ApplicationWindow {
     }
 
     property Component indexPage: IndexPage {
+        property string pageType: "indexPage"
         onOpenResource: {
             stackView.push(resourcePage)
             dataRequest.requestResource(id)
@@ -64,10 +79,12 @@ ApplicationWindow {
     }
 
     property Component resourceListPage: ResourceListPage {
+        property string pageType: "resourceListPage"
         onOpenResource: {
             stackView.push(resourcePage)
             dataRequest.requestResource(id)
         }
+
     }
 
     Drawer {
@@ -105,7 +122,10 @@ ApplicationWindow {
         initialItem: indexPage
 
         onCurrentItemChanged: {
-            if (currentItem) currentItem.forceActiveFocus();
+            if (currentItem){
+                inResourceListView = currentItem.pageType === "resourceListPage"
+                currentItem.forceActiveFocus();
+            }
         }
     }
 

@@ -54,6 +54,8 @@ int main(int argc, char *argv[])
             else
                 resourceListModel->appendRows(items);
 
+            if (dataRequest->getResourcePage() <= 1)
+                resourceListFilterData->update(rawdata.toHash());
         } break;
         case DataRequest::RESOURCE:
         {

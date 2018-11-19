@@ -87,8 +87,13 @@ Page {
                 StateChangeScript {
                     script: {
                         dataRequest.resourcePage = 1
-                        if (!dataRequest.isUpdatingResList)
-                            dataRequest.requestResourceList()
+                        if (!dataRequest.isUpdatingResList) {
+                            resourceListFilterData.setData("current/area", "")
+                            resourceListFilterData.setData("current/channel", "")
+                            resourceListFilterData.setData("current/year", "")
+                            resourceListFilterData.setData("current/sort", "update")
+                            dataRequest.requestResourceList(1, resourceCountPerPage, "", "update", "", "")
+                        }
                     }
                 }
             },
@@ -98,7 +103,11 @@ Page {
                 StateChangeScript {
                     script: {
                         if (!dataRequest.isUpdatingResList)
-                            dataRequest.requestResourceList(dataRequest.resourcePage + 1, resourceCountPerPage)
+                            dataRequest.requestResourceList(dataRequest.resourcePage + 1, resourceCountPerPage,
+                                                            resourceListFilterData.data("current/area"),
+                                                            resourceListFilterData.data("current/sort"),
+                                                            resourceListFilterData.data("current/channel"),
+                                                            resourceListFilterData.data("current/year"))
                     }
                 }
             }
@@ -112,24 +121,45 @@ Page {
         }
     }
 
-    Connections {
-        target: resourceListFilterData
-        onRefreshView: {
-            filterByAreaModel    = resourceListFilterData.data("area");
-            filterByYearModel    = resourceListFilterData.data("year");
-            filterBySortModel    = resourceListFilterData.data("sort");
-            filterByChannelModel = resourceListFilterData.data("channel");
-        }
-    }
-
-    Rectangle {
+    Popup {
         id: filter
 
-        anchors.left: parent.left; anchors.leftMargin: 10
-        anchors.right: parent.right; anchors.rightMargin: 10
-        height: filterButton.height
+        width:  parent.width * 0.8
+        height: filterDataColumn.implicitHeight + 60
 
-        MouseArea { anchors.fill: parent }
+        Connections {
+            target: window
+            onShowFilterPopup: filter.open()
+        }
+
+        Connections {
+            target: resourceListFilterData
+            onRefreshView: {
+                filterByAreaModel.clear()
+                filterByYearModel.clear()
+                filterBySortModel.clear()
+                filterByChannelModel.clear()
+
+                filterByAreaModel.append({"key": qsTr("All"), "value": "" })
+                for (var i=0; i<resourceListFilterData.dataListSize("area"); ++i)
+                    filterByAreaModel.append({"key": resourceListFilterData.dataListAt("area", i),
+                                              "value": resourceListFilterData.dataListAt("area", i)})
+
+                filterByYearModel.append({"key": qsTr("All"), "value": "" })
+                for (i=0; i<resourceListFilterData.dataListSize("year"); ++i)
+                    filterByYearModel.append({"key": resourceListFilterData.dataListAt("year", i),
+                                              "value": resourceListFilterData.dataListAt("year", i)})
+
+                filterByChannelModel.append({"key": qsTr("All"), "value": ""})
+                for (i=0; i<resourceListFilterData.dataListSize("channel/keys"); ++i)
+                    filterByChannelModel.append({"key"  : resourceListFilterData.dataListAt("channel/keys", i),
+                                                 "value": resourceListFilterData.dataListAt("channel/values", i)})
+
+                for (i=0; i<resourceListFilterData.dataListSize("sort/keys"); ++i)
+                    filterBySortModel.append({"key"  : resourceListFilterData.dataListAt("sort/keys", i),
+                                              "value": resourceListFilterData.dataListAt("sort/values", i)})
+            }
+        }
 
         ListModel { id: filterByAreaModel    }
         ListModel { id: filterByYearModel    }
@@ -137,65 +167,78 @@ Page {
         ListModel { id: filterByChannelModel }
 
         Column {
+            id: filterDataColumn
+            anchors.top: parent.top; anchors.topMargin: 10
             anchors.left: parent.left
             anchors.right: parent.right
-            height: areaRow.height
 
-            Row {
-                id: areaRow
-                anchors.left: parent.left
-                anchors.right: parent.right
-                height: areaFlow.implicitHeight
-
-                Label {
-                    id: areaLabel
-                    text: qsTr("By Area:")
-                }
-
-                Flow {
-                    id: areaFlow
-                    anchors.left: parent.left; anchors.leftMargin: areaLabel.width + 10
-                    anchors.right: parent.right
-                    Repeater {
-                        model: filterByAreaModel
-                        Label { text: modelData }
+            Flow {
+                id: areaFlow
+                width: parent.width - 20
+                Repeater {
+                    model: filterByAreaModel
+                    ToolButton {
+                        text: key
+                        highlighted: value === resourceListFilterData.data("current/area")
+                        onClicked: resourceListFilterData.setData("current/area", value)
                     }
                 }
             }
 
-            Row {
-                id: channelRow
-                anchors.left: parent.left
-                anchors.right: parent.right
-                height: areaFlow.implicitHeight
+            Rectangle { color: "#839496"; height: 1 }
 
-                Label {
-                    id: channelLabel
-                    text: qsTr("By Area:")
-                }
-
-                Flow {
-                    id: channelFlow
-                    anchors.left: parent.left; anchors.leftMargin: channelLabel.width + 10
-                    anchors.right: parent.right
-                    Repeater {
-                        model: filterByChannelModel
-                        Label { text: key }
+            Flow {
+                id: yearFlow
+                width: parent.width - 20
+                Repeater {
+                    model: filterByYearModel
+                    ToolButton {
+                        text: key
+                        highlighted: value === resourceListFilterData.data("current/year")
+                        onClicked: resourceListFilterData.setData("current/year", value)
                     }
                 }
             }
+
+            Rectangle { color: "#839496"; height: 1 }
+            Flow {
+                id: channelFlow
+                width: parent.width - 20
+                Repeater {
+                    model: filterByChannelModel
+                    ToolButton {
+                        text: key
+                        highlighted: value === resourceListFilterData.data("current/channel")
+                        onClicked: resourceListFilterData.setData("current/channel", value)
+                    }
+                }
+            }
+
+            Rectangle { color: "#839496"; height: 1 }
+            Flow {
+                id: sortFlow
+                width: parent.width - 20
+                Repeater {
+                    model: filterBySortModel
+                    ToolButton {
+                        text: key
+                        highlighted: value === "" || value === resourceListFilterData.data("current/sort")
+                        onClicked: resourceListFilterData.setData("current/sort", value)
+                    }
+                }
+            }
+            Rectangle { color: "#839496"; height: 1 }
         }
 
-
-
-
-    }
-
-    ToolButton {
-        id: filterButton
-        anchors.top: parent.top; anchors.topMargin: 20
-        anchors.right: parent.right; anchors.rightMargin: 20
-        icon.source: filterText === "" ? "images/empty_filter.png" : "images/filled_filter.png"
+        onClosed: {
+            resourceListModel.clear()
+            dataRequest.resourcePage = 1
+            dataRequest.requestResourceList(1, resourceCountPerPage,
+                                            resourceListFilterData.data("current/area"),
+                                            resourceListFilterData.data("current/sort"),
+                                            resourceListFilterData.data("current/channel"),
+                                            resourceListFilterData.data("current/year"))
+        }
     }
 
     BusyIndicator {

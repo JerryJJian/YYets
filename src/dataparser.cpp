@@ -82,10 +82,26 @@ void DataParser::dataReceived(int type, const QByteArray &data)
         filters.insert("year", years.join("|"));
 
         QJsonArray channelArray = doc.object().value("data").toObject().value("channel").toArray();
-        filters.insert("channel", channelArray.toVariantList());
+        QStringList channels;
+        QStringList channelVals;
+        for (auto channel : channelArray)
+        {
+            channels << channel.toObject().value("key").toString();
+            channelVals << channel.toObject().value("value").toString();
+        }
+        filters.insert("channel/keys", channels.join("|"));
+        filters.insert("channel/values", channelVals.join("|"));
 
         QJsonArray sortArray = doc.object().value("data").toObject().value("sort").toArray();
-        filters.insert("sort", sortArray.toVariantList());
+        QStringList sortKeys;
+        QStringList sortValues;
+        for (auto sort : sortArray)
+        {
+            sortKeys << sort.toObject().value("key").toString();
+            sortValues << sort.toObject().value("value").toString();
+        }
+        filters.insert("sort/keys", sortKeys.join("|"));
+        filters.insert("sort/values", sortValues.join("|"));
 
         emit updateData(type, filters, items);
     } break;

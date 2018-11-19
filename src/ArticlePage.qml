@@ -63,6 +63,7 @@ Page {
                 id: contentLabel
                 wrapMode: Text.Wrap
                 width: parent.width
+                font.pixelSize: Qt.application.font.pixelSize * 1.2
             }
 
         }
