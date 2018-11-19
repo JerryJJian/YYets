@@ -130,6 +130,8 @@ void ListModel::appendRows(const QList<ListItem *> &items)
         if (item == NULL)
             continue;
         connect(item, SIGNAL(dataChanged()), SLOT(handleItemChange()));
+        qDebug() << "ROW#" << m_list.size() << ">";
+        item->print();
         m_list.append(item);
     }
     endInsertRows();
@@ -296,6 +298,7 @@ QVariant ListModel::query(int index, QString roleName, QString path)
 {
     QHashIterator<int, QByteArray> it(m_prototype->roleNames());
 
+    qDebug() << Q_FUNC_INFO <<">" << index << ":" << roleName << path;
     while (it.hasNext())
     {
         it.next();
@@ -306,6 +309,7 @@ QVariant ListModel::query(int index, QString roleName, QString path)
                 return d;
 
             QStringList keys(path.split("/", QString::SkipEmptyParts));
+            qDebug() << "Query:" << index << ">" << roleName << ">" << keys;
             for (auto key : keys)
             {
                 if (d.type() == QVariant::Map)

@@ -1,4 +1,5 @@
 #include "listitem.h"
+#include <QDebug>
 
 ListItem::ListItem(QObject *parent)
     : QObject(parent)
@@ -63,6 +64,11 @@ void ListItem::setRoleName(int role, const QString &name)
 QHash<int, QByteArray> ListItem::roleNames() const
 {
     return m_roleNameMap;
+}
+
+void ListItem::print() const
+{
+    qDebug() << "#" << id() << ":" << selected() << ">" << m_dataMap;
 }
 
 void ListItem::init()

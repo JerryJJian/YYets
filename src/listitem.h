@@ -34,6 +34,8 @@ public:
     virtual void setRoleName(int role, const QString &name);
     virtual QHash<int, QByteArray> roleNames() const;
 
+    virtual void print() const;
+
 signals:
     void dataChanged();
 

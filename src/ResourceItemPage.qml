@@ -2,7 +2,8 @@ import QtQuick 2.11
 import QtQuick.Controls 2.4
 
 Page {
-    title: resourceData.data("cnname") === "" ? resourceData.data("enname") : resourceData.data("cnname")
+    title: (resourceData.data("cnname") === "" ? resourceData.data("enname") : resourceData.data("cnname"))
+           + (resourceData.data("current_item") === "" ? "" : (" - " + resourceData.data("current_item")))
 
     ListView {
 
@@ -16,6 +17,7 @@ Page {
             color: "#F2F2F2"
             width: parent.width
             height: labelRow.height + addressFlow.height + 20
+            property int modelRow: index
 
             Row {
                 id: labelRow
@@ -103,7 +105,7 @@ Page {
                         ToolTip.delay: 3
                         ToolTip.text: qsTr("Copied to clipboard!")
                         onClicked: {
-                            clipboard.text = resItemModel.convertToString(resItemModel.query(resItemModel.index, "files", index+"/address"))
+                            clipboard.text = resItemModel.convertToString(resItemModel.query(modelRow, "files", index+"/address"))
                         }
                     }
                 }

@@ -200,7 +200,13 @@ Page {
                                     }
                                     hoverEnabled: true
                                     text: resourceData.dataListAt("season/"+season, index)
-                                    onClicked: openResourceItem(resourceData.data("id"), season, text)
+                                    onClicked: {
+                                        var se = ""
+                                        if (season != -1)
+                                            se = "S" + season + "E" + text;
+                                        resourceData.setData("current_item", se)
+                                        openResourceItem(resourceData.data("id"), season, text)
+                                    }
                                 }
                             }
                         }
