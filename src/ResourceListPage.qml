@@ -116,10 +116,10 @@ Page {
                         dataRequest.resourcePage = 1
                         if (!dataRequest.isUpdatingResList) {
                             dataRequest.requestResourceList(1, resourceCountPerPage,
-                                                            filterByAreaModel.get(filterAreaIndex).key,
-                                                            filterBySortModel.get(filterSortIndex).key,
-                                                            filterByChannelModel.get(filterChannelIndex).key,
-                                                            filterByYearModel.get(filterYearIndex).key)
+                                                            filterByAreaModel.get(filterAreaIndex).value,
+                                                            filterBySortModel.get(filterSortIndex).value,
+                                                            filterByChannelModel.get(filterChannelIndex).value,
+                                                            filterByYearModel.get(filterYearIndex).value)
                         }
                     }
                 }
@@ -131,10 +131,10 @@ Page {
                     script: {
                         if (!dataRequest.isUpdatingResList)
                             dataRequest.requestResourceList(dataRequest.resourcePage + 1, resourceCountPerPage,
-                                                            filterByAreaModel.get(filterAreaIndex).key,
-                                                            filterBySortModel.get(filterSortIndex).key,
-                                                            filterByChannelModel.get(filterChannelIndex).key,
-                                                            filterByYearModel.get(filterYearIndex).key)
+                                                            filterByAreaModel.get(filterAreaIndex).value,
+                                                            filterBySortModel.get(filterSortIndex).value,
+                                                            filterByChannelModel.get(filterChannelIndex).value,
+                                                            filterByYearModel.get(filterYearIndex).value)
                     }
                 }
             }
@@ -269,10 +269,10 @@ Page {
             resourceListModel.clear()
             dataRequest.resourcePage = 1
             dataRequest.requestResourceList(1, resourceCountPerPage,
-                                            filterByAreaModel.get(filterAreaIndex).key,
-                                            filterBySortModel.get(filterSortIndex).key,
-                                            filterByChannelModel.get(filterChannelIndex).key,
-                                            filterByYearModel.get(filterYearIndex).key)
+                                            filterByAreaModel.get(filterAreaIndex).value,
+                                            filterBySortModel.get(filterSortIndex).value,
+                                            filterByChannelModel.get(filterChannelIndex).value,
+                                            filterByYearModel.get(filterYearIndex).value)
         }
     }
 

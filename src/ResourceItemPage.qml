@@ -11,6 +11,15 @@ Page {
 
         model: resItemModel
 
+        header: Label {
+            visible: resItemModel.count == 0 && !dataRequest.isUpdatingResItem
+            height: font.pixelSize * 2
+            text: qsTr("No resource!")
+            width: parent.width
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+        }
+
         delegate: Rectangle {
 
             id: delegate
