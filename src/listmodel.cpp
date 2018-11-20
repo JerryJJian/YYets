@@ -124,6 +124,9 @@ void ListModel::appendRow(ListItem *item)
 
 void ListModel::appendRows(const QList<ListItem *> &items)
 {
+    if (items.isEmpty())
+        return ;
+
     beginInsertRows(QModelIndex(), rowCount(), rowCount()+items.size()-1);
     foreach(ListItem *item, items)
     {

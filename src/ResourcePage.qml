@@ -43,7 +43,7 @@ Page {
 
     Item {
         id: posterImg
-        width: metaInfo.height + 30 < 200 ? 200 : metaInfo.height + 30
+        width: 240
         height: width
         anchors.left: parent.left
         anchors.top: parent.top
@@ -59,7 +59,7 @@ Page {
 
     Column {
         id: metaInfo
-        anchors.left: posterImg.right; anchors.leftMargin: 10
+        anchors.left: posterImg.right; anchors.leftMargin: (posterImg.width > img.width ? (img.width - posterImg.width)/2 : 0) + 10
         anchors.right: parent.right;   anchors.rightMargin: 10
         anchors.top: parent.top;       anchors.topMargin: 30
         spacing: ennameLabel.height

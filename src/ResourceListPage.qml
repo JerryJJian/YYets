@@ -42,12 +42,33 @@ Page {
                     source: poster_m
                     cache:  true
                 }
+
+                Column {
+                    anchors.top: img.top
+                    anchors.left: posterImg.left; anchors.leftMargin: 15
+                    spacing: Qt.application.font.pixelSize * 0.5
+                    Label {
+                        width: implicitWidth + font.pixelSize
+                        height: implicitHeight * 1.5
+                        background: Rectangle {
+                            color: "#F26B3A"
+                            radius: height / 4
+                            border.color: "#9DC6F3"
+                            border.width: 1
+                        }
+                        color: "white"
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                        text: channel_cn
+                        font.pixelSize: Qt.application.font.pixelSize * 0.8
+                    }
+                }
             }
 
             Label {
                 anchors.top: parent.top
                 anchors.horizontalCenter: parent.horizontalCenter
-                width: implicitWidth * 1.5
+                width: implicitWidth + font.pixelSize
                 height: implicitHeight * 1.5
                 background: Rectangle {
                     color: "#4C8AD2"
@@ -166,9 +187,9 @@ Page {
                                               "value": resourceListFilterData.dataListAt("sort/values", i)})
                 }
 
-                reslistpage.title = filterByAreaModel.get(filterAreaIndex).key + " "
-                        + filterByChannelModel.get(filterChannelIndex).key + " "
-                        + filterByYearModel.get(filterYearIndex).key + " "
+                reslistpage.title = (filterAreaIndex > 0 ? filterByAreaModel.get(filterAreaIndex).key + " " : "")
+                        + (filterChannelIndex > 0 ? filterByChannelModel.get(filterChannelIndex).key + " " : "")
+                        + (filterYearIndex > 0 ? filterByYearModel.get(filterYearIndex).key + " " : "" )
                         + filterBySortModel.get(filterSortIndex).key
 
 

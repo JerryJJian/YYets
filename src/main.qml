@@ -86,6 +86,14 @@ ApplicationWindow {
         }
 
     }
+    property Component searchResourcePage: SearchPage {
+        property string pageType: "searchResourcePage"
+        onOpenResource: {
+            stackView.push(resourcePage)
+            dataRequest.requestResource(id)
+        }
+
+    }
 
     Drawer {
         id: drawer
@@ -107,6 +115,14 @@ ApplicationWindow {
                     stackView.push(resourceListPage)
                     if (inPortrait) drawer.close()
                     dataRequest.requestResourceList()
+                }
+            }
+            ItemDelegate {
+                text: qsTr("Search")
+                width: parent.width
+                onClicked: {
+                    stackView.push(searchResourcePage)
+                    if (inPortrait) drawer.close()
                 }
             }
         }

@@ -13,6 +13,7 @@
 #include "articlelistitem.h"
 #include "clipboardproxy.h"
 #include "resourcelistitem.h"
+#include "searchresourcelistitem.h"
 #include <QDebug>
 
 int main(int argc, char *argv[])
@@ -38,6 +39,8 @@ int main(int argc, char *argv[])
 
     ListModel *resourceListModel = new ListModel(new ResourceListItem, dataRequest);
     DataSet *resourceListFilterData = new DataSet(dataParser);
+
+    ListModel *searchResourceModel = new ListModel(new SearchResourceListItem, dataRequest);
 
     QObject::connect(dataParser, &DataParser::updateData, [=](int type, const QVariant &rawdata, const QList<ListItem*> &items){
         switch (type)
@@ -74,6 +77,10 @@ int main(int argc, char *argv[])
         {
             articleData->update(rawdata.toHash());
         } break;
+        case DataRequest::SEARCHRESOURCE:
+        {
+            searchResourceModel->appendRows(items);
+        } break;
         }
     });
 
@@ -86,6 +93,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("articleData",            articleData);
     engine.rootContext()->setContextProperty("resourceListModel",      resourceListModel);
     engine.rootContext()->setContextProperty("resourceListFilterData", resourceListFilterData);
+    engine.rootContext()->setContextProperty("searchResourceModel",    searchResourceModel);
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())

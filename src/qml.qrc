@@ -9,5 +9,7 @@
         <file>ResourceListPage.qml</file>
         <file>images/empty_filter.png</file>
         <file>images/filled_filter.png</file>
+        <file>SearchPage.qml</file>
+        <file>images/find.png</file>
     </qresource>
 </RCC>

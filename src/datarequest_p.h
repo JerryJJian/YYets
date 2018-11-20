@@ -20,6 +20,7 @@ public:
     bool m_isUpdatingResItem;
     bool m_isUpdatingArticle;
     bool m_isUpdatingResList;
+    bool m_isSearching;
     int  m_articlePage;
     int  m_resourcePage;
 

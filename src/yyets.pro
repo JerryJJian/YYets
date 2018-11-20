@@ -23,7 +23,8 @@ SOURCES += \
     resitemlistitem.cpp \
     clipboardproxy.cpp \
     articlelistitem.cpp \
-    resourcelistitem.cpp
+    resourcelistitem.cpp \
+    searchresourcelistitem.cpp
 
 RESOURCES += qml.qrc
 
@@ -49,4 +50,5 @@ HEADERS += \
     resitemlistitem.h \
     clipboardproxy.h \
     articlelistitem.h \
-    resourcelistitem.h
+    resourcelistitem.h \
+    searchresourcelistitem.h

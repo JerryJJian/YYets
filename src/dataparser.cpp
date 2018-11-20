@@ -12,6 +12,7 @@
 #include "movielistitem.h"
 #include "resitemlistitem.h"
 #include "resourcelistitem.h"
+#include "searchresourcelistitem.h"
 #include <QDebug>
 
 
@@ -158,6 +159,20 @@ void DataParser::dataReceived(int type, const QByteArray &data)
         QVariantHash articleData(object.toVariantHash());
         articleData.insert("dateline", QDateTime::fromSecsSinceEpoch(articleData.value("dateline").toInt()).toString("yyyy-MM-dd hh:mm:ss"));
         emit updateData(type, articleData, items);
+    } break;
+    case DataRequest::SEARCHRESOURCE:
+    {
+        items.clear();
+        QJsonArray objects = doc.object().value("data").toObject().value("list").toArray();
+        for (auto object : objects)
+        {
+            QVariantHash itemdata(object.toVariant().toHash());
+            itemdata.insert("pubtime", QDateTime::fromSecsSinceEpoch(itemdata.value("pubtime").toInt()).toString("yyyy-MM-dd"));
+            itemdata.insert("uptime", QDateTime::fromSecsSinceEpoch(itemdata.value("uptime").toInt()).toString("yyyy-MM-dd"));
+            ListItem *item = new SearchResourceListItem(itemdata);
+            items << item;
+        }
+        emit updateData(type, doc.object().value("data").toObject().value("count").toVariant(), items);
     } break;
     }
 

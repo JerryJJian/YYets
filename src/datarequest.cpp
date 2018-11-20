@@ -59,6 +59,13 @@ void DataRequest::requestResourceList(int page, int countPerPage, QString area, 
     d->startRequest(RESOURCELIST, QUrl(url.arg(page).arg(countPerPage).arg(area).arg(sort).arg(channel).arg(year)));
 }
 
+void DataRequest::searchResource(QString text, int page, int limit)
+{
+    Q_D(DataRequest);
+    QString url(DataRequestPrivate::RequestURL.arg("a=search&st=resource&k=%1&page=%2&limit=%3"));
+    d->startRequest(SEARCHRESOURCE, QUrl(url.arg(text).arg(page).arg(limit)));
+}
+
 bool DataRequest::getIsUpdatingResList() const
 {
     Q_D(const DataRequest);
@@ -72,6 +79,21 @@ void DataRequest::setIsUpdatingResList(bool isUpdatingResList)
         return ;
     d->m_isUpdatingResList = isUpdatingResList;
     emit isUpdatingResListChanged(d->m_isUpdatingResList);
+}
+
+bool DataRequest::getIsSearching() const
+{
+    Q_D(const DataRequest);
+    return d->m_isSearching;
+}
+
+void DataRequest::setIsSearching(bool isSearching)
+{
+    Q_D(DataRequest);
+    if (d->m_isSearching == isSearching)
+        return ;
+    d->m_isSearching = isSearching;
+    emit isSearchingChanged(d->m_isSearching);
 }
 
 int DataRequest::getResourcePage() const
@@ -158,6 +180,7 @@ DataRequestPrivate::DataRequestPrivate(QNetworkAccessManager *network)
     : m_isUpdatingIndex(false),
       m_isUpdatingResItem(false),
       m_isUpdatingResList(false),
+      m_isSearching(false),
       m_articlePage(0),
       m_resourcePage(0),
       m_network(network)
