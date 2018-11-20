@@ -14,5 +14,6 @@
         <file>images/filter.png</file>
         <file>images/follow.png</file>
         <file>images/top.png</file>
+        <file>images/ticket.png</file>
     </qresource>
 </RCC>

@@ -6,7 +6,7 @@ ApplicationWindow {
     visible: true
     width: 640
     height: 480
-    title: qsTr("Tabs")
+    title: qsTr("Ticket")
     readonly property bool inPortrait: window.width < window.height
     property alias inResourceListView: filterButton.visible
     signal showFilterPopup()
@@ -111,6 +111,13 @@ ApplicationWindow {
         Column {
             anchors.fill: parent
 
+            Image {
+                anchors.horizontalCenter: parent.horizontalCenter
+                source: "images/ticket.png"
+                width: parent.width * 0.66
+                height: width
+            }
+
             ItemDelegate {
                 text: qsTr("Top")
                 icon.source: "images/top.png"
@@ -118,7 +125,6 @@ ApplicationWindow {
                 enabled: stackView.currentItem.pageType !== "indexPage"
                 onClicked: {
                     stackView.pop()
-//                    stackView.push(indexPage)
                     if (inPortrait) drawer.close()
                     dataRequest.requestIndex()
                 }
