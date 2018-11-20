@@ -14,7 +14,6 @@ Page {
         delegate: Rectangle {
 
             id: delegate
-            color: "#F2F2F2"
             width: parent.width
             height: labelRow.height + addressFlow.height + 20
             property int modelRow: index
@@ -30,7 +29,7 @@ Page {
                     width: implicitWidth * 1.2
                     background: Rectangle { color: "#5B5B5B" }
                     text: foramt
-                    color: "#FFFFFF"
+                    color: "white"
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                 }
@@ -38,9 +37,9 @@ Page {
                     id: formatTipLabel;
                     height: implicitHeight * 1.5
                     width: implicitWidth * 1.2
-                    background: Rectangle { color: "#4EC720" }
+                    background: Rectangle { color: "#282828" }
                     text: format_tip
-                    color: "#FFFFFF"
+                    color: "white"
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                 }
@@ -116,7 +115,7 @@ Page {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 height: 1
-                color: "#FDFDFD"
+                color: "gray"
             }
         }
     }

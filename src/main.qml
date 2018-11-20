@@ -41,7 +41,7 @@ ApplicationWindow {
 
         ToolButton {
             id: filterButton
-            icon.source: "images/empty_filter.png"
+            icon.source: "images/filter.png"
             anchors.right: parent.right
             visible: false
             onClicked: showFilterPopup()
@@ -94,6 +94,9 @@ ApplicationWindow {
         }
 
     }
+    property Component followedListPage: FollowedListPage {
+        property string pageType: "followedListPage"
+    }
 
     Drawer {
         id: drawer
@@ -109,9 +112,25 @@ ApplicationWindow {
             anchors.fill: parent
 
             ItemDelegate {
-                text: qsTr("Resource")
+                text: qsTr("Top")
+                icon.source: "images/top.png"
                 width: parent.width
+                enabled: stackView.currentItem.pageType !== "indexPage"
                 onClicked: {
+                    stackView.pop()
+//                    stackView.push(indexPage)
+                    if (inPortrait) drawer.close()
+                    dataRequest.requestIndex()
+                }
+            }
+
+            ItemDelegate {
+                text: qsTr("Resource")
+                icon.source: "images/movie.png"
+                width: parent.width
+                enabled: stackView.currentItem.pageType !== "resourceListPage"
+                onClicked: {
+                    stackView.pop()
                     stackView.push(resourceListPage)
                     if (inPortrait) drawer.close()
                     dataRequest.requestResourceList()
@@ -119,9 +138,23 @@ ApplicationWindow {
             }
             ItemDelegate {
                 text: qsTr("Search")
+                icon.source: "images/find.png"
                 width: parent.width
+                enabled: stackView.currentItem.pageType !== "searchResourcePage"
                 onClicked: {
+                    stackView.pop()
                     stackView.push(searchResourcePage)
+                    if (inPortrait) drawer.close()
+                }
+            }
+            ItemDelegate {
+                text: qsTr("Followed")
+                icon.source: "images/follow.png"
+                width: parent.width
+                enabled: stackView.currentItem.pageType !== "followedListPage"
+                onClicked: {
+                    stackView.pop()
+                    stackView.push(followedListPage)
                     if (inPortrait) drawer.close()
                 }
             }

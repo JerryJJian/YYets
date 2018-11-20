@@ -7,9 +7,12 @@
         <file>ResourceItemPage.qml</file>
         <file>ArticlePage.qml</file>
         <file>ResourceListPage.qml</file>
-        <file>images/empty_filter.png</file>
-        <file>images/filled_filter.png</file>
         <file>SearchPage.qml</file>
         <file>images/find.png</file>
+        <file>FollowedListPage.qml</file>
+        <file>images/movie.png</file>
+        <file>images/filter.png</file>
+        <file>images/follow.png</file>
+        <file>images/top.png</file>
     </qresource>
 </RCC>
