@@ -2,10 +2,16 @@ import QtQuick 2.0
 import QtQuick.Controls 2.4
 
 Page {
+    id: reslistpage
     title: qsTr("Resource")
     signal openResource(int id)
     property int resourceCountPerPage: 30
     property string filterText: ""
+
+    property int filterAreaIndex: 0
+    property int filterChannelIndex: 0
+    property int filterYearIndex: 0
+    property int filterSortIndex: 0
 
     GridView {
         id: resourcelist
@@ -88,11 +94,11 @@ Page {
                     script: {
                         dataRequest.resourcePage = 1
                         if (!dataRequest.isUpdatingResList) {
-                            resourceListFilterData.setData("current/area", "")
-                            resourceListFilterData.setData("current/channel", "")
-                            resourceListFilterData.setData("current/year", "")
-                            resourceListFilterData.setData("current/sort", "update")
-                            dataRequest.requestResourceList(1, resourceCountPerPage, "", "update", "", "")
+                            dataRequest.requestResourceList(1, resourceCountPerPage,
+                                                            filterByAreaModel.get(filterAreaIndex).key,
+                                                            filterBySortModel.get(filterSortIndex).key,
+                                                            filterByChannelModel.get(filterChannelIndex).key,
+                                                            filterByYearModel.get(filterYearIndex).key)
                         }
                     }
                 }
@@ -104,10 +110,10 @@ Page {
                     script: {
                         if (!dataRequest.isUpdatingResList)
                             dataRequest.requestResourceList(dataRequest.resourcePage + 1, resourceCountPerPage,
-                                                            resourceListFilterData.data("current/area"),
-                                                            resourceListFilterData.data("current/sort"),
-                                                            resourceListFilterData.data("current/channel"),
-                                                            resourceListFilterData.data("current/year"))
+                                                            filterByAreaModel.get(filterAreaIndex).key,
+                                                            filterBySortModel.get(filterSortIndex).key,
+                                                            filterByChannelModel.get(filterChannelIndex).key,
+                                                            filterByYearModel.get(filterYearIndex).key)
                     }
                 }
             }
@@ -155,9 +161,17 @@ Page {
                     filterByChannelModel.append({"key"  : resourceListFilterData.dataListAt("channel/keys", i),
                                                  "value": resourceListFilterData.dataListAt("channel/values", i)})
 
-                for (i=0; i<resourceListFilterData.dataListSize("sort/keys"); ++i)
+                for (i=0; i<resourceListFilterData.dataListSize("sort/keys"); ++i) {
                     filterBySortModel.append({"key"  : resourceListFilterData.dataListAt("sort/keys", i),
                                               "value": resourceListFilterData.dataListAt("sort/values", i)})
+                }
+
+                reslistpage.title = filterByAreaModel.get(filterAreaIndex).key + " "
+                        + filterByChannelModel.get(filterChannelIndex).key + " "
+                        + filterByYearModel.get(filterYearIndex).key + " "
+                        + filterBySortModel.get(filterSortIndex).key
+
+
             }
         }
 
@@ -179,8 +193,8 @@ Page {
                     model: filterByAreaModel
                     ToolButton {
                         text: key
-                        highlighted: value === resourceListFilterData.data("current/area")
-                        onClicked: resourceListFilterData.setData("current/area", value)
+                        highlighted: filterAreaIndex === index
+                        onClicked: filterAreaIndex = index
                     }
                 }
             }
@@ -194,8 +208,8 @@ Page {
                     model: filterByYearModel
                     ToolButton {
                         text: key
-                        highlighted: value === resourceListFilterData.data("current/year")
-                        onClicked: resourceListFilterData.setData("current/year", value)
+                        highlighted: filterYearIndex === index
+                        onClicked: filterYearIndex = index
                     }
                 }
             }
@@ -208,8 +222,8 @@ Page {
                     model: filterByChannelModel
                     ToolButton {
                         text: key
-                        highlighted: value === resourceListFilterData.data("current/channel")
-                        onClicked: resourceListFilterData.setData("current/channel", value)
+                        highlighted: filterChannelIndex === index
+                        onClicked: filterChannelIndex = index
                     }
                 }
             }
@@ -222,8 +236,8 @@ Page {
                     model: filterBySortModel
                     ToolButton {
                         text: key
-                        highlighted: value === "" || value === resourceListFilterData.data("current/sort")
-                        onClicked: resourceListFilterData.setData("current/sort", value)
+                        highlighted: filterSortIndex === index
+                        onClicked: filterSortIndex = index
                     }
                 }
             }
@@ -234,10 +248,10 @@ Page {
             resourceListModel.clear()
             dataRequest.resourcePage = 1
             dataRequest.requestResourceList(1, resourceCountPerPage,
-                                            resourceListFilterData.data("current/area"),
-                                            resourceListFilterData.data("current/sort"),
-                                            resourceListFilterData.data("current/channel"),
-                                            resourceListFilterData.data("current/year"))
+                                            filterByAreaModel.get(filterAreaIndex).key,
+                                            filterBySortModel.get(filterSortIndex).key,
+                                            filterByChannelModel.get(filterChannelIndex).key,
+                                            filterByYearModel.get(filterYearIndex).key)
         }
     }
 
