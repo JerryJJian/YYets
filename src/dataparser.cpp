@@ -130,14 +130,41 @@ void DataParser::dataReceived(int type, const QByteArray &data)
     case DataRequest::ITEM:
     {
         items.clear();
+        QVariantList rawdata;
         QJsonArray objects = doc.object().value("data").toObject().value("item_list").toArray();
         for (auto object : objects)
         {
-            ListItem *item = new ResItemListItem(object.toVariant().toHash());
+            QVariantHash d(object.toVariant().toHash());
+            rawdata << d;
+            ListItem *item = new ResItemListItem(d);
             items << item;
         }
 
-        emit updateData(type, objects.toVariantList(), items);
+        QJsonArray playSrcs = doc.object().value("data").toObject().value("play_source").toArray();
+        if (!playSrcs.isEmpty())
+        {
+            QVariantHash psdata;
+            psdata.insert("foramt", tr("*"));
+            psdata.insert("format_tip", tr("Play Source"));
+            psdata.insert("size", "");
+            psdata.insert("comments_count", "0");
+
+            QVariantList files;
+            for (auto obj : playSrcs)
+            {
+                QVariantMap psitem(obj.toVariant().toMap());
+                psitem.insert("way_name", (psitem.value("way_cn").isNull() ? psitem.value("way_en") : psitem.value("way_cn")));
+                files.append(psitem);
+            }
+            psdata.insert("files", files);
+
+            ListItem *item = new ResItemListItem(psdata);
+            items << item;
+
+            rawdata << psdata;
+        }
+
+        emit updateData(type, rawdata, items);
     } break;
     case DataRequest::ARTICLELIST:
     {
