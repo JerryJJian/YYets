@@ -216,7 +216,7 @@ void DataParser::dataReceived(int type, const QByteArray &data)
 
         // resource
         QStringList resources;
-        for (auto res : object.value("relative").toArray())
+        for (auto res : object.value("resource").toArray())
         {
             QJsonObject resObj = res.toObject();
             QString id(resObj.value("id").toString());
