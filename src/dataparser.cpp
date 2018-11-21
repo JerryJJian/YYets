@@ -126,17 +126,21 @@ void DataParser::dataReceived(int type, const QByteArray &data)
         if (seasonList.size() > 0)
             resHash.insert("season", seasons.join("|"));
 
+        resHash.insert("comments_count", doc.object().value("data").toObject().value("comments_count").toString());
+
         // comments
         QJsonArray comments = doc.object().value("data").toObject().value("comments_hot").toArray();
         for (auto comment : comments)
         {
             QVariantHash commentData(comment.toObject().toVariantHash());
+            commentData.insert("dateline", QDateTime::fromSecsSinceEpoch(commentData.value("dateline").toInt()).toString("yyyy-MM-dd hh:mm:ss"));
             if (!comment.toObject().value("reply").isNull())
             {
                 QJsonObject reply = comment.toObject().value("reply").toObject();
                 for (auto key : reply.keys())
                     commentData.insert("reply_"+key, reply.value(key));
 
+                commentData.insert("reply_dateline", QDateTime::fromSecsSinceEpoch(commentData.value("reply_dateline").toInt()).toString("yyyy-MM-dd hh:mm:ss"));
                 commentData.insert("reply", reply.value("id"));
             }
             else
@@ -208,6 +212,65 @@ void DataParser::dataReceived(int type, const QByteArray &data)
         QJsonObject object = doc.object().value("data").toObject();
         QVariantHash articleData(object.toVariantHash());
         articleData.insert("dateline", QDateTime::fromSecsSinceEpoch(articleData.value("dateline").toInt()).toString("yyyy-MM-dd hh:mm:ss"));
+        articleData.insert("comments_count", object.value("comments_count").toString());
+
+        // resource
+        QStringList resources;
+        for (auto res : object.value("relative").toArray())
+        {
+            QJsonObject resObj = res.toObject();
+            QString id(resObj.value("id").toString());
+            resources << id;
+            articleData.insert("resource/"+id+"/id",       resObj.value("id").toString());
+            articleData.insert("resource/"+id+"/cnname",   resObj.value("cnname").toString());
+            articleData.insert("resource/"+id+"/remark",   resObj.value("remark").toString());
+            articleData.insert("resource/"+id+"/content",  resObj.value("content").toString());
+            articleData.insert("resource/"+id+"/enname",   resObj.value("enname").toString());
+            articleData.insert("resource/"+id+"/score",    resObj.value("score").toString());
+            articleData.insert("resource/"+id+"/poster_s", resObj.value("poster_s").toString());
+            articleData.insert("resource/"+id+"/poster_b", resObj.value("poster_b").toString());
+        }
+        articleData.insert("resource", resources);
+
+        // relative
+        QStringList relatedArticles;
+        for (auto related : object.value("relative").toArray())
+        {
+            QJsonObject relatedObj = related.toObject();
+            QString id(relatedObj.value("id").toString());
+            relatedArticles << id;
+            articleData.insert("relative/"+id+"/poster_s", relatedObj.value("poster_s").toString());
+            articleData.insert("relative/"+id+"/poster_b", relatedObj.value("poster_b").toString());
+            articleData.insert("relative/"+id+"/poster_m", relatedObj.value("poster_m").toString());
+            articleData.insert("relative/"+id+"/title", relatedObj.value("title").toString());
+            articleData.insert("relative/"+id+"/id", relatedObj.value("id").toString());
+            articleData.insert("relative/"+id+"/dateline", QDateTime::fromSecsSinceEpoch(relatedObj.value("dateline").toString().toInt()).toString("yyyy-MM-dd hh:mm:ss"));
+        }
+        articleData.insert("relative", relatedArticles);
+
+        // comments
+        for (auto comment : object.value("comments_hot").toArray())
+        {
+            QVariantHash commentData(comment.toObject().toVariantHash());
+            commentData.insert("dateline", QDateTime::fromSecsSinceEpoch(commentData.value("dateline").toInt()).toString("yyyy-MM-dd hh:mm:ss"));
+            if (!comment.toObject().value("reply").isNull())
+            {
+                QJsonObject reply = comment.toObject().value("reply").toObject();
+                for (auto key : reply.keys())
+                    commentData.insert("reply_"+key, reply.value(key));
+
+                commentData.insert("reply_dateline", QDateTime::fromSecsSinceEpoch(commentData.value("reply_dateline").toInt()).toString("yyyy-MM-dd hh:mm:ss"));
+                commentData.insert("reply", reply.value("id"));
+            }
+            else
+            {
+                commentData.insert("reply", "");
+            }
+
+            ListItem *item = new CommentListItem(commentData);
+            items << item;
+        }
+
         emit updateData(type, articleData, items);
     } break;
     case DataRequest::SEARCHRESOURCE:

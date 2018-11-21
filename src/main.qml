@@ -5,11 +5,12 @@ ApplicationWindow {
     id: window
     visible: true
     width: 640
-    height: 480
+    height: 960
     title: qsTr("Ticket")
     readonly property bool inPortrait: window.width < window.height
     signal showFilterPopup()
     signal setSearchType(string type)
+    signal showArticleView(string type)
 
     header: ToolBar {
         anchors.left: parent.left
@@ -36,13 +37,17 @@ ApplicationWindow {
 
         Label {
             text: stackView.currentItem.title
-            anchors.centerIn: parent
+            anchors.left: toolButton.right
+            anchors.right: toolRow.left
+            anchors.verticalCenter: parent.verticalCenter
+            clip: true
+            horizontalAlignment: Text.AlignHCenter
         }
 
         Row {
-            anchors.right: parent.right; anchors.rightMargin: 10
+            id: toolRow
+            anchors.right: parent.right; anchors.rightMargin: 5
             anchors.verticalCenter: parent.verticalCenter
-            spacing: 10
 
             ToolButton {
                 id: filterButton
@@ -70,12 +75,44 @@ ApplicationWindow {
                     setSearchType("article")
                 }
             }
+
+            ToolButton {
+                id: articleContentButton
+                icon.source: "images/news.png"
+                visible: stackView.currentItem.pageType === "articlePage"
+                highlighted: visible && stackView.currentItem.currentView === "article"
+                onClicked: {
+                    stackView.currentItem.currentView = "article"
+                    showArticleView("article")
+                }
+            }
+            ToolButton {
+                id: articleRelativeButton
+                icon.source: "images/link.png"
+                visible: stackView.currentItem.pageType === "articlePage"
+                highlighted: visible && stackView.currentItem.currentView === "relative"
+                onClicked: {
+                    stackView.currentItem.currentView = "relative"
+                    showArticleView("relative")
+                }
+            }
+            ToolButton {
+                id: articleCommentsButton
+                icon.source: "images/comment.png"
+                visible: stackView.currentItem.pageType === "articlePage"
+                highlighted: visible && stackView.currentItem.currentView === "comments"
+                onClicked: {
+                    stackView.currentItem.currentView = "comments"
+                    showArticleView("comments")
+                }
+            }
         }
 
     }
 
     property Component articlePage: ArticlePage {
         property string pageType: "articlePage"
+        property string currentView: "article"
     }
 
     property Component resourceItemPage: ResourceItemPage {

@@ -80,6 +80,7 @@ int main(int argc, char *argv[])
         case DataRequest::ARTICLE:
         {
             articleData->update(rawdata.toHash());
+            commentListModel->updateRows(items);
         } break;
         case DataRequest::SEARCHRESOURCE:
         {

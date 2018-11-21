@@ -6,6 +6,7 @@ Page {
 
     title: qsTr("Resource Name")
     signal openResourceItem(int id, int season, int episode)
+    property int commentsCount: 0
 
     Connections {
         target: resourceData
@@ -26,6 +27,7 @@ Page {
             content.text = resourceData.data("content")
             prevueLabel.visible = resourceData.data("prevue/play_time") !== ""
             busyIndicator.running = false
+            commentsCount = resourceData.data("comments_count")
 
             for (var i=0; i<resourceData.dataListSize("season"); ++i) {
                 var episode = new Array();
@@ -50,6 +52,7 @@ Page {
         height: width
         anchors.left: parent.left
         anchors.top: parent.top
+        anchors.topMargin: 0
 
         Image {
             id: img
@@ -64,7 +67,7 @@ Page {
         id: metaInfo
         anchors.left: posterImg.right; anchors.leftMargin: (posterImg.width > img.width ? (img.width - posterImg.width)/2 : 0) + 10
         anchors.right: parent.right;   anchors.rightMargin: 10
-        anchors.top: parent.top;       anchors.topMargin: 30
+        anchors.top: posterImg.top;   anchors.topMargin: 30
         spacing: ennameLabel.height
 
         Label { id: ennameLabel    ; width: parent.width; wrapMode: Text.WordWrap; }
@@ -150,6 +153,7 @@ Page {
             text: qsTr("Commonts")
         }
     }
+
     StackLayout {
         id: layout
         anchors.top: tabbar.bottom; anchors.topMargin: 10
@@ -281,159 +285,33 @@ Page {
             clip: true
             model: commentListModel
 
-            delegate: Rectangle {
+            footer: Item {
                 width: parent.width
-                height: Math.max(sessionInfo.implicitHeight, avatarItem.height) + userLabel.implicitHeight + 30
+                height: commentbutton.height * 1.5
 
-                Label {
-                    id: userLabel
-                    anchors.top: parent.top; anchors.topMargin: 10
-                    anchors.left: parent.left;
-                    anchors.leftMargin: Math.abs((avatarImg.width - avatarItem.width)/2)
-
-                    height: implicitHeight + font.pixelSize
-                    text: nickname + " [" + group_name + "]"
-                    font.bold: true
-                    verticalAlignment: Text.AlignVCenter
+                Button {
+                    id: commentbutton
+                    anchors.centerIn: parent
+                    text: qsTr("Show " + commentsCount + " Comments")
+                    icon.source: "images/comment.png"
                 }
+            }
+            delegate: CommentItemDelegate {
+                width: parent.width
 
-                Row {
-                    id: infobar
-                    anchors.top: userLabel.top
-                    anchors.right: parent.right
-                    anchors.rightMargin: 5
-                    spacing: 3
-
-                    Label {
-                        text: dateline + "  "
-                        color: "gray"
-                        font.pixelSize: Qt.application.font.pixelSize * 0.9
-                    }
-
-                    Image {
-                        height: Qt.application.font.pixelSize
-                        width: height
-                        source: "images/good.png"
-                    }
-                    Label { color: "gray"; text: "(" + good + ")  "; font.pixelSize: Qt.application.font.pixelSize * 0.9 }
-
-                    Image {
-                        height: Qt.application.font.pixelSize
-                        width: height
-                        source: "images/bad.png"
-                    }
-                    Label { color: "gray"; text: "(" + bad + ")"; font.pixelSize: Qt.application.font.pixelSize * 0.9 }
-                }
-
-                Item {
-                    id: avatarItem
-                    width:  64
-                    height: 64
-                    anchors.left: userLabel.left
-                    anchors.top:  userLabel.bottom;
-                    anchors.topMargin: (avatarImg.height - avatarItem.height) / 2
-
-                    Image {
-                        id: avatarImg
-                        anchors.centerIn: parent
-                        width:  sourceSize.width > sourceSize.height ? avatarItem.width : sourceSize.width * height / sourceSize.height
-                        height: sourceSize.width < sourceSize.height ? avatarItem.width : sourceSize.height * width / sourceSize.width
-                        source: avatar_s
-                        cache:  true
-                    }
-                }
-
-                Column {
-                    id: sessionInfo
-                    anchors.left: avatarItem.right
-                    anchors.right: parent.right
-                    anchors.top: avatarItem.anchors.top
-                    anchors.topMargin: avatarItem.anchors.topMargin
-                    spacing: Qt.application.font.pixelSize / 2
-
-                    Label {
-                        text: content
-                        width: parent.width
-                        lineHeight: 1.5
-                        padding: font.pixelSize
-                        wrapMode: Text.WrapAnywhere
-                    }
-
-                    Rectangle {
-                        width: parent.width - Qt.application.font.pixelSize * 2
-                        height: visible ? (reContentLabel.implicitHeight + reUserLabel.implicitHeight) : 0
-                        border.color: "#EEEEEE"
-                        border.width: 1
-                        radius: Qt.application.font.pixelSize / 3
-                        visible: reply !== ""
-
-                        Label {
-                            id: replyFlag
-                            padding: 3
-                            anchors.left: parent.left; anchors.leftMargin: 3
-                            anchors.top: parent.top; anchors.topMargin: 3
-                            text: qsTr("Reply")
-                            color: "white"
-                            font.pixelSize: Qt.application.font.pixelSize * 0.8
-                            background: Rectangle { color: "#282828"; radius: Qt.application.font.pixelSize / 2 }
-                        }
-
-                        Label {
-                            id: reUserLabel
-                            anchors.top: parent.top
-                            anchors.left: replyFlag.right
-                            padding: font.pixelSize / 3
-                            font.bold: true
-                            color: "gray"
-                            lineHeight: 1.5
-                            text: reply_nickname + " [" + reply_group_name + "]"
-                        }
-
-                        Row {
-                            id: replyInfobar
-                            anchors.top: parent.top
-                            anchors.topMargin: 5
-                            anchors.right: parent.right
-                            anchors.rightMargin: 5
-                            spacing: 3
-
-                            Label {
-                                text: reply_dateline + "  "
-                                color: "gray"
-                                font.pixelSize: Qt.application.font.pixelSize * 0.9
-                            }
-
-                            Image {
-                                height: Qt.application.font.pixelSize
-                                width: height
-                                source: "images/good.png"
-                            }
-                            Label { color: "gray"; text: "(" + reply_good + ")  "; font.pixelSize: Qt.application.font.pixelSize * 0.9 }
-
-                            Image {
-                                height: Qt.application.font.pixelSize
-                                width: height
-                                source: "images/bad.png"
-                            }
-                            Label { color: "gray"; text: "(" + reply_bad + ")"; font.pixelSize: Qt.application.font.pixelSize * 0.9 }
-                        }
-
-                        Label {
-                            id: reContentLabel
-                            padding: font.pixelSize / 2
-                            width: parent.width
-                            wrapMode: Text.WrapAnywhere
-                            anchors.left: parent.left
-                            anchors.top: reUserLabel.bottom
-                            lineHeight: 1.5
-                            color: "gray"
-                            text: reply_content
-                        }
-                    }
-                }
-
-                Rectangle { width: parent.width; height: 1; color: "#ECECEC"; anchors.bottom: parent.bottom }
-
+                p_user: nickname + " [" + group_name + "]"
+                p_dateline: dateline + " "
+                p_good: "("+(good === "" ? 0 : good)+") "
+                p_bad: "("+(bad===""?0:bad)+")"
+                p_content: content
+                p_avatar_s: avatar_s
+                p_replyShown: reply !== ""
+                p_reply_user: reply_nickname + " [" + reply_group_name + "]"
+                p_reply_dateline: reply_dateline + " "
+                p_reply_good: "("+(reply_good === "" ? 0 : reply_good)+") "
+                p_reply_bad: "("+(reply_bad===""?0:reply_bad)+")"
+                p_reply_avatar_s: reply_avatar_s
+                p_reply_content: reply_content
             }
         }
 
