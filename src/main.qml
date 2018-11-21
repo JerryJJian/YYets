@@ -8,8 +8,8 @@ ApplicationWindow {
     height: 480
     title: qsTr("Ticket")
     readonly property bool inPortrait: window.width < window.height
-    property alias inResourceListView: filterButton.visible
     signal showFilterPopup()
+    signal setSearchType(string type)
 
     header: ToolBar {
         anchors.left: parent.left
@@ -39,12 +39,37 @@ ApplicationWindow {
             anchors.centerIn: parent
         }
 
-        ToolButton {
-            id: filterButton
-            icon.source: "images/filter.png"
-            anchors.right: parent.right
-            visible: false
-            onClicked: showFilterPopup()
+        Row {
+            anchors.right: parent.right; anchors.rightMargin: 10
+            anchors.verticalCenter: parent.verticalCenter
+            spacing: 10
+
+            ToolButton {
+                id: filterButton
+                icon.source: "images/filter.png"
+                visible: stackView.currentItem.pageType === "resourceListPage"
+                onClicked: showFilterPopup()
+            }
+            ToolButton {
+                id: searchResourceButton
+                icon.source: "images/movie.png"
+                visible: stackView.currentItem.pageType === "searchResourcePage"
+                highlighted: visible && stackView.currentItem.searchType === "resource"
+                onClicked: {
+                    stackView.currentItem.searchType = "resource"
+                    setSearchType("resource")
+                }
+            }
+            ToolButton {
+                id: searchArticleButton
+                icon.source: "images/news.png"
+                visible: stackView.currentItem.pageType === "searchResourcePage"
+                highlighted: visible && stackView.currentItem.searchType === "article"
+                onClicked: {
+                    stackView.currentItem.searchType = "article"
+                    setSearchType("article")
+                }
+            }
         }
 
     }
@@ -88,11 +113,15 @@ ApplicationWindow {
     }
     property Component searchResourcePage: SearchPage {
         property string pageType: "searchResourcePage"
+        property string searchType: "resource"
         onOpenResource: {
             stackView.push(resourcePage)
             dataRequest.requestResource(id)
         }
-
+        onOpenArticle: {
+            stackView.push(articlePage)
+            dataRequest.requestArticle(id)
+        }
     }
     property Component followedListPage: FollowedListPage {
         property string pageType: "followedListPage"
@@ -178,7 +207,6 @@ ApplicationWindow {
 
         onCurrentItemChanged: {
             if (currentItem){
-                inResourceListView = currentItem.pageType === "resourceListPage"
                 currentItem.forceActiveFocus();
             }
         }

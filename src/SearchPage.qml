@@ -4,9 +4,25 @@ import QtQuick.Controls 2.4
 
 Page {
     title: qsTr("Search")
+
     signal openResource(int id)
+    signal openArticle(int id)
+
+    property string searchType: "resource"
     property int pageNum: 0
     readonly property int pageSize: 10
+
+    Connections {
+        target: window
+        onSetSearchType: {
+            if (searchType !== type) {
+                searchType = type
+                if (searchText.text !== "") {
+                    findButton.clicked()
+                }
+            }
+        }
+    }
 
     ToolButton {
         id: findButton
@@ -15,7 +31,7 @@ Page {
         icon.source: "images/find.png"
         onClicked: {
             searchResourceModel.clear()
-            dataRequest.searchResource(searchText.text)
+            dataRequest.searchResource(searchType, searchText.text)
         }
     }
 
@@ -75,6 +91,7 @@ Page {
 
                     Label {
                         text: channel;
+                        visible: channel !== ""
                         width: implicitWidth + font.pixelSize
                         height: implicitHeight + font.pixelSize / 2
                         font.pixelSize: Qt.application.font.pixelSize * 0.9;
@@ -125,6 +142,7 @@ Page {
                         font.pixelSize: Qt.application.font.pixelSize * 0.9;
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
+                        wrapMode: Text.WrapAnywhere
                         color: "#FFFFFF"
                         background: Rectangle {
                             radius: height / 3
@@ -145,7 +163,12 @@ Page {
             MouseArea {
                 id: mouseArea
                 anchors.fill: parent
-                onClicked: openResource(itemid)
+                onClicked: {
+                    if (searchType === "resource")
+                        openResource(itemid)
+                    else
+                        openArticle(itemid)
+                }
             }
         }
 
@@ -163,7 +186,7 @@ Page {
                             return ;
 
                         if (!dataRequest.isUpdatingResList)
-                            dataRequest.searchResource(searchText.text, pageNum + 1, pageSize)
+                            dataRequest.searchResource(searchType, searchText.text, pageNum + 1, pageSize)
                     }
                 }
             }

@@ -15,5 +15,11 @@
         <file>images/follow.png</file>
         <file>images/top.png</file>
         <file>images/ticket.png</file>
+        <file>images/news.png</file>
+        <file>images/comment.png</file>
+        <file>images/introduce.png</file>
+        <file>images/link.png</file>
+        <file>images/bad.png</file>
+        <file>images/good.png</file>
     </qresource>
 </RCC>

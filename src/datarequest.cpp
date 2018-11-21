@@ -59,11 +59,11 @@ void DataRequest::requestResourceList(int page, int countPerPage, QString area, 
     d->startRequest(RESOURCELIST, QUrl(url.arg(page).arg(countPerPage).arg(area).arg(sort).arg(channel).arg(year)));
 }
 
-void DataRequest::searchResource(QString text, int page, int limit)
+void DataRequest::searchResource(QString type, QString text, int page, int limit)
 {
     Q_D(DataRequest);
-    QString url(DataRequestPrivate::RequestURL.arg("a=search&st=resource&k=%1&page=%2&limit=%3"));
-    d->startRequest(SEARCHRESOURCE, QUrl(url.arg(text).arg(page).arg(limit)));
+    QString url(DataRequestPrivate::RequestURL.arg("a=search&st=%1&k=%2&page=%3&limit=%4"));
+    d->startRequest(SEARCHRESOURCE, QUrl(url.arg(type).arg(text).arg(page).arg(limit)));
 }
 
 bool DataRequest::getIsUpdatingResList() const

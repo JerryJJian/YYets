@@ -14,6 +14,7 @@
 #include "clipboardproxy.h"
 #include "resourcelistitem.h"
 #include "searchresourcelistitem.h"
+#include "commentlistitem.h"
 #include <QDebug>
 
 int main(int argc, char *argv[])
@@ -42,6 +43,8 @@ int main(int argc, char *argv[])
 
     ListModel *searchResourceModel = new ListModel(new SearchResourceListItem, dataRequest);
 
+    ListModel *commentListModel = new ListModel(new CommentListItem, dataRequest);
+
     QObject::connect(dataParser, &DataParser::updateData, [=](int type, const QVariant &rawdata, const QList<ListItem*> &items){
         switch (type)
         {
@@ -63,6 +66,7 @@ int main(int argc, char *argv[])
         case DataRequest::RESOURCE:
         {
             resourceData->update(rawdata.toHash());
+            commentListModel->updateRows(items);
         } break;
         case DataRequest::ITEM:
         {
@@ -94,6 +98,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("resourceListModel",      resourceListModel);
     engine.rootContext()->setContextProperty("resourceListFilterData", resourceListFilterData);
     engine.rootContext()->setContextProperty("searchResourceModel",    searchResourceModel);
+    engine.rootContext()->setContextProperty("commentListModel",       commentListModel);
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())

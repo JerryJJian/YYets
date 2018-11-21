@@ -8,6 +8,7 @@
 #include <QJsonParseError>
 #include <QDateTime>
 #include "articlelistitem.h"
+#include "commentlistitem.h"
 #include "dataset.h"
 #include "movielistitem.h"
 #include "resitemlistitem.h"
@@ -125,7 +126,29 @@ void DataParser::dataReceived(int type, const QByteArray &data)
         if (seasonList.size() > 0)
             resHash.insert("season", seasons.join("|"));
 
-        emit updateData(type, resHash);
+        // comments
+        QJsonArray comments = doc.object().value("data").toObject().value("comments_hot").toArray();
+        for (auto comment : comments)
+        {
+            QVariantHash commentData(comment.toObject().toVariantHash());
+            if (!comment.toObject().value("reply").isNull())
+            {
+                QJsonObject reply = comment.toObject().value("reply").toObject();
+                for (auto key : reply.keys())
+                    commentData.insert("reply_"+key, reply.value(key));
+
+                commentData.insert("reply", reply.value("id"));
+            }
+            else
+            {
+                commentData.insert("reply", "");
+            }
+
+            ListItem *item = new CommentListItem(commentData);
+            items << item;
+        }
+
+        emit updateData(type, resHash, items);
     } break;
     case DataRequest::ITEM:
     {
