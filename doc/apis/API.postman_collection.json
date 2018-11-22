@@ -226,7 +226,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "api1.ousns.net/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=search&st=resource&page=1&g=api/v1&k= 生&limit=5",
+					"raw": "api1.ousns.net/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=search&st=article&page=1&g=api/v1&k= 生&limit=5",
 					"host": [
 						"api1",
 						"ousns",
@@ -250,7 +250,8 @@
 						},
 						{
 							"key": "st",
-							"value": "resource"
+							"value": "article",
+							"description": "resource|article"
 						},
 						{
 							"key": "page",
@@ -283,7 +284,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://api1.ousns.net/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=resource_list&g=api%2Fv1&area=&sort=update&page=3&channel=&year=&limit=2",
+					"raw": "http://api1.ousns.net/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=resource_list&g=api%2Fv1&area=&sort=update&page=1&channel=&year=&limit=30",
 					"protocol": "http",
 					"host": [
 						"api1",
@@ -320,7 +321,7 @@
 						},
 						{
 							"key": "page",
-							"value": "3"
+							"value": "1"
 						},
 						{
 							"key": "channel",
@@ -332,7 +333,7 @@
 						},
 						{
 							"key": "limit",
-							"value": "2"
+							"value": "30"
 						}
 					]
 				}
@@ -422,7 +423,8 @@
 						},
 						{
 							"key": "id",
-							"value": "31502"
+							"value": "31502",
+							"description": "31538(包含extend 节点)"
 						}
 					]
 				}
