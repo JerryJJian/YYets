@@ -7,10 +7,12 @@ Page {
     title: qsTr("Resource Name")
     signal openResourceItem(int id, int season, int episode)
     property int commentsCount: 0
+    property string resourceId: ""
 
     Connections {
         target: resourceData
         onRefreshView: {
+            resourceId = resourceData.data("id")
             title = resourceData.data("cnname") === "" ? resourceData.data("enname") : resourceData.data("cnname")
             img.source = resourceData.data("poster_b")
             ennameLabel.text = resourceData.data("enname")
@@ -29,13 +31,16 @@ Page {
             busyIndicator.running = false
             commentsCount = resourceData.data("comments_count")
 
-            for (var i=0; i<resourceData.dataListSize("season"); ++i) {
-                var episode = new Array();
-                var season = resourceData.dataListAt("season", i);
-                for (var j=0; j<resourceData.dataListSize("season/"+season); ++j)
-                    episode[j] = resourceData.dataListAt("season/"+season, j);
+            if (key === "" || key === "season") {
+                seasonModel.clear()
+                for (var i=0; i<resourceData.dataListSize("season"); ++i) {
+                    var episode = new Array();
+                    var season = resourceData.dataListAt("season", i);
+                    for (var j=0; j<resourceData.dataListSize("season/"+season); ++j)
+                        episode[j] = resourceData.dataListAt("season/"+season, j);
 
-                seasonModel.append({"season": resourceData.dataListAt("season", i), "episode": episode })
+                    seasonModel.append({"season": resourceData.dataListAt("season", i), "episode": episode })
+                }
             }
 
             resourceArea.state = (seasonModel.count > 0 ? "tv" : "movie")
@@ -257,8 +262,8 @@ Page {
                                         var se = ""
                                         if (season != -1)
                                             se = "S" + season + "E" + text;
+                                        openResourceItem(resourceId, season, text)
                                         resourceData.setData("current_item", se)
-                                        openResourceItem(resourceData.data("id"), season, text)
                                     }
                                 }
                             }

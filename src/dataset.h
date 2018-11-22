@@ -16,7 +16,7 @@ public:
     Q_INVOKABLE QString dataListAt(const QString &key, int index, const QString &splitBy = StringListSeparator) const;
 
 signals:
-    void refreshView();
+    void refreshView(const QString &key = QString());
 
 public slots:
     void setData(const QString &key, const QVariant &data);

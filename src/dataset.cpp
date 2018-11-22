@@ -44,7 +44,7 @@ void DataSet::setData(const QString &key, const QVariant &data)
     if (key.endsWith("time"))
     {
         d.printableData.insert(key, QDateTime::fromSecsSinceEpoch(data.toInt()).toString("yyyy-MM-dd hh:mm:ss"));
-        if (d.enableRefresh) emit refreshView();
+        if (d.enableRefresh) emit refreshView(key);
         return ;
     }
 
@@ -55,7 +55,7 @@ void DataSet::setData(const QString &key, const QVariant &data)
             items << item.toString();
 
         d.printableData.insert(key, items.join(StringListSeparator));
-        if (d.enableRefresh) emit refreshView();
+        if (d.enableRefresh) emit refreshView(key);
         return ;
     }
 
@@ -67,13 +67,13 @@ void DataSet::setData(const QString &key, const QVariant &data)
             it.next();
             d.printableData.insert(key+"/"+it.key(), it.value().toString());
         }
-        if (d.enableRefresh) emit refreshView();
+        if (d.enableRefresh) emit refreshView(key+"/"+it.key());
         return ;
     }
 
 //    if (data.canConvert(QVariant::String))
     d.printableData.insert(key, data.toString());
-    if (d.enableRefresh) emit refreshView();
+    if (d.enableRefresh) emit refreshView(key);
 }
 
 void DataSet::update(const QVariantHash &data)
