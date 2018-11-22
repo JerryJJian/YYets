@@ -190,6 +190,7 @@ ApplicationWindow {
                 source: "images/ticket.png"
                 width: parent.width * 0.66
                 height: width
+                cache: false
             }
 
             ItemDelegate {

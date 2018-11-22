@@ -48,6 +48,7 @@ Rectangle {
             height: Qt.application.font.pixelSize
             width: height
             source: "images/good.png"
+            cache: false
         }
         Label { id: goodLabel; color: "gray"; font.pixelSize: Qt.application.font.pixelSize * 0.9 }
 
@@ -55,6 +56,7 @@ Rectangle {
             height: Qt.application.font.pixelSize
             width: height
             source: "images/bad.png"
+            cache: false
         }
         Label { id: badLabel; color: "gray"; font.pixelSize: Qt.application.font.pixelSize * 0.9 }
     }
@@ -146,6 +148,7 @@ Rectangle {
                     height: Qt.application.font.pixelSize
                     width: height
                     source: "images/good.png"
+                    cache: false
                 }
                 Label { id: replygoodLabel; color: "gray"; font.pixelSize: Qt.application.font.pixelSize * 0.9 }
 
@@ -153,6 +156,7 @@ Rectangle {
                     height: Qt.application.font.pixelSize
                     width: height
                     source: "images/bad.png"
+                    cache: false
                 }
                 Label { id: replybadLabel; color: "gray"; font.pixelSize: Qt.application.font.pixelSize * 0.9 }
             }

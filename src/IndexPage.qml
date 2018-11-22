@@ -109,11 +109,12 @@ Page {
                     source: poster_b
                     width: parent.width > 480 ? 480 : parent.width
                     height: width * 9 / 16
+                    cache: true
                 }
 
                 Label {
                     width: parent.width
-                    text: type_cn + " " + dateline + qsTr(" views: ") + views
+                    text: type_cn + " " + dateline + qsTr(" views:(") + views + ")"
                     wrapMode: Text.WordWrap
                     color: "#9CA5B4"
                 }
@@ -141,7 +142,8 @@ Page {
     states: [
         State {
             name: "loadmore"
-            when: articleList.contentHeight > 0 && (articleList.contentY > articleList.contentHeight - articleList.height - articleList.headerItem.height + 64)
+            when: !dataRequest.isUpdatingIndex && articleList.contentHeight > 0
+                  && (articleList.contentY > articleList.contentHeight - articleList.height - articleList.headerItem.height + 64)
             StateChangeScript {
                 script: {
                     console.log("loadmore")
@@ -152,12 +154,14 @@ Page {
         },
         State {
             name: "refresh"
-            when: articleList.contentY < -64 - articleList.headerItem.height
+            when: !dataRequest.isUpdatingIndex && articleList.contentY < -64 - articleList.headerItem.height
             StateChangeScript {
                 script: {
                     console.log("refresh")
-                    if (!dataRequest.isUpdatingIndex)
+                    if (!dataRequest.isUpdatingIndex) {
+                        articlesModel.clear()
                         dataRequest.requestIndex()
+                    }
                 }
             }
         }

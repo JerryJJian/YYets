@@ -23,5 +23,6 @@
         <file>images/good.png</file>
         <file>CommentItemDelegate.qml</file>
         <file>CommentListPage.qml</file>
+        <file>images/view.png</file>
     </qresource>
 </RCC>

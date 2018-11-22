@@ -59,4 +59,13 @@ HEADERS += \
     commentlistitem.h
 
 DISTFILES += \
-    CommentItemDelegate.qml
+    main.qml \
+    IndexPage.qml \
+    ResourcePage.qml \
+    ResourceItemPage.qml \
+    ArticlePage.qml \
+    ResourceListPage.qml \
+    SearchPage.qml \
+    FollowedListPage.qml \
+    CommentItemDelegate.qml \
+    CommentListPage.qml
