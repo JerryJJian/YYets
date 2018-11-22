@@ -214,6 +214,32 @@ void DataParser::dataReceived(int type, const QByteArray &data)
         articleData.insert("dateline", QDateTime::fromSecsSinceEpoch(articleData.value("dateline").toInt()).toString("yyyy-MM-dd hh:mm:ss"));
         articleData.insert("comments_count", object.value("comments_count").toString());
 
+        // extend content
+        QJsonObject extendObject = object.value("extend").toObject();
+        if (!extendObject.isEmpty())
+        {
+            QStringList extContents;
+            for (auto ext : extendObject.value("articleContent").toArray())
+                extContents << ext.toString();
+            articleData.insert("extend/articleContent", extContents);
+
+            QStringList extTrailers;
+            for (auto ext : extendObject.value("article_trailer").toArray())
+                extTrailers << ext.toString();
+            articleData.insert("extend/article_trailer", extTrailers);
+
+            QStringList extRids;
+            for (auto ext : extendObject.value("rids").toArray())
+                extRids << ext.toString();
+            articleData.insert("extend/rids", extRids);
+            articleData.insert("extend", extContents.size());
+        }
+        else
+        {
+            articleData.insert("extend", 0);
+        }
+
+
         // resource
         QStringList resources;
         for (auto res : object.value("resource").toArray())
@@ -230,7 +256,7 @@ void DataParser::dataReceived(int type, const QByteArray &data)
             articleData.insert("resource/"+id+"/poster_s", resObj.value("poster_s").toString());
             articleData.insert("resource/"+id+"/poster_b", resObj.value("poster_b").toString());
         }
-        articleData.insert("resource", resources);
+        articleData.insert("resource", resources.join("|"));
 
         // relative
         QStringList relatedArticles;
@@ -246,7 +272,7 @@ void DataParser::dataReceived(int type, const QByteArray &data)
             articleData.insert("relative/"+id+"/id", relatedObj.value("id").toString());
             articleData.insert("relative/"+id+"/dateline", QDateTime::fromSecsSinceEpoch(relatedObj.value("dateline").toString().toInt()).toString("yyyy-MM-dd hh:mm:ss"));
         }
-        articleData.insert("relative", relatedArticles);
+        articleData.insert("relative", relatedArticles.join("|"));
 
         // comments
         for (auto comment : object.value("comments_hot").toArray())

@@ -113,6 +113,14 @@ ApplicationWindow {
     property Component articlePage: ArticlePage {
         property string pageType: "articlePage"
         property string currentView: "article"
+        onOpenResource: {
+            stackView.push(resourcePage)
+            dataRequest.requestResource(id)
+        }
+        onOpenArticle: {
+            stackView.push(articlePage)
+            dataRequest.requestArticle(id)
+        }
     }
 
     property Component resourceItemPage: ResourceItemPage {

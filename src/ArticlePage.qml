@@ -6,48 +6,62 @@ Page {
 
     title: qsTr("Article")
     property string commentsCount: "0"
+    signal openResource(int id)
+    signal openArticle(int id)
+    property string article: ""
 
     Connections {
         target: articleData
         onRefreshView: {
-            title = articleData.data("title")
-            authorLabel.text  = articleData.data("author")
-            timeLabel.text    = articleData.data("dateline") + "/" +  qsTr("Views ") + articleData.data("views")
-            introLabel.text   = articleData.data("intro")
-            contentLabel.text = articleData.data("content")
-            commentsCount     = articleData.data("comments_count")
+            if (article === "" || article === articleData.data("id")) {
+                article = articleData.data("id")
+                title = articleData.data("title")
+                authorLabel.text  = articleData.data("author")
+                timeLabel.text    = articleData.data("dateline") + "/" +  qsTr("Views ") + articleData.data("views")
+                introLabel.text   = articleData.data("intro")
+                contentLabel.text = articleData.data("content")
+                commentsCount     = articleData.data("comments_count")
 
-            relatedResourceModel = articleData.dataList("resource")
+                for (var i=0; i<articleData.data("extend"); ++i) {
+                    extentContentModel.append({
+                                                  "aContent": articleData.dataListAt("extend/articleContent", i),
+                                                  "aTrailer": articleData.dataListAt("extend/article_trailer", i),
+                                                  "aRid": articleData.dataListAt("extend/rids", i),
+                                              })
+                }
 
-//            for (var i=0; i<articleData.dataListSize("resource"); ++i) {
-//                relatedResourceModel.append({
-//                                                "id":       articleData.data("resource/" + articleData.dataListAt("resource", i) + "/id"),
-//                                                "cnname":   articleData.data("resource/" + articleData.dataListAt("resource", i) + "/cnname"),
-//                                                "remark":   articleData.data("resource/" + articleData.dataListAt("resource", i) + "/remark"),
-//                                                "poster_b": articleData.data("resource/" + articleData.dataListAt("resource", i) + "/poster_b"),
-//                                                "content":  articleData.data("resource/" + articleData.dataListAt("resource", i) + "/content"),
-//                                                "enname":   articleData.data("resource/" + articleData.dataListAt("resource", i) + "/enname"),
-//                                                "score":    articleData.data("resource/" + articleData.dataListAt("resource", i) + "/score"),
-//                                                "poster_s": articleData.data("resource/" + articleData.dataListAt("resource", i) + "/poster_s")
-//                                            })
-//            }
-//            relatedResourceModel.sync()
+                console.log(articleData.data("resource"))
 
-            for (var i=0; i<articleData.dataListSize("relative"); ++i) {
-                relatedArticleModel.append({
-                                               "id":       articleData.data("relative/" + articleData.dataListAt("relative", i) + "/id"),
-                                               "dateline": articleData.data("relative/" + articleData.dataListAt("relative", i) + "/dateline"),
-                                               "title":    articleData.data("relative/" + articleData.dataListAt("relative", i) + "/title"),
-                                               "poster_b": articleData.data("relative/" + articleData.dataListAt("relative", i) + "/poster_b"),
-                                               "poster_m": articleData.data("relative/" + articleData.dataListAt("relative", i) + "/poster_m"),
-                                               "poster_s": articleData.data("relative/" + articleData.dataListAt("relative", i) + "/poster_s")
-                                           })
+                for (i=0; i<articleData.dataListSize("resource"); ++i) {
+                    var resourceId = articleData.dataListAt("resource", i)
+                    relatedResourceModel.append({
+                                                    "id":       resourceId,
+                                                    "cnname":   articleData.data("resource/" + resourceId + "/cnname"),
+                                                    "remark":   articleData.data("resource/" + resourceId + "/remark"),
+                                                    "poster_b": articleData.data("resource/" + resourceId + "/poster_b"),
+                                                    "content":  articleData.data("resource/" + resourceId + "/content"),
+                                                    "enname":   articleData.data("resource/" + resourceId + "/enname"),
+                                                    "score":    articleData.data("resource/" + resourceId + "/score"),
+                                                    "poster_s": articleData.data("resource/" + resourceId + "/poster_s")
+                                                })
+                }
+
+                for (i=0; i<articleData.dataListSize("relative"); ++i) {
+                    var articleId = articleData.dataListAt("relative", i)
+                    relatedArticleModel.append({
+                                                   "id":       articleId,
+                                                   "dateline": articleData.data("relative/" + articleId + "/dateline"),
+                                                   "title":    articleData.data("relative/" + articleId + "/title"),
+                                                   "poster_b": articleData.data("relative/" + articleId + "/poster_b"),
+                                                   "poster_m": articleData.data("relative/" + articleId + "/poster_m"),
+                                                   "poster_s": articleData.data("relative/" + articleId + "/poster_s")
+                                               })
+                }
             }
-//            relatedArticleModel.sync()
-
         }
     }
 
+    ListModel { id: extentContentModel   }
     ListModel { id: relatedResourceModel }
     ListModel { id: relatedArticleModel  }
 
@@ -62,9 +76,11 @@ Page {
         Connections {
             target: window
             onShowArticleView: {
-                if (type === "article") layout.currentIndex = 0
-                else if (type === "relative") layout.currentIndex = 1
-                else if (type === "comments") layout.currentIndex = 2
+                if (article === "" || article === articleData.data("id")) {
+                    if (type === "article") layout.currentIndex = 0
+                    else if (type === "relative") layout.currentIndex = 1
+                    else if (type === "comments") layout.currentIndex = 2
+                }
             }
         }
 
@@ -107,14 +123,56 @@ Page {
                     }
                 }
 
-                Text {
+                Label {
                     id: contentLabel
                     wrapMode: Text.Wrap
                     width: parent.width
                     font.pixelSize: Qt.application.font.pixelSize * 1.2
                 }
 
+                Label {
+                    id: extendContentLabel
+                    wrapMode: Text.Wrap
+                    width: parent.width
+                    font.pixelSize: Qt.application.font.pixelSize * 1.2
+                }
+
+                Repeater {
+                    model: extentContentModel
+
+                    Rectangle {
+                        radius: Qt.application.font.pixelSize
+                        color: "#ECECEC"
+                        width: parent.width
+                        height: acontentLabel.implicitHeight + atrailerLabel.implicitHeight
+                        Label {
+                            id: acontentLabel
+                            anchors.top: parent.top
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            width: parent.width
+                            padding: font.pixelSize
+                            text: aContent
+                            wrapMode: Text.WrapAnywhere
+                        }
+                        Label {
+                            id: atrailerLabel
+                            padding: font.pixelSize
+                            text: aTrailer
+                            width: parent.width
+                            anchors.top: acontentLabel.bottom
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            wrapMode: Text.WrapAnywhere
+                            horizontalAlignment: Text.AlignRight
+                        }
+                    }
+
+                }
+
             }
+
+
 
         }
 
@@ -126,82 +184,188 @@ Page {
             Column {
 
                 width: parent.width
-                spacing: 3
+                spacing: 10
 
-                Label {
-                    text: qsTr("Relative Resources")
+                Item {
+                    width: parent.width
+                    height: resourceLabel.implicitHeight
+
+                    Rectangle {
+                        anchors.left: parent.left
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        width: 3
+                        color: "#F47023";
+                        radius: height / 3
+                    }
+
+                    Label {
+                        id: resourceLabel
+                        text: qsTr("Resources")
+                        padding: font.pixelSize / 2
+                    }
                 }
 
                 Repeater {
                     model: relatedResourceModel
 
                     Rectangle {
-//                        color: "#F3F3F3"
+                        color: "#F3F3F3"
                         width: parent.width
-                        height: Math.max(resPoster.height, resInfo.implicitHeight)
-                        property string resId: modelData
+                        height: Math.max(resPoster.height, resInfo.implicitHeight + resInfo.anchors.topMargin * 2)
 
                         Item {
                             id: resPoster
-                            width:  64
-                            height: 64
+                            width:  80
+                            height: 80
                             anchors.left: parent.left
                             anchors.top:  parent.top
 
                             Image {
                                 id: resImage
                                 anchors.centerIn: parent
-                                width:  sourceSize.width > sourceSize.height ? resPoster.width : sourceSize.width * height / sourceSize.height
-                                height: sourceSize.width < sourceSize.height ? resPoster.width : sourceSize.height * width / sourceSize.width
+                                width:  sourceSize.width > sourceSize.height ? 64 : sourceSize.width * height / sourceSize.height
+                                height: sourceSize.width < sourceSize.height ? 64 : sourceSize.height * width / sourceSize.width
                                 cache:  true
-                                source: articleData.data("resource/" + resId + "/poster_s")
+                                source: poster_s
                             }
                         }
 
                         Column {
                             id: resInfo
                             width: parent.width
+                            anchors.left: resPoster.right
+                            anchors.right: parent.right; anchors.rightMargin: 10
+                            anchors.top: parent.top; anchors.topMargin: 10
                             spacing: Qt.application.font.pixelSize * 0.3
 
                             Label {
-                                text: articleData.data("resource/" + resId + "/cnname")
-                                font.pixelSize: Qt.application.font.pixelSize * 1.6
+                                id: cnnameLabel
+                                text: cnname
+                                font.pixelSize: Qt.application.font.pixelSize * 1.2
                                 font.bold: true
+                                padding: font.pixelSize / 4
+                                width: parent.width
                                 wrapMode: Text.WrapAnywhere
                             }
                             Label {
-                                text: articleData.data("resource/" + resId + "/enname")
+                                id: ennameLabel
+                                text: enname
+                                width: parent.width
                                 wrapMode: Text.WrapAnywhere
+                                padding: font.pixelSize / 4
                                 color: "gray"
+                                font.pixelSize: Qt.application.font.pixelSize * 0.9
                             }
                             Label {
-                                text: articleData.data("resource/" + resId + "/remark")
+                                id: remarkLabel
+                                text: remark
+                                width: parent.width
+                                wrapMode: Text.WrapAnywhere
+                                padding: font.pixelSize / 4
                                 color: "gray"
+                                font.pixelSize: Qt.application.font.pixelSize * 0.9
                             }
                         }
 
                         Label {
-                            anchors.top: resPoster.top
-                            anchors.right: parent.right
-                            text: articleData.data("resource/" + resId + "/score")
+                            id: scoreLabel
+                            anchors.top: parent.top; anchors.topMargin: 10
+                            anchors.right: parent.right; anchors.rightMargin: 10
+                            text: score
                             visible: text !== ""
                             color: "white"
                             padding: font.pixelSize / 3
-                            background: Rectangle { color: "#282828"; radius: height / 3; }
-                            font.pixelSize: Qt.application.font.pixelSize * 1.6
-                            font.bold: true
+                            background: Rectangle { color: "#097BED"; radius: height / 3; }
+                            font.pixelSize: Qt.application.font.pixelSize * 0.9
                         }
 
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: openResource(id)
+                        }
                     }
-
-                    Label { text:resId + "  ? " + modelData }
 
                 }
 
+                // article
+                Item {
+                    width: parent.width
+                    height: articleLabel.implicitHeight
 
+                    Rectangle {
+                        anchors.left: parent.left
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        width: 3
+                        color: "#26B47F";
+                        radius: height / 3
+                    }
 
+                    Label {
+                        id: articleLabel
+                        text: qsTr("Articles")
+                        padding: font.pixelSize / 2
+                    }
+                }
+
+                Repeater {
+                    model: relatedArticleModel
+
+                    Rectangle {
+                        color: "#F3F3F3"
+                        width: parent.width
+                        height: Math.max(aPoster.height, aInfo.implicitHeight + aInfo.anchors.topMargin * 2)
+
+                        Item {
+                            id: aPoster
+                            width:  80
+                            height: 80
+                            anchors.left: parent.left
+                            anchors.top:  parent.top
+
+                            Image {
+                                id: aImage
+                                anchors.centerIn: parent
+                                width:  sourceSize.width > sourceSize.height ? 64 : sourceSize.width * height / sourceSize.height
+                                height: sourceSize.width < sourceSize.height ? 64 : sourceSize.height * width / sourceSize.width
+                                cache:  true
+                                source: poster_m
+                            }
+                        }
+
+                        Column {
+                            id: aInfo
+                            anchors.left: aPoster.right
+                            anchors.right: parent.right; anchors.rightMargin: 10
+                            anchors.top: parent.top; anchors.topMargin: 10
+                            spacing: Qt.application.font.pixelSize * 0.3
+
+                            Label {
+                                text: title
+                                font.pixelSize: Qt.application.font.pixelSize * 1.2
+                                font.bold: true
+                                padding: font.pixelSize / 4
+                                width: parent.width
+                                wrapMode: Text.WrapAnywhere
+                            }
+                            Label {
+                                text: dateline
+                                width: parent.width
+                                wrapMode: Text.WrapAnywhere
+                                padding: font.pixelSize / 4
+                                font.pixelSize: Qt.application.font.pixelSize * 0.9
+                                color: "gray"
+                            }
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: openArticle(id)
+                        }
+                    }
+                }
             }
-
         }
 
         ListView {
