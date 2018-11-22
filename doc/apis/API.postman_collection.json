@@ -1,0 +1,433 @@
+{
+	"info": {
+		"_postman_id": "46697772-8c2f-9cf5-afa5-8eebaa79ba09",
+		"name": "人人影视API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "index",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept-Encoding",
+						"value": "gzip"
+					},
+					{
+						"key": "Connection",
+						"value": "Keep-Alive"
+					},
+					{
+						"key": "User-Agent",
+						"value": "okhttp/3.5.0"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "api1.ousns.net/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=index&m=index&tlimit=10&g=api/v1&alimit=10",
+					"host": [
+						"api1",
+						"ousns",
+						"net"
+					],
+					"path": [
+						"index.php"
+					],
+					"query": [
+						{
+							"key": "accesskey",
+							"value": "519fc5ab85c8015b175449477561a827"
+						},
+						{
+							"key": "client",
+							"value": "2"
+						},
+						{
+							"key": "a",
+							"value": "index"
+						},
+						{
+							"key": "m",
+							"value": "index"
+						},
+						{
+							"key": "tlimit",
+							"value": "10"
+						},
+						{
+							"key": "g",
+							"value": "api/v1"
+						},
+						{
+							"key": "alimit",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "resource_item",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Connection",
+						"value": "Keep-Alive"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "gzip"
+					},
+					{
+						"key": "User-Agent",
+						"value": "okhttp/3.5.0"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "api1.ousns.net/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=resource_item&season=2&m=index&episode=6&id=35642&g=api/v1",
+					"host": [
+						"api1",
+						"ousns",
+						"net"
+					],
+					"path": [
+						"index.php"
+					],
+					"query": [
+						{
+							"key": "accesskey",
+							"value": "519fc5ab85c8015b175449477561a827"
+						},
+						{
+							"key": "client",
+							"value": "2"
+						},
+						{
+							"key": "a",
+							"value": "resource_item"
+						},
+						{
+							"key": "season",
+							"value": "2"
+						},
+						{
+							"key": "m",
+							"value": "index"
+						},
+						{
+							"key": "episode",
+							"value": "6"
+						},
+						{
+							"key": "id",
+							"value": "35642"
+						},
+						{
+							"key": "g",
+							"value": "api/v1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "resource",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Connection",
+						"value": "Keep-Alive"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "gzip"
+					},
+					{
+						"key": "User-Agent",
+						"value": "okhttp/3.5.0"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "api1.ousns.net/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=resource&m=index&id=37054&g=api/v1",
+					"host": [
+						"api1",
+						"ousns",
+						"net"
+					],
+					"path": [
+						"index.php"
+					],
+					"query": [
+						{
+							"key": "accesskey",
+							"value": "519fc5ab85c8015b175449477561a827"
+						},
+						{
+							"key": "client",
+							"value": "2"
+						},
+						{
+							"key": "a",
+							"value": "resource"
+						},
+						{
+							"key": "m",
+							"value": "index"
+						},
+						{
+							"key": "id",
+							"value": "37054"
+						},
+						{
+							"key": "g",
+							"value": "api/v1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Connection",
+						"value": "Keep-Alive"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "gzip"
+					},
+					{
+						"key": "User-Agent",
+						"value": "okhttp/3.5.0"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "api1.ousns.net/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=search&st=resource&page=1&g=api/v1&k= 生&limit=5",
+					"host": [
+						"api1",
+						"ousns",
+						"net"
+					],
+					"path": [
+						"index.php"
+					],
+					"query": [
+						{
+							"key": "accesskey",
+							"value": "519fc5ab85c8015b175449477561a827"
+						},
+						{
+							"key": "client",
+							"value": "2"
+						},
+						{
+							"key": "a",
+							"value": "search"
+						},
+						{
+							"key": "st",
+							"value": "resource"
+						},
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "g",
+							"value": "api/v1"
+						},
+						{
+							"key": "k",
+							"value": " 生"
+						},
+						{
+							"key": "limit",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "resource_list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://api1.ousns.net/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=resource_list&g=api%2Fv1&area=&sort=update&page=3&channel=&year=&limit=2",
+					"protocol": "http",
+					"host": [
+						"api1",
+						"ousns",
+						"net"
+					],
+					"path": [
+						"index.php"
+					],
+					"query": [
+						{
+							"key": "accesskey",
+							"value": "519fc5ab85c8015b175449477561a827"
+						},
+						{
+							"key": "client",
+							"value": "2"
+						},
+						{
+							"key": "a",
+							"value": "resource_list"
+						},
+						{
+							"key": "g",
+							"value": "api%2Fv1"
+						},
+						{
+							"key": "area",
+							"value": ""
+						},
+						{
+							"key": "sort",
+							"value": "update"
+						},
+						{
+							"key": "page",
+							"value": "3"
+						},
+						{
+							"key": "channel",
+							"value": ""
+						},
+						{
+							"key": "year",
+							"value": ""
+						},
+						{
+							"key": "limit",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "article_list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "api1.ousns.net/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=article_list&g=api/v1&page=2",
+					"host": [
+						"api1",
+						"ousns",
+						"net"
+					],
+					"path": [
+						"index.php"
+					],
+					"query": [
+						{
+							"key": "accesskey",
+							"value": "519fc5ab85c8015b175449477561a827"
+						},
+						{
+							"key": "client",
+							"value": "2"
+						},
+						{
+							"key": "a",
+							"value": "article_list"
+						},
+						{
+							"key": "g",
+							"value": "api/v1"
+						},
+						{
+							"key": "page",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "article",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "api1.ousns.net/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=article&g=api/v1&id=31502",
+					"host": [
+						"api1",
+						"ousns",
+						"net"
+					],
+					"path": [
+						"index.php"
+					],
+					"query": [
+						{
+							"key": "accesskey",
+							"value": "519fc5ab85c8015b175449477561a827"
+						},
+						{
+							"key": "client",
+							"value": "2"
+						},
+						{
+							"key": "a",
+							"value": "article"
+						},
+						{
+							"key": "g",
+							"value": "api/v1"
+						},
+						{
+							"key": "id",
+							"value": "31502"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
