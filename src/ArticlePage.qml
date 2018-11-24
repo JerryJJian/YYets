@@ -89,6 +89,7 @@ Page {
             contentWidth: width
             ScrollBar.horizontal.interactive: true
             ScrollBar.vertical.interactive: true
+            focusReason: Qt.TabFocus
 
             Column {
                 id: articleContent
@@ -117,7 +118,9 @@ Page {
 
                     Label {
                         id: introLabel
+                        padding: font.pixelSize
                         color: "gray"
+                        visible: text !== ""
                         anchors.fill: parent
                         wrapMode: Text.WordWrap
                     }
@@ -159,6 +162,7 @@ Page {
                             id: atrailerLabel
                             padding: font.pixelSize
                             text: aTrailer
+                            visible: text !== ""
                             width: parent.width
                             anchors.top: acontentLabel.bottom
                             anchors.left: parent.left
