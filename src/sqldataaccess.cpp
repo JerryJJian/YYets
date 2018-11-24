@@ -9,7 +9,7 @@
 #include <QBuffer>
 #include <QCryptographicHash>
 #include <QCoreApplication>
-#include "settings.h"
+#include <QDataStream>
 
 SQLDataAccess::SQLDataAccess(QObject *parent)
     : QObject(parent),
@@ -17,30 +17,11 @@ SQLDataAccess::SQLDataAccess(QObject *parent)
       m_db(QSqlDatabase::addDatabase("QMYSQL")),
 #endif
 #ifdef DATABASE_SQLITE
-      m_db(QSqlDatabase::addDatabase("QSQLITE", "sperm-analyzer-database")),
+      m_db(QSqlDatabase::addDatabase("QSQLITE", "YYeTs-database")),
 #endif
       m_error(0),
       m_errorString(tr("No Error"))
 {
-#ifdef DATABASE_MYSQL
-    m_sqlTypeMap.insert("string",   qMakePair<QString, int> ("VARCHAR(%1) NULL",        VALUE_LEN));
-    m_sqlTypeMap.insert("text",     qMakePair<QString, int> ("LONGTEXT NULL",           VALUE_NONE));
-    m_sqlTypeMap.insert("datetime", qMakePair<QString, int> ("VARCHAR(20) NULL",        VALUE_NONE));
-    m_sqlTypeMap.insert("date",     qMakePair<QString, int> ("VARCHAR(10) NULL",        VALUE_NONE));
-    m_sqlTypeMap.insert("bool",     qMakePair<QString, int> ("INT NOT NULL DEFAULT %1", VALUE_DEFAULT));
-    m_sqlTypeMap.insert("byte",     qMakePair<QString, int> ("LONGBLOB NULL",           VALUE_NONE));
-    m_sqlTypeMap.insert("int",      qMakePair<QString, int> ("INT NOT NULL DEFAULT %1", VALUE_DEFAULT));
-#endif
-
-#ifdef DATABASE_SQLITE
-    m_sqlTypeMap.insert("string",   qMakePair<QString, int> ("VARCHAR(%1) NULL",            VALUE_LEN));
-    m_sqlTypeMap.insert("text",     qMakePair<QString, int> ("TEXT NULL",                   VALUE_NONE));
-    m_sqlTypeMap.insert("datetime", qMakePair<QString, int> ("VARCHAR(20) NULL",            VALUE_NONE));
-    m_sqlTypeMap.insert("date",     qMakePair<QString, int> ("VARCHAR(10) NULL",            VALUE_NONE));
-    m_sqlTypeMap.insert("bool",     qMakePair<QString, int> ("INTEGER NOT NULL DEFAULT %1", VALUE_DEFAULT));
-    m_sqlTypeMap.insert("byte",     qMakePair<QString, int> ("TEXT NULL",                   VALUE_NONE));
-    m_sqlTypeMap.insert("int",      qMakePair<QString, int> ("INTEGER NOT NULL DEFAULT %1", VALUE_DEFAULT));
-#endif
 }
 
 bool SQLDataAccess::connect(const QString &host, int port,
@@ -229,29 +210,62 @@ QString SQLDataAccess::errorString() const
     return m_errorString;
 }
 
-QMap<QString, QStringList> SQLDataAccess::history(int id)
+QVariant SQLDataAccess::history(int id)
 {
     QString sql("SELECT * FROM `history` WHERE `id`='%1';");
     QList<QSqlRecord> result;
     execQuery(sql.arg(id), result);
 
-    QMap<QString, QStringList> records;
-    for (auto rec : result)
-        records[rec.value("season").toString()].append(rec.value("episode").toString());
+    QVariant historyData;
+    if (result.size() > 0)
+    {
+        QByteArray bytes(result.value(0).value("data").toByteArray());
+        QDataStream in(&bytes, QIODevice::ReadOnly);
+        in >> historyData;
+    }
 
-    return records;
+    return historyData;
 }
 
 void SQLDataAccess::addHistory(int id, const QString &season, const QString &episode)
 {
-    QString sql("SELECT * FROM `history` WHERE `id`='%1' AND `season`='%2' AND `episode`='%3';");
-    QList<QSqlRecord> result;
-    execQuery(sql.arg(id), result);
-    if (result.size() > 0)
+    QVariantMap historyMap = history(id).toMap();
+    if (historyMap.isEmpty())
+    {
+        historyMap.insert(season, QStringList(episode));
+        QByteArray bytes;
+        QDataStream out(&bytes, QIODevice::WriteOnly);
+        out << QVariant::fromValue(historyMap);
+
+        QSqlQuery query(m_db);
+        if (query.prepare("INSERT INTO `history` (`id`, `data`) VALUES(?, ?);"))
+        {
+            query.addBindValue(id);
+            query.addBindValue(bytes);
+            query.exec();
+        }
+    }
+
+
+    QStringList eps = historyMap.value(season).toStringList();
+    if (eps.indexOf(episode) >= 0)
         return ;
 
-    QString sqlInsert("INSERT INTO `history` WHERE `id`='%1' AND `season`='%2' AND `episode`='%3';");
-    execQuery(sqlInsert.arg(id).arg(season).arg(episode));
+    eps << episode;
+
+    historyMap.insert(season, eps);
+    QByteArray bytes;
+    QDataStream out(&bytes, QIODevice::WriteOnly);
+    out << QVariant::fromValue(historyMap);
+
+    QSqlQuery query(m_db);
+    if (query.prepare("UPDATE `history` SET `data`=? WHERE `id`=?);"))
+    {
+        query.addBindValue(bytes);
+        query.addBindValue(id);
+        query.exec();
+    }
+
 }
 
 void SQLDataAccess::addFollowed(int id, const QString &meta, int lastvisit)
