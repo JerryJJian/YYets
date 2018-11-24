@@ -81,6 +81,8 @@ void DataParser::dataReceived(int type, const QByteArray &data)
         QStringList years;
         for (auto year : yearArray)
             years << year.toString();
+        for (int y=years.first().toInt(); y<=QDate::currentDate().year();++y)
+            years.prepend(QString::number(y));
         filters.insert("year", years.join("|"));
 
         QJsonArray channelArray = doc.object().value("data").toObject().value("channel").toArray();

@@ -1,4 +1,4 @@
-QT += quick core gui widgets network core-private
+QT += quick core gui widgets network core-private sql
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -25,7 +25,8 @@ SOURCES += \
     articlelistitem.cpp \
     resourcelistitem.cpp \
     searchresourcelistitem.cpp \
-    commentlistitem.cpp
+    commentlistitem.cpp \
+    sqldataaccess.cpp
 
 RESOURCES += qml.qrc
 
@@ -56,7 +57,8 @@ HEADERS += \
     articlelistitem.h \
     resourcelistitem.h \
     searchresourcelistitem.h \
-    commentlistitem.h
+    commentlistitem.h \
+    sqldataaccess.h
 
 DISTFILES += \
     main.qml \

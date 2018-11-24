@@ -46,7 +46,7 @@ Page {
                 Column {
                     anchors.top: img.top
                     anchors.left: posterImg.left; anchors.leftMargin: 15
-                    spacing: Qt.application.font.pixelSize * 0.5
+                    spacing: Qt.application.font.pixelSize * 0.33
                     Label {
                         width: implicitWidth + font.pixelSize
                         height: implicitHeight * 1.5
@@ -60,6 +60,22 @@ Page {
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
                         text: channel_cn
+                        font.pixelSize: Qt.application.font.pixelSize * 0.8
+                    }
+                    Label {
+                        width: implicitWidth + font.pixelSize
+                        height: implicitHeight * 1.5
+                        background: Rectangle {
+                            color: "#4bbe93"
+                            radius: height / 4
+                            border.color: "#9DC6F3"
+                            border.width: 1
+                        }
+                        color: "white"
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                        text: publish_year
+                        visible: text !== ""
                         font.pixelSize: Qt.application.font.pixelSize * 0.8
                     }
                 }
@@ -263,17 +279,56 @@ Page {
                 }
             }
             Rectangle { color: "#839496"; height: 1 }
+
+
+            Row {
+                id: buttonRow
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: Qt.application.font.pixelSize
+                Button {
+                    text: qsTr("Close")
+                    onClicked: filter.close()
+                }
+                Button {
+                    text: qsTr("Reset")
+                    onClicked: {
+                        filter.close()
+                        if (filterSortIndex !== 0
+                                || filterAreaIndex !== 0
+                                || filterChannelIndex !== 0
+                                || filterYearIndex !== 0) {
+                            filterSortIndex = 0
+                            filterAreaIndex = 0
+                            filterChannelIndex = 0
+                            filterYearIndex = 0
+                            resourceListModel.clear()
+                            dataRequest.resourcePage = 1
+                            dataRequest.requestResourceList(1, resourceCountPerPage,
+                                                            filterByAreaModel.get(filterAreaIndex).value,
+                                                            filterBySortModel.get(filterSortIndex).value,
+                                                            filterByChannelModel.get(filterChannelIndex).value,
+                                                            filterByYearModel.get(filterYearIndex).value)
+                        }
+
+                    }
+                }
+                Button {
+                    text: qsTr("Yes")
+                    onClicked: {
+                        filter.close()
+                        resourceListModel.clear()
+                        dataRequest.resourcePage = 1
+                        dataRequest.requestResourceList(1, resourceCountPerPage,
+                                                        filterByAreaModel.get(filterAreaIndex).value,
+                                                        filterBySortModel.get(filterSortIndex).value,
+                                                        filterByChannelModel.get(filterChannelIndex).value,
+                                                        filterByYearModel.get(filterYearIndex).value)
+
+                    }
+                }
+            }
         }
 
-        onClosed: {
-            resourceListModel.clear()
-            dataRequest.resourcePage = 1
-            dataRequest.requestResourceList(1, resourceCountPerPage,
-                                            filterByAreaModel.get(filterAreaIndex).value,
-                                            filterBySortModel.get(filterSortIndex).value,
-                                            filterByChannelModel.get(filterChannelIndex).value,
-                                            filterByYearModel.get(filterYearIndex).value)
-        }
     }
 
     BusyIndicator {

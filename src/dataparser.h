@@ -18,6 +18,9 @@ signals:
 public slots:
     void dataReceived(int type, const QByteArray &data);
 
+private:
+    void handleImageSize(QString &htmlText);
+
 };
 
 #endif // DATAPARSER_H
