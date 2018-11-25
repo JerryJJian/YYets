@@ -4,6 +4,7 @@
 #include <QObject>
 #include <qglobal.h>
 #include <QSqlDatabase>
+#include <QVariant>
 #include <QMap>
 #include <QDateTime>
 
@@ -15,7 +16,7 @@ public:
     QSqlDatabase database() const;
 
     bool isConnected() const;
-    bool connect(const QString &host, int port, const QString &dbname, const QString &username, const QString &passwd);
+    bool connect(const QString &host, const QString &dbname, int port = 3306, const QString &username = QString(), const QString &passwd = QString());
     void disconnect();
     bool open();
     bool reOpen();

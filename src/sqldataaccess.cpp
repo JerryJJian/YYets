@@ -24,8 +24,9 @@ SQLDataAccess::SQLDataAccess(QObject *parent)
 {
 }
 
-bool SQLDataAccess::connect(const QString &host, int port,
+bool SQLDataAccess::connect(const QString &host,
                             const QString &dbname,
+                            int port,
                             const QString &username,
                             const QString &passwd)
 {
@@ -41,8 +42,8 @@ bool SQLDataAccess::connect(const QString &host, int port,
     m_db.setConnectOptions("MYSQL_OPT_RECONNECT=1");
 #endif
 #ifdef DATABASE_SQLITE
-    m_db.setHostName("sperm-analyzer-database");
-    m_db.setDatabaseName(QCoreApplication::applicationDirPath() + "/sample.db");
+    m_db.setDatabaseName(host);
+    m_db.setHostName(dbname);
 #endif
 
     if (!m_db.open() && !m_db.isOpen())

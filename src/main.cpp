@@ -15,6 +15,7 @@
 #include "resourcelistitem.h"
 #include "searchresourcelistitem.h"
 #include "commentlistitem.h"
+#include "objectpool.h"
 #include <QDebug>
 
 int main(int argc, char *argv[])
@@ -89,6 +90,7 @@ int main(int argc, char *argv[])
         }
     });
 
+    engine.rootContext()->setContextProperty("database",               ObjectPool::instance()->sqlDataAccess());
     engine.rootContext()->setContextProperty("clipboard",              new ClipBoardProxy(&app));
     engine.rootContext()->setContextProperty("dataRequest",            dataRequest);
     engine.rootContext()->setContextProperty("indexModel",             indexModel);
