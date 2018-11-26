@@ -37,7 +37,7 @@ Page {
 
             Column {
                 id: infoColumn
-                anchors.top: parent.top; anchors.topMargin: Math.abs(img.height - posterImg.height) / 2
+                anchors.top: parent.top; anchors.topMargin: img.state === Image.Ready ? Math.abs(img.height - posterImg.height) / 2 : Qt.application.font.pixelSize
                 anchors.left: posterImg.right
                 anchors.right: parent.right
                 spacing: Qt.application.font.pixelSize / 3
@@ -178,6 +178,7 @@ Page {
                 font.pixelSize: Qt.application.font.pixelSize * 0.9
             }
 
+            Rectangle { anchors.bottom: parent.bottom; width: parent.width; height: 1; color: "#ededed" }
             MouseArea {
                 id: mouseArea
                 anchors.fill: parent

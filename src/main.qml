@@ -134,6 +134,10 @@ ApplicationWindow {
             resItemModel.clear()
             dataRequest.requestResourceItem(id, season, episode)
         }
+        onOpenArticle: {
+            stackView.push(articlePage)
+            dataRequest.requestArticle(id)
+        }
     }
 
     property Component indexPage: IndexPage {

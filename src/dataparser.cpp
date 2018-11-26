@@ -168,6 +168,11 @@ void DataParser::dataReceived(int type, const QByteArray &data)
             resHash.insert("prevue_play_time", prevue.value("play_time"));
             resHash.insert("prevue_week", prevue.value("week"));
         }
+        QString keyword(resHash.value("cnname").toString());
+        if (keyword.isEmpty())
+            keyword = resHash.value("enname").toString();
+
+        resHash.insert("search_keywords", keyword);
 
         if (ObjectPool::instance()->sqlDataAccess()->hasFollowed(resHash.value("id").toInt()))
             ObjectPool::instance()->sqlDataAccess()->updateFollowed(resHash.value("id").toInt(),

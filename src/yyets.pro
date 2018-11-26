@@ -12,6 +12,23 @@ DEFINES += QT_DEPRECATED_WARNINGS DATABASE_SQLITE
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+HEADERS += \
+    listmodel.h \
+    datarequest.h \
+    datarequest_p.h \
+    movielistitem.h \
+    dataparser.h \
+    listitem.h \
+    dataset.h \
+    resitemlistitem.h \
+    clipboardproxy.h \
+    articlelistitem.h \
+    resourcelistitem.h \
+    searchresourcelistitem.h \
+    commentlistitem.h \
+    sqldataaccess.h \
+    objectpool.h
+
 SOURCES += \
     main.cpp \
     listmodel.cpp \
@@ -31,6 +48,7 @@ SOURCES += \
 
 RESOURCES += qml.qrc
 
+TRANSLATIONS += zh_CN.ts
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -43,33 +61,7 @@ RC_FILE += resource.rc
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
+else: win32: target.path = $$PWD/../bin
+
 !isEmpty(target.path): INSTALLS += target
 
-HEADERS += \
-    listmodel.h \
-    datarequest.h \
-    datarequest_p.h \
-    movielistitem.h \
-    dataparser.h \
-    listitem.h \
-    dataset.h \
-    resitemlistitem.h \
-    clipboardproxy.h \
-    articlelistitem.h \
-    resourcelistitem.h \
-    searchresourcelistitem.h \
-    commentlistitem.h \
-    sqldataaccess.h \
-    objectpool.h
-
-DISTFILES += \
-    main.qml \
-    IndexPage.qml \
-    ResourcePage.qml \
-    ResourceItemPage.qml \
-    ArticlePage.qml \
-    ResourceListPage.qml \
-    SearchPage.qml \
-    FollowedListPage.qml \
-    CommentItemDelegate.qml \
-    CommentListPage.qml

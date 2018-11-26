@@ -6,6 +6,8 @@ Page {
 
     title: qsTr("Resource Name")
     signal openResourceItem(int id, int season, int episode)
+    signal openArticle(int id)
+
     property int commentsCount: 0
     property string resourceId: ""
     property bool followed: false
@@ -22,7 +24,7 @@ Page {
             areaLabel.text = resourceData.data("area")
             langLabel.text = resourceData.data("lang")
             statusLabel.text = resourceData.data("tvstation") + " @" + resourceData.data("premiere") + " - " + resourceData.data("play_status")
-            itemupdateLabel.text = "\u231A " + resourceData.data("updatetime")
+            itemupdateLabel.text = "\u231A " + resourceData.data("dateline")
             remarkLabel.text = resourceData.data("remark")
             prevue_episode.text = resourceData.data("prevue_episode")
             prevue_play_time.text = resourceData.data("prevue/play_time")
@@ -207,6 +209,16 @@ Page {
             icon.source: "images/comment.png"
             text: qsTr("Commonts")
         }
+
+        TabButton {
+            icon.source: "images/link.png"
+            text: qsTr("Articles")
+            onClicked: {
+                searchResourceModel.clear()
+                searchResultList.pageNum = 1
+                dataRequest.searchResource("article", resourceData.data("search_keywords"), searchResultList.pageNum, searchResultList.pageSize)
+            }
+        }
     }
 
     StackLayout {
@@ -313,11 +325,11 @@ Page {
                                         var se = ""
                                         if (season != -1)
                                             se = "S" + season + "E" + text;
-                                        openResourceItem(resourceId, season, text)
                                         resourceData.setData("current_item", se)
                                         resourceData.setData("current/season", season)
                                         resourceData.setData("current/episode", text)
                                         highlighted = true
+                                        openResourceItem(resourceId, season, text)
                                     }
                                 }
                             }
@@ -370,6 +382,162 @@ Page {
                 p_reply_bad: "("+(reply_bad===""?0:reply_bad)+")"
                 p_reply_avatar_s: reply_avatar_s
                 p_reply_content: reply_content
+            }
+        }
+
+        ListView {
+            id: searchResultList
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: findButton.bottom
+            anchors.bottom: parent.bottom
+            clip: true
+            model: searchResourceModel
+            property int pageNum: 1
+            property int pageSize: 30
+
+            delegate: Rectangle {
+                width: searchResultList.width
+                height: aPosterImg.height
+
+                Item {
+                    id: aPosterImg
+                    width:  120
+                    height: 120
+                    anchors.left:  parent.left
+                    anchors.top:   parent.top
+
+                    Image {
+                        id: aImg
+                        anchors.centerIn: parent
+                        width:  sourceSize.width > sourceSize.height ? 100 : sourceSize.width * height / sourceSize.height
+                        height: sourceSize.width < sourceSize.height ? 100 : sourceSize.height * width / sourceSize.width
+                        source: poster_m
+                        cache:  true
+                    }
+                }
+
+                Column {
+                    anchors.left: aPosterImg.right
+                    anchors.right: parent.right; anchors.rightMargin: 15
+                    anchors.top: aPosterImg.top; anchors.topMargin: (aPosterImg.height - aImg.height)/2
+                    spacing: Qt.application.font.pixelSize
+
+                    Label {
+                        text: title
+                        width: parent.width
+                        font.bold: true
+                        wrapMode: Text.WrapAnywhere
+                    }
+
+                    Flow {
+                        spacing: Qt.application.font.pixelSize / 2
+
+                        Label {
+                            text: channel;
+                            visible: channel !== ""
+                            width: implicitWidth + font.pixelSize
+                            height: implicitHeight + font.pixelSize / 2
+                            font.pixelSize: Qt.application.font.pixelSize * 0.9;
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignHCenter
+                            color: "#FFFFFF"
+                            background: Rectangle {
+                                radius: height / 3
+                                color: "#303030"
+                            }
+                        }
+
+                        Label {
+                            text: prefix;
+                            visible: prefix !== ""
+                            width: implicitWidth + font.pixelSize
+                            height: implicitHeight + font.pixelSize / 2
+                            font.pixelSize: Qt.application.font.pixelSize * 0.9;
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignHCenter
+                            color: "#FFFFFF"
+                            background: Rectangle {
+                                radius: height / 3
+                                color: "#303030"
+                            }
+                        }
+
+                        Label {
+                            text: suffix;
+                            visible: suffix !== ""
+                            width: implicitWidth + font.pixelSize
+                            height: implicitHeight + font.pixelSize / 2
+                            font.pixelSize: Qt.application.font.pixelSize * 0.9;
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignHCenter
+                            color: "#FFFFFF"
+                            background: Rectangle {
+                                radius: height / 3
+                                color: "#303030"
+                            }
+                        }
+
+                        Label {
+                            text: character;
+                            visible: character !== ""
+                            width: implicitWidth + font.pixelSize
+                            height: implicitHeight + font.pixelSize / 2
+                            font.pixelSize: Qt.application.font.pixelSize * 0.9;
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignHCenter
+                            wrapMode: Text.WrapAnywhere
+                            color: "#FFFFFF"
+                            background: Rectangle {
+                                radius: height / 3
+                                color: "#303030"
+                            }
+                        }
+                    }
+
+                    Label {
+                        width: parent.width;
+                        text: pubtime;
+                        font.pixelSize: Qt.application.font.pixelSize * 0.9;
+                        color: "gray"
+                    }
+
+                }
+
+                MouseArea {
+                    id: mouseArea
+                    anchors.fill: parent
+                    onClicked: {
+                        openArticle(itemid)
+                    }
+                }
+            }
+
+            states: [
+                State {
+                    name: "none"
+                    when: searchResultList.contentY === 0
+                },
+                State {
+                    name: "loadmore"
+                    when: !dataRequest.isSearching && searchResultList.contentHeight > 0 && (searchResultList.contentY > searchResultList.contentHeight - searchResultList.height + 64)
+                    StateChangeScript {
+                        script: {
+                            if (searchResourceModel.count % searchResultList.pageSize !== 0)
+                                return ;
+
+                            if (!dataRequest.isUpdatingResList)
+                                dataRequest.searchResource("article", resourceData.data("search_keywords"), searchResultList.pageNum + 1, searchResultList.pageSize)
+                        }
+                    }
+                }
+            ]
+
+            Connections {
+                target: searchResourceModel
+                onDataModelAppended: {
+                    searchResultList.pageNum = Math.ceil(searchResourceModel.count / searchResultList.pageSize)
+                }
             }
         }
 

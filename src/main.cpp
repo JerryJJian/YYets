@@ -4,6 +4,8 @@
 #include <QNetworkReply>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QTranslator>
+#include <QLocale>
 #include "dataparser.h"
 #include "datarequest.h"
 #include "listmodel.h"
@@ -23,6 +25,10 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QGuiApplication app(argc, argv);
+
+    QTranslator translator;
+    if (translator.load(QString(":/%1.qm").arg(QLocale::system().name())))
+        app.installTranslator(&translator);
 
     QQmlApplicationEngine engine;
 
