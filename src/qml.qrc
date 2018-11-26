@@ -24,5 +24,7 @@
         <file>CommentItemDelegate.qml</file>
         <file>CommentListPage.qml</file>
         <file>images/view.png</file>
+        <file>images/followed.png</file>
+        <file>images/heart.png</file>
     </qresource>
 </RCC>

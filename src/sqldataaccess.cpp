@@ -228,7 +228,7 @@ QVariant SQLDataAccess::history(int id)
     return historyData;
 }
 
-void SQLDataAccess::addHistory(int id, const QString &season, const QString &episode)
+bool SQLDataAccess::addHistory(int id, const QString &season, const QString &episode)
 {
     QVariantMap historyMap = history(id).toMap();
     if (historyMap.isEmpty())
@@ -244,20 +244,27 @@ void SQLDataAccess::addHistory(int id, const QString &season, const QString &epi
             query.addBindValue(id);
             query.addBindValue(bytes);
             if (query.exec())
+            {
                 emit historyAdded(id, season, episode);
+                return true;
+            }
             else
+            {
                 qDebug() << "ERROR > query.exec(" << query.lastQuery() << ")" << query.lastError().text();
+            }
         }
         else
         {
             qDebug() << "ERROR > query.prepare(" << query.lastQuery() << ")" << query.lastError().text();
         }
+
+        return false;
     }
 
 
     QStringList eps = historyMap.value(season).toStringList();
     if (eps.indexOf(episode) >= 0)
-        return ;
+        return true;
 
     eps << episode;
 
@@ -273,22 +280,88 @@ void SQLDataAccess::addHistory(int id, const QString &season, const QString &epi
     {
         query.addBindValue(bytes);
         if (query.exec())
+        {
             emit historyAdded(id, season, episode);
+            return true;
+        }
         else
+        {
             qDebug() << "ERROR > query.exec(" << query.lastQuery() << ")" << query.lastError().text();
+        }
     }
     else
     {
         qDebug() << "ERROR > query.prepare(" << query.lastQuery() << ")" << query.lastError().text();
     }
+
+    return false;
 }
 
-void SQLDataAccess::addFollowed(int id, const QString &meta, int lastvisit)
+bool SQLDataAccess::addFollowed(int id, const QByteArray &meta, int lastvisit)
 {
+    QString checkSql("SELECT `id` FROM `followed` WHERE `id`='%1';");
+    QList<QSqlRecord> result;
+    execQuery(checkSql.arg(id), result);
 
+    if (result.value(0).value("id").toInt() != id)
+    {
+        QString insertSql("INSERT INTO `followed` (`id`, `meta`, `lastvisit`) VALUES ('%1', ?, '%2');");
+        QSqlQuery query(m_db);
+        if (query.prepare(insertSql.arg(id).arg(lastvisit)))
+        {
+            query.addBindValue(meta);
+            if (query.exec())
+                return true;
+            else
+                qDebug() << "ERROR > query.exec(" << query.lastQuery() << ")" << query.lastError().text();
+        }
+        else
+        {
+            qDebug() << "ERROR > query.prepare(" << query.lastQuery() << ")" << query.lastError().text();
+        }
+
+        return false;
+    }
+
+    return execQuery(QString("DELETE FROM `followed` WHERE `id`='%1';").arg(id)) == 0;
 }
 
 void SQLDataAccess::removeFollowed(int id)
 {
+    execQuery(QString("DELETE FROM `followed` WHERE `id`='%1';").arg(id));
+}
 
+QByteArray SQLDataAccess::followedList(int page, int pageSize)
+{
+    QString sql("SELECT * FROM `followed` LIMIT %1, %2;");
+    QList<QSqlRecord> result;
+    execQuery(sql.arg(((page < 1 ? 1 : page) - 1) * pageSize).arg(pageSize), result);
+
+    QStringList resources;
+    for (auto rec : result)
+        resources.append(QString::fromUtf8(rec.value("meta").toByteArray()));
+
+    return QString("{\"data\":{\"list\":[%1], \"page\": \"%2\"}}").arg(resources.join(",")).arg(page < 1 ? 1 : page).toUtf8();
+}
+
+bool SQLDataAccess::hasFollowed(int id)
+{
+    QString checkSql("SELECT `id` FROM `followed` WHERE `id`='%1';");
+    QList<QSqlRecord> result;
+    execQuery(checkSql.arg(id), result);
+
+    return (result.value(0).value("id").toInt() == id);
+}
+
+QList<int> SQLDataAccess::checkFollowed(const QStringList &ids)
+{
+    QString checkSql("SELECT `id` FROM `followed` WHERE `id` IN ('%1');");
+    QList<QSqlRecord> result;
+    execQuery(checkSql.arg(ids.join("','")), result);
+
+    QList<int> followed;
+    for (auto rec : result)
+        followed << rec.value("id").toInt();
+
+    return followed;
 }

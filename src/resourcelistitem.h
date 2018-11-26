@@ -67,7 +67,8 @@ public:
         PosterNRole,
         PlayTimeRole,
         UpdatetimeRole,
-        PosterMRole
+        PosterMRole,
+        FollowedRole
     };
 
     QString id() const;

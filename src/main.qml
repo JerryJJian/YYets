@@ -170,6 +170,10 @@ ApplicationWindow {
     }
     property Component followedListPage: FollowedListPage {
         property string pageType: "followedListPage"
+        onOpenResource: {
+            stackView.push(resourcePage)
+            dataRequest.requestResource(id)
+        }
     }
 
     Drawer {

@@ -8,6 +8,7 @@ Page {
     signal openResourceItem(int id, int season, int episode)
     property int commentsCount: 0
     property string resourceId: ""
+    property bool followed: false
 
     Connections {
         target: resourceData
@@ -30,6 +31,7 @@ Page {
             prevueLabel.visible = resourceData.data("prevue/play_time") !== ""
             busyIndicator.running = false
             commentsCount = resourceData.data("comments_count")
+            followed = database.hasFollowed(resourceData.data("id"))
 
             if (key === "" || key === "season") {
                 seasonModel.clear()
@@ -137,6 +139,16 @@ Page {
         font.bold: true
         anchors.top: metaInfo.top;
         anchors.right: metaInfo.right
+    }
+
+    ToolButton {
+        id: followButton
+        anchors.right: metaInfo.right
+        anchors.bottom: tabbar.top
+        text: followed ? qsTr("Followed") : qsTr("Follow")
+        icon.source: followed ? "images/followed.png" : "images/follow.png"
+        highlighted: followed
+        onClicked: followed = database.addFollowed(resourceData.data("id"), resourceData.data("resource"), resourceData.data("lastvisit"))
     }
 
     // ---------------------------------------------------------------

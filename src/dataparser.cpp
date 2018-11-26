@@ -66,9 +66,19 @@ void DataParser::dataReceived(int type, const QByteArray &data)
         items.clear();
         QVariantHash filters;
         QJsonArray resArray = doc.object().value("data").toObject().value("list").toArray();
+        QStringList ids;
+        for (auto res : resArray)
+            ids << res.toObject().value("id").toString();
+
+        QList<int> followed = ObjectPool::instance()->sqlDataAccess()->checkFollowed(ids);
+        qDebug() << followed;
         for (auto res : resArray)
         {
-            ListItem *item = new ResourceListItem(res.toObject().toVariantHash());
+            QVariantHash resItem(res.toObject().toVariantHash());
+            resItem.insert("followed", followed.indexOf(resItem.value("id").toInt()) >=0 ? 1 : 0);
+            resItem.insert("categoryList", resItem.value("category"));
+            resItem.insert("languageList", resItem.value("lang"));
+            ListItem *item = new ResourceListItem(resItem);
             items << item;
         }
 
@@ -110,10 +120,28 @@ void DataParser::dataReceived(int type, const QByteArray &data)
 
         emit updateData(type, filters, items);
     } break;
+    case DataRequest::FOLLOWEDLIST:
+    {
+        items.clear();
+        QJsonArray resArray = doc.object().value("data").toObject().value("list").toArray();
+        for (auto res : resArray)
+        {
+            QVariantHash itemData(res.toObject().toVariantHash());
+            itemData.insert("categoryList", itemData.value("category"));
+            itemData.insert("languageList", itemData.value("lang"));
+            ListItem *item = new ResourceListItem(itemData);
+            items << item;
+        }
+        QVariantHash metaData;
+        metaData.insert("page", doc.object().value("data").toObject().value("page").toInt());
+        emit updateData(type, metaData, items);
+    } break;
     case DataRequest::RESOURCE:
     {
         items.clear();
         QVariantHash resHash = doc.object().value("data").toObject().value("resource").toObject().toVariantHash();
+        resHash.insert("resource",  QJsonDocument::fromVariant(resHash).toJson());
+        resHash.insert("lastvisit", QDateTime::currentDateTime().toSecsSinceEpoch());
         QVariantList seasonList = doc.object().value("data").toObject().value("season").toArray().toVariantList();
         QStringList seasons;
         QVariantMap historyData = ObjectPool::instance()->sqlDataAccess()->history(resHash.value("id").toInt()).toMap();

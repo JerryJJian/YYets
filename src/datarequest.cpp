@@ -1,5 +1,6 @@
 #include "datarequest.h"
 #include "datarequest_p.h"
+#include "objectpool.h"
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
@@ -64,6 +65,11 @@ void DataRequest::searchResource(QString type, QString text, int page, int limit
     Q_D(DataRequest);
     QString url(DataRequestPrivate::RequestURL.arg("a=search&st=%1&k=%2&page=%3&limit=%4"));
     d->startRequest(SEARCHRESOURCE, QUrl(url.arg(type).arg(text).arg(page).arg(limit)));
+}
+
+void DataRequest::requestFollowedList(int page, int size)
+{
+    emit dataReady(FOLLOWEDLIST, ObjectPool::instance()->sqlDataAccess()->followedList(page, size));
 }
 
 bool DataRequest::getIsUpdatingResList() const

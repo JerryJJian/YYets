@@ -30,9 +30,9 @@ void ResourceListItem::initRoles()
     setRoleName(RankValueRole,       "rank_value"       );
     setRoleName(ShowTypeRole,        "show_type"        );
     setRoleName(AliasnameRole,       "aliasname"        );
-    setRoleName(CategoryRole,        "category"         );
+    setRoleName(CategoryRole,        "categoryList"     );
     setRoleName(ViewsRole,           "views"            );
-    setRoleName(LangRole,            "lang"             );
+    setRoleName(LangRole,            "languageList"     );
     setRoleName(RemarkRole,          "remark"           );
     setRoleName(UpdaterRole,         "updater"          );
     setRoleName(PermissionRole,      "permission"       );
@@ -74,4 +74,5 @@ void ResourceListItem::initRoles()
     setRoleName(PlayTimeRole,        "play_time"        );
     setRoleName(UpdatetimeRole,      "updatetime"       );
     setRoleName(PosterMRole,         "poster_m"         );
+    setRoleName(FollowedRole,        "followed"         );
 }

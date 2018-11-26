@@ -43,6 +43,16 @@ Page {
                     cache:  true
                 }
 
+                Image {
+                    id: followFlag
+                    anchors.right: img.right; anchors.rightMargin: - width * 0.66
+                    anchors.bottom: parent.bottom
+                    height: Qt.application.font.pixelSize * 2
+                    width: height
+                    source: "images/heart.png"
+                    visible: followed
+                }
+
                 Column {
                     anchors.top: img.top
                     anchors.left: posterImg.left; anchors.leftMargin: 15

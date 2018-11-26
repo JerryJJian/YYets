@@ -27,7 +27,8 @@ public:
         ARTICLELIST,
         ARTICLE,
         RESOURCELIST,
-        SEARCHRESOURCE
+        SEARCHRESOURCE,
+        FOLLOWEDLIST
     };
     Q_ENUM(Type)
 
@@ -71,6 +72,7 @@ public slots:
     void requestArticle(int id);
     void requestResourceList(int page = 1, int countPerPage = 30, QString area = QString(), QString sort = QString("update"), QString channel = QString(), QString year = QString());
     void searchResource(QString type, QString text, int page = 1, int limit = 10);
+    void requestFollowedList(int page, int size=50);
 };
 
 #endif // DATAREQUEST_H

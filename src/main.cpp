@@ -35,18 +35,16 @@ int main(int argc, char *argv[])
 
     ListModel *indexModel = new ListModel(new MovieListItem, dataRequest);
     ListModel *articlesModel = new ListModel(new ArticleListItem, dataRequest);
-    DataSet *resourceData = new DataSet(dataParser);
+    DataSet   *resourceData = new DataSet(dataParser);
     ListModel *resItemModel = new ListModel(new ResItemListItem, dataParser);
-    DataSet *articleData = new DataSet(dataParser);
-
+    DataSet   *articleData = new DataSet(dataParser);
     ListModel *resourceListModel = new ListModel(new ResourceListItem, dataRequest);
-    DataSet *resourceListFilterData = new DataSet(dataParser);
-
+    DataSet   *resourceListFilterData = new DataSet(dataParser);
     ListModel *searchResourceModel = new ListModel(new SearchResourceListItem, dataRequest);
-
     ListModel *commentListModel = new ListModel(new CommentListItem, dataRequest);
+    ListModel *followedListModel = new ListModel(new ResourceListItem, dataRequest);
 
-    QObject::connect(dataParser, &DataParser::updateData, [=](int type, const QVariant &rawdata, const QList<ListItem*> &items){
+    QObject::connect(dataParser, &DataParser::updateData, [=](int type, const QVariant &rawdata, const QList<ListItem*> &items) {
         switch (type)
         {
         case DataRequest::INDEX:
@@ -68,6 +66,13 @@ int main(int argc, char *argv[])
         {
             resourceData->update(rawdata.toHash());
             commentListModel->updateRows(items);
+        } break;
+        case DataRequest::FOLLOWEDLIST:
+        {
+            if (rawdata.toHash().value("page").toInt() <= 1)
+                followedListModel->updateRows(items);
+            else
+                followedListModel->appendRows(items);
         } break;
         case DataRequest::ITEM:
         {
@@ -102,6 +107,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("resourceListFilterData", resourceListFilterData);
     engine.rootContext()->setContextProperty("searchResourceModel",    searchResourceModel);
     engine.rootContext()->setContextProperty("commentListModel",       commentListModel);
+    engine.rootContext()->setContextProperty("followedListModel",      followedListModel);
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())
