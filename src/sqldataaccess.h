@@ -29,8 +29,10 @@ public:
 
 signals:
     void errorOccured(const QString &errorString);
+    void historyAdded(int id, const QString &season, const QString &episode);
 
 public slots:
+    // QVariantMap, QMap<QString, QStringList>
     QVariant history(int id);
     void addHistory(int id, const QString &season = QString(), const QString &episode = QString());
     void addFollowed(int id, const QString &meta, int lastvisit);

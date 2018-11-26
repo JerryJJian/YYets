@@ -34,12 +34,15 @@ Page {
             if (key === "" || key === "season") {
                 seasonModel.clear()
                 for (var i=0; i<resourceData.dataListSize("season"); ++i) {
-                    var episode = new Array();
+                    var episode = new Array;
+                    var visit = new Array;
                     var season = resourceData.dataListAt("season", i);
-                    for (var j=0; j<resourceData.dataListSize("season/"+season); ++j)
+                    for (var j=0; j<resourceData.dataListSize("season/"+season); ++j) {
                         episode[j] = resourceData.dataListAt("season/"+season, j);
+                        visit[j] = resourceData.dataListContains("season/"+season+"/visit", episode[j])
+                    }
 
-                    seasonModel.append({"season": resourceData.dataListAt("season", i), "episode": episode })
+                    seasonModel.append({"season": resourceData.dataListAt("season", i), "episode": episode, "visit": visit })
                 }
             }
 
@@ -191,7 +194,7 @@ Page {
                     PropertyChanges { target: seasonResource;        visible: false }
                     PropertyChanges { target: singleEpisodeResource; visible: true }
                     PropertyChanges { target: resourceArea; contentHeight: singleEpisodeResource.implicitHeight }
-                    StateChangeScript { script: dataRequest.requestResourceItem(resourceData.data("id"))}
+                    StateChangeScript { script: dataRequest.requestResourceItem(resourceData.data("id")) }
                 }
             ]
 
@@ -256,6 +259,7 @@ Page {
                                         anchors.fill: parent
                                         color: hovered || pressed ? "#e3e3e3" : "#F3F3F3"
                                     }
+                                    highlighted: resourceData.dataListContains("season/"+season+"/visit", text)
                                     hoverEnabled: true
                                     text: resourceData.dataListAt("season/"+season, index)
                                     onClicked: {
@@ -264,6 +268,9 @@ Page {
                                             se = "S" + season + "E" + text;
                                         openResourceItem(resourceId, season, text)
                                         resourceData.setData("current_item", se)
+                                        resourceData.setData("current/season", season)
+                                        resourceData.setData("current/episode", text)
+                                        highlighted = true
                                     }
                                 }
                             }

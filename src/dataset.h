@@ -11,6 +11,7 @@ public:
     explicit DataSet(QObject *parent = nullptr);
 
     Q_INVOKABLE QString data(const QString &key) const;
+    Q_INVOKABLE bool dataListContains(const QString &key, const QString value, const QString &splitBy = StringListSeparator) const;
     Q_INVOKABLE QStringList dataList(const QString &key, const QString &splitBy = StringListSeparator) const;
     Q_INVOKABLE int dataListSize(const QString &key, const QString &splitBy = StringListSeparator) const;
     Q_INVOKABLE QString dataListAt(const QString &key, int index, const QString &splitBy = StringListSeparator) const;

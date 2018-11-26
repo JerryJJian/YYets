@@ -11,6 +11,7 @@
 #include "commentlistitem.h"
 #include "dataset.h"
 #include "movielistitem.h"
+#include "objectpool.h"
 #include "resitemlistitem.h"
 #include "resourcelistitem.h"
 #include "searchresourcelistitem.h"
@@ -115,6 +116,8 @@ void DataParser::dataReceived(int type, const QByteArray &data)
         QVariantHash resHash = doc.object().value("data").toObject().value("resource").toObject().toVariantHash();
         QVariantList seasonList = doc.object().value("data").toObject().value("season").toArray().toVariantList();
         QStringList seasons;
+        QVariantMap historyData = ObjectPool::instance()->sqlDataAccess()->history(resHash.value("id").toInt()).toMap();
+        qDebug() << "#" << resHash.value("id").toInt() << historyData;
         for (auto season : seasonList)
         {
             QVariantMap seasonMap(season.toMap());
@@ -124,6 +127,7 @@ void DataParser::dataReceived(int type, const QByteArray &data)
             for (auto ep : seasonMap.value("episode").toList())
                 episodeList << ep.toString();
             resHash.insert(QString("season/%1").arg(seasonNum), episodeList.join("|"));
+            resHash.insert(QString("season/%1/visit").arg(seasonNum), historyData.value(seasonNum).toStringList());
         }
         if (seasonList.size() > 0)
             resHash.insert("season", seasons.join("|"));

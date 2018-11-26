@@ -15,6 +15,11 @@ QString DataSet::data(const QString &key) const
     return d.printableData.value(key);
 }
 
+bool DataSet::dataListContains(const QString &key, const QString value, const QString &splitBy) const
+{
+    return d.printableData.value(key).contains(value);
+}
+
 QStringList DataSet::dataList(const QString &key, const QString &splitBy) const
 {
     if (d.printableData.value(key).isEmpty())

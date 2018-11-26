@@ -114,6 +114,7 @@ Page {
                         ToolTip.text: qsTr("Copied to clipboard!")
                         onClicked: {
                             clipboard.text = resItemModel.convertToString(resItemModel.query(modelRow, "files", index+"/address"))
+                            database.addHistory(resourceData.data("id"), resourceData.data("current/season"), resourceData.data("current/episode"))
                         }
                     }
                 }

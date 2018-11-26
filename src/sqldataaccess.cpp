@@ -192,8 +192,8 @@ int SQLDataAccess::execQuery(const QString &sql, QList<QSqlRecord> &result)
 
 void SQLDataAccess::initTables()
 {
-    execQuery("CREATE TABLE IF NOT EXISTS `history` ( `id` INTEGER NOT NULL UNIQUE, `data` BLOB, PRIMARY KEY(`id`) );"
-              "CREATE TABLE IF NOT EXISTS `followed` ( `id` INTEGER NOT NULL UNIQUE, `meta` BLOB, `lastvisit` INTEGER, PRIMARY KEY(`id`) );");
+    execQuery("CREATE TABLE IF NOT EXISTS `history` ( `id` INTEGER NOT NULL UNIQUE, `data` BLOB, PRIMARY KEY(`id`) );");
+    execQuery("CREATE TABLE IF NOT EXISTS `followed` ( `id` INTEGER NOT NULL UNIQUE, `meta` BLOB, `lastvisit` INTEGER, PRIMARY KEY(`id`) );");
 }
 
 QSqlDatabase SQLDataAccess::database() const
@@ -243,7 +243,14 @@ void SQLDataAccess::addHistory(int id, const QString &season, const QString &epi
         {
             query.addBindValue(id);
             query.addBindValue(bytes);
-            query.exec();
+            if (query.exec())
+                emit historyAdded(id, season, episode);
+            else
+                qDebug() << "ERROR > query.exec(" << query.lastQuery() << ")" << query.lastError().text();
+        }
+        else
+        {
+            qDebug() << "ERROR > query.prepare(" << query.lastQuery() << ")" << query.lastError().text();
         }
     }
 
@@ -254,19 +261,26 @@ void SQLDataAccess::addHistory(int id, const QString &season, const QString &epi
 
     eps << episode;
 
+    qDebug() << "HISTORY:" << eps;
+
     historyMap.insert(season, eps);
     QByteArray bytes;
     QDataStream out(&bytes, QIODevice::WriteOnly);
     out << QVariant::fromValue(historyMap);
 
     QSqlQuery query(m_db);
-    if (query.prepare("UPDATE `history` SET `data`=? WHERE `id`=?);"))
+    if (query.prepare(QString("UPDATE `history` SET `data`=? WHERE `id`='%1';").arg(id)))
     {
         query.addBindValue(bytes);
-        query.addBindValue(id);
-        query.exec();
+        if (query.exec())
+            emit historyAdded(id, season, episode);
+        else
+            qDebug() << "ERROR > query.exec(" << query.lastQuery() << ")" << query.lastError().text();
     }
-
+    else
+    {
+        qDebug() << "ERROR > query.prepare(" << query.lastQuery() << ")" << query.lastError().text();
+    }
 }
 
 void SQLDataAccess::addFollowed(int id, const QString &meta, int lastvisit)

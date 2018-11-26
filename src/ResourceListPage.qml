@@ -166,8 +166,8 @@ Page {
 
     Popup {
         id: filter
-
-        width:  parent.width * 0.8
+        x: (parent.width - width) / 2
+        width:  parent.width * 0.9
         height: filterDataColumn.implicitHeight + 60
 
         Connections {
@@ -280,11 +280,10 @@ Page {
             }
             Rectangle { color: "#839496"; height: 1 }
 
-
             Row {
                 id: buttonRow
                 anchors.horizontalCenter: parent.horizontalCenter
-                spacing: Qt.application.font.pixelSize
+                spacing: Qt.application.font.pixelSize * 3
                 Button {
                     text: qsTr("Close")
                     onClicked: filter.close()
