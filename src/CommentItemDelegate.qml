@@ -23,7 +23,7 @@ Rectangle {
         id: userLabel
         anchors.top: parent.top; anchors.topMargin: 10
         anchors.left: parent.left;
-        anchors.leftMargin: avatarImg.state === Image.Ready ? Math.abs((avatarImg.width - avatarItem.width)/2) : 10
+        anchors.leftMargin: avatarImg.status === Image.Ready ? Math.abs((avatarImg.width - avatarItem.width)/2) : 10
 
         height: implicitHeight + font.pixelSize
         font.bold: true
@@ -66,7 +66,7 @@ Rectangle {
         height: 64
         anchors.left: userLabel.left
         anchors.top:  userLabel.bottom;
-        anchors.topMargin: avatarImg.state === Image.Ready ? (avatarImg.height - avatarItem.height) / 2 : 0
+        anchors.topMargin: avatarImg.status === Image.Ready ? (avatarImg.height - avatarItem.height) / 2 : 0
 
         Image {
             id: avatarImg
@@ -105,7 +105,7 @@ Rectangle {
                 id: reUserLabel
                 anchors.top: parent.top
                 anchors.left: parent.left
-                anchors.leftMargin: reAvatarImg.state === Image.Ready ? Math.abs((reAvatarImg.width - reAvatarItem.width)/2) : 10
+                anchors.leftMargin: reAvatarImg.status === Image.Ready ? Math.abs((reAvatarImg.width - reAvatarItem.width)/2) : 10
                 padding: font.pixelSize / 3
                 font.bold: true
                 color: "gray"
@@ -118,7 +118,7 @@ Rectangle {
                 height: 64
                 anchors.left: reUserLabel.left
                 anchors.top:  reUserLabel.bottom
-                anchors.topMargin: reAvatarImg.state === Image.Ready ? (reAvatarImg.height - reAvatarItem.height) / 2 : 0
+                anchors.topMargin: reAvatarImg.status === Image.Ready ? (reAvatarImg.height - reAvatarItem.height) / 2 : 0
 
                 Image {
                     id: reAvatarImg

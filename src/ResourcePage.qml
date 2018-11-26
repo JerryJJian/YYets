@@ -387,10 +387,6 @@ Page {
 
         ListView {
             id: searchResultList
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.top: findButton.bottom
-            anchors.bottom: parent.bottom
             clip: true
             model: searchResourceModel
             property int pageNum: 1
@@ -420,7 +416,7 @@ Page {
                 Column {
                     anchors.left: aPosterImg.right
                     anchors.right: parent.right; anchors.rightMargin: 15
-                    anchors.top: aPosterImg.top; anchors.topMargin: (aPosterImg.height - aImg.height)/2
+                    anchors.top: aPosterImg.top; anchors.topMargin: aImg.status === Image.Ready ? (aPosterImg.height - aImg.height)/2 : 20
                     spacing: Qt.application.font.pixelSize
 
                     Label {
@@ -504,6 +500,7 @@ Page {
 
                 }
 
+                Rectangle { anchors.bottom: parent.bottom; width: parent.width; height: 1; color: "#ededed" }
                 MouseArea {
                     id: mouseArea
                     anchors.fill: parent

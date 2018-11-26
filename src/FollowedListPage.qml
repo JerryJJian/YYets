@@ -37,7 +37,7 @@ Page {
 
             Column {
                 id: infoColumn
-                anchors.top: parent.top; anchors.topMargin: img.state === Image.Ready ? Math.abs(img.height - posterImg.height) / 2 : Qt.application.font.pixelSize
+                anchors.top: parent.top; anchors.topMargin: img.status === Image.Ready ? Math.abs(img.height - posterImg.height) / 2 : Qt.application.font.pixelSize
                 anchors.left: posterImg.right
                 anchors.right: parent.right
                 spacing: Qt.application.font.pixelSize / 3

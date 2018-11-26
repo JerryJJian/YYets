@@ -54,7 +54,7 @@ Page {
         model: searchResourceModel
         delegate: Rectangle {
             width: searchResultList.width
-            height: posterImg.height
+            height: Math.max(posterImg.height, infoColumn.implicitHeight + infoColumn.anchors.topMargin)
 
             Item {
                 id: posterImg
@@ -74,9 +74,10 @@ Page {
             }
 
             Column {
+                id: infoColumn
                 anchors.left: posterImg.right
-                anchors.right: parent.right; anchors.rightMargin: 15
-                anchors.top: posterImg.top; anchors.topMargin: (posterImg.height - img.height)/2
+                anchors.right: parent.right; anchors.rightMargin: spacing
+                anchors.top: posterImg.top; anchors.topMargin: img.status === Image.Ready ? (posterImg.height - img.height)/2 : 20
                 spacing: Qt.application.font.pixelSize
 
                 Label {
@@ -153,13 +154,13 @@ Page {
 
                 Label {
                     width: parent.width;
-                    text: pubtime;
+                    text: uptime + " " + pubtime
                     font.pixelSize: Qt.application.font.pixelSize * 0.9;
                     color: "gray"
                 }
 
             }
-
+            Rectangle { anchors.bottom: parent.bottom; width: parent.width; height: 1; color: "#ededed" }
             MouseArea {
                 id: mouseArea
                 anchors.fill: parent
