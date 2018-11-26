@@ -59,6 +59,7 @@ Page {
                 Flow {
                     width: parent.width
                     spacing: Qt.application.font.pixelSize / 3
+
                     Label {
                         text: channel_cn
                         visible: text !== ""
@@ -69,8 +70,8 @@ Page {
                         color: "#FFFFFF";
                         background: Rectangle { radius: height / 3; color: "#282828"; }
                     }
+
                     Label {
-                        text: categoryList
                         visible: text !== ""
                         width: implicitWidth + font.pixelSize
                         height: implicitHeight + font.pixelSize / 2
@@ -78,7 +79,9 @@ Page {
                         verticalAlignment: Text.AlignVCenter
                         color: "#FFFFFF";
                         background: Rectangle { radius: height / 3; color: "#282828"; }
+                        text: category
                     }
+
                     Label {
                         text: area
                         visible: text !== ""
@@ -89,8 +92,9 @@ Page {
                         color: "#FFFFFF";
                         background: Rectangle { radius: height / 3; color: "#282828"; }
                     }
+
                     Label {
-                        text: languageList
+                        text: lang
                         visible: text !== ""
                         width: implicitWidth + font.pixelSize
                         height: implicitHeight + font.pixelSize / 2
@@ -99,13 +103,60 @@ Page {
                         color: "#FFFFFF";
                         background: Rectangle { radius: height / 3; color: "#282828"; }
                     }
+                    Label {
+                        text: publish_year
+                        visible: text !== ""
+                        width: implicitWidth + font.pixelSize
+                        height: implicitHeight + font.pixelSize / 2
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        color: "#FFFFFF";
+                        background: Rectangle { radius: height / 3; color: "#282828"; }
+                    }
+
                 }
 
                 Label {
-                    text: updatetime + "  " + play_status
+                    text: itemupdate + "  " + play_status
                     color: "gray"
                     font.pixelSize: Qt.application.font.pixelSize * 0.9
                     wrapMode: Text.WordWrap
+                }
+
+                Flow {
+                    width: parent.width
+                    spacing: Qt.application.font.pixelSize / 3
+
+                    Label {
+                        text: prevue_episode
+                        visible: text !== ""
+                        width: implicitWidth + font.pixelSize
+                        height: implicitHeight + font.pixelSize / 2
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        color: "#FFFFFF";
+                        background: Rectangle { radius: height / 3; color: "#F26B3A"; }
+                    }
+                    Label {
+                        text: prevue_play_time
+                        visible: text !== ""
+                        width: implicitWidth + font.pixelSize
+                        height: implicitHeight + font.pixelSize / 2
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        color: "#FFFFFF";
+                        background: Rectangle { radius: height / 3; color: "#F26B3A"; }
+                    }
+                    Label {
+                        text: prevue_week
+                        visible: text !== ""
+                        width: implicitWidth + font.pixelSize
+                        height: implicitHeight + font.pixelSize / 2
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        color: "#FFFFFF";
+                        background: Rectangle { radius: height / 3; color: "#F26B3A"; }
+                    }
                 }
             }
 
@@ -134,27 +185,27 @@ Page {
             }
         }
 
-//        states: [
-//            State {
-//                name: "refresh"
-//                when: followedList.contentY < -64
-//                StateChangeScript {
-//                    script: {
-//                        pageNum = 1
-//                        dataRequest.requestFollowedList(pageNum, pageSize)
-//                    }
-//                }
-//            },
-//            State {
-//                name: "loadmore"
-//                when: followedList.contentHeight > 0 && (followedList.contentY > followedList.contentHeight - followedList.height + 64)
-//                StateChangeScript {
-//                    script: {
-//                        dataRequest.requestFollowedList(pageNum + 1, pageSize)
-//                    }
-//                }
-//            }
-//        ]
+        states: [
+            State {
+                name: "refresh"
+                when: followedList.contentY < -64
+                StateChangeScript {
+                    script: {
+                        pageNum = 1
+                        dataRequest.requestFollowedList(pageNum, pageSize)
+                    }
+                }
+            },
+            State {
+                name: "loadmore"
+                when: followedList.contentHeight > 0 && (followedList.contentY > followedList.contentHeight - followedList.height + 64)
+                StateChangeScript {
+                    script: {
+                        dataRequest.requestFollowedList(pageNum + 1, pageSize)
+                    }
+                }
+            }
+        ]
 
         Connections {
             target: followedListModel

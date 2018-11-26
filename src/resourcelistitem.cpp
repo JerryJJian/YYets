@@ -30,9 +30,9 @@ void ResourceListItem::initRoles()
     setRoleName(RankValueRole,       "rank_value"       );
     setRoleName(ShowTypeRole,        "show_type"        );
     setRoleName(AliasnameRole,       "aliasname"        );
-    setRoleName(CategoryRole,        "categoryList"     );
+    setRoleName(CategoryRole,        "category"         );
     setRoleName(ViewsRole,           "views"            );
-    setRoleName(LangRole,            "languageList"     );
+    setRoleName(LangRole,            "lang"             );
     setRoleName(RemarkRole,          "remark"           );
     setRoleName(UpdaterRole,         "updater"          );
     setRoleName(PermissionRole,      "permission"       );
@@ -75,4 +75,7 @@ void ResourceListItem::initRoles()
     setRoleName(UpdatetimeRole,      "updatetime"       );
     setRoleName(PosterMRole,         "poster_m"         );
     setRoleName(FollowedRole,        "followed"         );
+    setRoleName(PrevueEpisodeRole,   "prevue_episode");
+    setRoleName(PrevuePlaytimeRole,  "prevue_play_time");
+    setRoleName(PrevueWeekRole,      "prevue_week");
 }

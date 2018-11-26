@@ -7,6 +7,7 @@
 #include <QJsonValue>
 #include <QJsonParseError>
 #include <QDateTime>
+#include <QtMath>
 #include "articlelistitem.h"
 #include "commentlistitem.h"
 #include "dataset.h"
@@ -55,7 +56,7 @@ void DataParser::dataReceived(int type, const QByteArray &data)
         for (auto object : articles)
         {
             QVariantHash articleData(object.toVariant().toHash());
-            articleData.insert("dateline", QDateTime::fromSecsSinceEpoch(articleData.value("dateline").toInt()).toString("yyyy-MM-dd hh:mm:ss"));
+            articleData.insert("dateline",  handleDatetime(articleData.value("dateline").toInt()));
             ListItem *item = new ArticleListItem(articleData);
             items << item;
         }
@@ -75,9 +76,11 @@ void DataParser::dataReceived(int type, const QByteArray &data)
         for (auto res : resArray)
         {
             QVariantHash resItem(res.toObject().toVariantHash());
+            resItem.insert("dateline",   handleDatetime(resItem.value("dateline").toInt()));
+            resItem.insert("itemupdate", handleDatetime(resItem.value("itemupdate").toInt()));
+            resItem.insert("close_time", handleDatetime(resItem.value("close_time").toInt()));
+            resItem.insert("updatetime", handleDatetime(resItem.value("updatetime").toInt()));
             resItem.insert("followed", followed.indexOf(resItem.value("id").toInt()) >=0 ? 1 : 0);
-            resItem.insert("categoryList", resItem.value("category"));
-            resItem.insert("languageList", resItem.value("lang"));
             ListItem *item = new ResourceListItem(resItem);
             items << item;
         }
@@ -127,8 +130,26 @@ void DataParser::dataReceived(int type, const QByteArray &data)
         for (auto res : resArray)
         {
             QVariantHash itemData(res.toObject().toVariantHash());
-            itemData.insert("categoryList", itemData.value("category"));
-            itemData.insert("languageList", itemData.value("lang"));
+            QStringList itKeys;
+            for (auto it : itemData.value("category").toList())
+                itKeys << it.toString();
+            itemData.insert("category", itKeys.join("|"));
+            itKeys.clear();
+            for (auto it : itemData.value("lang").toList())
+                itKeys << it.toString();
+
+            itemData.insert("lang", itKeys.join("|"));
+            itemData.insert("dateline",   handleDatetime(itemData.value("dateline").toInt()));
+            itemData.insert("itemupdate", handleDatetime(itemData.value("itemupdate").toInt()));
+            itemData.insert("close_time", handleDatetime(itemData.value("close_time").toInt()));
+            itemData.insert("updatetime", handleDatetime(itemData.value("updatetime").toInt()));
+            if (!itemData.value("prevue").isNull())
+            {
+                QVariantMap prevue(itemData.value("prevue").toMap());
+                itemData.insert("prevue_episode", QString("S%1E%2").arg(prevue.value("season").toString()).arg(prevue.value("episode").toString()));
+                itemData.insert("prevue_play_time", prevue.value("play_time"));
+                itemData.insert("prevue_week", prevue.value("week"));
+            }
             ListItem *item = new ResourceListItem(itemData);
             items << item;
         }
@@ -140,8 +161,26 @@ void DataParser::dataReceived(int type, const QByteArray &data)
     {
         items.clear();
         QVariantHash resHash = doc.object().value("data").toObject().value("resource").toObject().toVariantHash();
+        if (!resHash.value("prevue").isNull())
+        {
+            QVariantMap prevue(resHash.value("prevue").toMap());
+            resHash.insert("prevue_episode", QString("S%1E%2").arg(prevue.value("season").toString()).arg(prevue.value("episode").toString()));
+            resHash.insert("prevue_play_time", prevue.value("play_time"));
+            resHash.insert("prevue_week", prevue.value("week"));
+        }
+
+        if (ObjectPool::instance()->sqlDataAccess()->hasFollowed(resHash.value("id").toInt()))
+            ObjectPool::instance()->sqlDataAccess()->updateFollowed(resHash.value("id").toInt(),
+                                                                    QJsonDocument::fromVariant(resHash).toJson(),
+                                                                    resHash.value("prevue_play_time").toString());
         resHash.insert("resource",  QJsonDocument::fromVariant(resHash).toJson());
-        resHash.insert("lastvisit", QDateTime::currentDateTime().toSecsSinceEpoch());
+
+        resHash.insert("dateline",   handleDatetime(resHash.value("dateline").toInt()));
+        resHash.insert("itemupdate", handleDatetime(resHash.value("itemupdate").toInt()));
+        resHash.insert("close_time", handleDatetime(resHash.value("close_time").toInt()));
+        resHash.insert("updatetime", handleDatetime(resHash.value("updatetime").toInt()));
+        resHash.insert("premiere_time", handleDatetime(resHash.value("updatetime").toInt(), "yyyy/MM/dd"));
+
         QVariantList seasonList = doc.object().value("data").toObject().value("season").toArray().toVariantList();
         QStringList seasons;
         QVariantMap historyData = ObjectPool::instance()->sqlDataAccess()->history(resHash.value("id").toInt()).toMap();
@@ -167,14 +206,13 @@ void DataParser::dataReceived(int type, const QByteArray &data)
         for (auto comment : comments)
         {
             QVariantHash commentData(comment.toObject().toVariantHash());
-            commentData.insert("dateline", QDateTime::fromSecsSinceEpoch(commentData.value("dateline").toInt()).toString("yyyy-MM-dd hh:mm:ss"));
+            commentData.insert("dateline",  handleDatetime(commentData.value("dateline").toInt()));
             if (!comment.toObject().value("reply").isNull())
             {
                 QJsonObject reply = comment.toObject().value("reply").toObject();
                 for (auto key : reply.keys())
                     commentData.insert("reply_"+key, reply.value(key));
 
-                commentData.insert("reply_dateline", QDateTime::fromSecsSinceEpoch(commentData.value("reply_dateline").toInt()).toString("yyyy-MM-dd hh:mm:ss"));
                 commentData.insert("reply", reply.value("id"));
             }
             else
@@ -234,7 +272,7 @@ void DataParser::dataReceived(int type, const QByteArray &data)
         for (auto object : objects)
         {
             QVariantHash articleData(object.toVariant().toHash());
-            articleData.insert("dateline", QDateTime::fromSecsSinceEpoch(articleData.value("dateline").toInt()).toString("yyyy-MM-dd hh:mm:ss"));
+            articleData.insert("dateline",  handleDatetime(articleData.value("dateline").toInt()));
             ListItem *item = new ArticleListItem(articleData);
             items << item;
         }
@@ -245,7 +283,8 @@ void DataParser::dataReceived(int type, const QByteArray &data)
         items.clear();
         QJsonObject object = doc.object().value("data").toObject();
         QVariantHash articleData(object.toVariantHash());
-        articleData.insert("dateline", QDateTime::fromSecsSinceEpoch(articleData.value("dateline").toInt()).toString("yyyy-MM-dd hh:mm:ss"));
+        articleData.insert("dateline", handleDatetime(articleData.value("dateline").toInt()));
+        articleData.insert("updatetime", handleDatetime(articleData.value("dateline").toInt()));
         articleData.insert("comments_count", object.value("comments_count").toString());
 
         // extend content
@@ -304,7 +343,7 @@ void DataParser::dataReceived(int type, const QByteArray &data)
             articleData.insert("relative/"+id+"/poster_m", relatedObj.value("poster_m").toString());
             articleData.insert("relative/"+id+"/title", relatedObj.value("title").toString());
             articleData.insert("relative/"+id+"/id", relatedObj.value("id").toString());
-            articleData.insert("relative/"+id+"/dateline", QDateTime::fromSecsSinceEpoch(relatedObj.value("dateline").toString().toInt()).toString("yyyy-MM-dd hh:mm:ss"));
+            articleData.insert("relative/"+id+"/dateline",  handleDatetime(relatedObj.value("dateline").toInt()));
         }
         articleData.insert("relative", relatedArticles.join("|"));
 
@@ -312,7 +351,7 @@ void DataParser::dataReceived(int type, const QByteArray &data)
         for (auto comment : object.value("comments_hot").toArray())
         {
             QVariantHash commentData(comment.toObject().toVariantHash());
-            commentData.insert("dateline", QDateTime::fromSecsSinceEpoch(commentData.value("dateline").toInt()).toString("yyyy-MM-dd hh:mm:ss"));
+            commentData.insert("dateline",  handleDatetime(commentData.value("dateline").toInt()));
             if (!comment.toObject().value("reply").isNull())
             {
                 QJsonObject reply = comment.toObject().value("reply").toObject();
@@ -340,8 +379,8 @@ void DataParser::dataReceived(int type, const QByteArray &data)
         for (auto object : objects)
         {
             QVariantHash itemdata(object.toVariant().toHash());
-            itemdata.insert("pubtime", QDateTime::fromSecsSinceEpoch(itemdata.value("pubtime").toInt()).toString("yyyy-MM-dd"));
-            itemdata.insert("uptime", QDateTime::fromSecsSinceEpoch(itemdata.value("uptime").toInt()).toString("yyyy-MM-dd"));
+            itemdata.insert("pubtime", handleDatetime(itemdata.value("pubtime").toInt(), "yyyy/MM/dd"));
+            itemdata.insert("uptime",  handleDatetime(itemdata.value("uptime").toInt()));
             ListItem *item = new SearchResourceListItem(itemdata);
             items << item;
         }
@@ -349,5 +388,36 @@ void DataParser::dataReceived(int type, const QByteArray &data)
     } break;
     }
 
+}
+
+QString DataParser::handleDatetime(qint64 secs, const QString &formatString) const
+{
+    if (secs == 0)
+        return QString("0");
+
+    if (!formatString.isEmpty())
+        return QDateTime::fromSecsSinceEpoch(secs).toString(formatString);
+
+    int currentSec = QDateTime::currentSecsSinceEpoch();
+    int offset = currentSec - secs;
+
+    if (offset < 600)
+        return tr("%1 mintes ago").arg(qFloor(offset / 60));
+    if (offset < 3600)
+        return tr("%1 mintes ago").arg(qFloor(offset / 600) * 10);
+    if (offset < 86400) // day
+        return tr("%1 hour ago").arg(qFloor(offset / 3600));
+    if (offset < 604800) // week
+        return tr("%1 days ago").arg(qFloor(offset / 86400));
+    if (offset < 3024000) // month
+        return tr("%1 weeks ago").arg(qFloor(offset / 604800));
+
+    QDate date(QDateTime::fromSecsSinceEpoch(secs).date());
+    QDate curr(QDate::currentDate());
+    int years = curr.year() - date.year();
+    if (years == 0)
+        return tr("%1 months ago").arg(curr.month() - date.month());
+
+    return tr("%1 years ago").arg(years);
 }
 

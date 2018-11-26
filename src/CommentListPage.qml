@@ -20,7 +20,6 @@ Page {
             p_avatar_s: avatar_s
             p_replyShown: reply !== ""
             p_reply_user: reply_nickname + " [" + reply_group_name + "]"
-            p_reply_dateline: reply_dateline + " "
             p_reply_good: "("+(reply_good === "" ? 0 : reply_good)+") "
             p_reply_bad: "("+(reply_bad===""?0:reply_bad)+")"
             p_reply_avatar_s: reply_avatar_s

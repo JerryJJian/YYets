@@ -193,7 +193,8 @@ int SQLDataAccess::execQuery(const QString &sql, QList<QSqlRecord> &result)
 void SQLDataAccess::initTables()
 {
     execQuery("CREATE TABLE IF NOT EXISTS `history` ( `id` INTEGER NOT NULL UNIQUE, `data` BLOB, PRIMARY KEY(`id`) );");
-    execQuery("CREATE TABLE IF NOT EXISTS `followed` ( `id` INTEGER NOT NULL UNIQUE, `meta` BLOB, `lastvisit` INTEGER, PRIMARY KEY(`id`) );");
+    execQuery("CREATE TABLE IF NOT EXISTS `followed` ( `id` INTEGER NOT NULL UNIQUE, "
+              " `meta` BLOB, `prevue` TEXT, `lastvisit` INTEGER, PRIMARY KEY(`id`) );");
 }
 
 QSqlDatabase SQLDataAccess::database() const
@@ -297,7 +298,7 @@ bool SQLDataAccess::addHistory(int id, const QString &season, const QString &epi
     return false;
 }
 
-bool SQLDataAccess::addFollowed(int id, const QByteArray &meta, int lastvisit)
+bool SQLDataAccess::addFollowed(int id, const QByteArray &meta, const QString &prevue, int lastvisit)
 {
     QString checkSql("SELECT `id` FROM `followed` WHERE `id`='%1';");
     QList<QSqlRecord> result;
@@ -305,9 +306,9 @@ bool SQLDataAccess::addFollowed(int id, const QByteArray &meta, int lastvisit)
 
     if (result.value(0).value("id").toInt() != id)
     {
-        QString insertSql("INSERT INTO `followed` (`id`, `meta`, `lastvisit`) VALUES ('%1', ?, '%2');");
+        QString insertSql("INSERT INTO `followed` (`id`, `meta`, `prevue`, `lastvisit`) VALUES ('%1', ?, '%2', '%3');");
         QSqlQuery query(m_db);
-        if (query.prepare(insertSql.arg(id).arg(lastvisit)))
+        if (query.prepare(insertSql.arg(id).arg(prevue).arg(lastvisit)))
         {
             query.addBindValue(meta);
             if (query.exec())
@@ -333,7 +334,7 @@ void SQLDataAccess::removeFollowed(int id)
 
 QByteArray SQLDataAccess::followedList(int page, int pageSize)
 {
-    QString sql("SELECT * FROM `followed` LIMIT %1, %2;");
+    QString sql("SELECT * FROM `followed` ORDER BY `prevue` DESC LIMIT %1, %2;");
     QList<QSqlRecord> result;
     execQuery(sql.arg(((page < 1 ? 1 : page) - 1) * pageSize).arg(pageSize), result);
 
@@ -341,7 +342,7 @@ QByteArray SQLDataAccess::followedList(int page, int pageSize)
     for (auto rec : result)
         resources.append(QString::fromUtf8(rec.value("meta").toByteArray()));
 
-    return QString("{\"data\":{\"list\":[%1], \"page\": \"%2\"}}").arg(resources.join(",")).arg(page < 1 ? 1 : page).toUtf8();
+    return QString("{\"data\":{\"list\":[%1], \"page\": %2 }}").arg(resources.join(",")).arg(page < 1 ? 1 : page).toUtf8();
 }
 
 bool SQLDataAccess::hasFollowed(int id)
@@ -364,4 +365,24 @@ QList<int> SQLDataAccess::checkFollowed(const QStringList &ids)
         followed << rec.value("id").toInt();
 
     return followed;
+}
+
+bool SQLDataAccess::updateFollowed(int id, const QByteArray &meta, const QString &prevue)
+{
+    QString updateSql("UPDATE `followed` SET `meta`=?, `prevue`='%2', `lastvisit`='%3' WHERE `id`='%1';");
+    QSqlQuery query(m_db);
+    if (query.prepare(updateSql.arg(id).arg(prevue).arg(QDateTime::currentDateTime().toSecsSinceEpoch())))
+    {
+        query.addBindValue(meta);
+        if (query.exec())
+            return true;
+        else
+            qDebug() << "ERROR > query.exec(" << query.lastQuery() << ")" << query.lastError().text();
+    }
+    else
+    {
+        qDebug() << "ERROR > query.prepare(" << query.lastQuery() << ")" << query.lastError().text();
+    }
+
+    return false;
 }

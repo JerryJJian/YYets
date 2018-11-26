@@ -21,6 +21,8 @@ public slots:
 private:
     void handleImageSize(QString &htmlText);
 
+    QString handleDatetime(qint64 secs, const QString &formatString = QString()) const;
+
 };
 
 #endif // DATAPARSER_H

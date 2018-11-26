@@ -68,7 +68,10 @@ public:
         PlayTimeRole,
         UpdatetimeRole,
         PosterMRole,
-        FollowedRole
+        FollowedRole,
+        PrevueEpisodeRole,
+        PrevuePlaytimeRole,
+        PrevueWeekRole
     };
 
     QString id() const;

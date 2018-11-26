@@ -35,11 +35,12 @@ public slots:
     // QVariantMap, QMap<QString, QStringList>
     QVariant history(int id);
     bool addHistory(int id, const QString &season = QString(), const QString &episode = QString());
-    bool addFollowed(int id, const QByteArray &meta, int lastvisit);
+    bool addFollowed(int id, const QByteArray &meta, const QString &prevue, int lastvisit);
     void removeFollowed(int id);
     QByteArray followedList(int page = 1, int pageSize = 10);
     bool hasFollowed(int id);
     QList<int> checkFollowed(const QStringList &ids);
+    bool updateFollowed(int id, const QByteArray &meta, const QString &prevue);
 
 private:
     void initTables();

@@ -13,7 +13,6 @@ Rectangle {
     property alias p_avatar_s: avatarImg.source
     property alias p_replyShown: replyArea.visible
     property alias p_reply_user: reUserLabel.text
-    property alias p_reply_dateline: reply_datelineLabel.text
     property alias p_reply_good: replygoodLabel.text
     property alias p_reply_bad: replybadLabel.text
     property alias p_reply_avatar_s: reAvatarImg.source
@@ -137,12 +136,6 @@ Rectangle {
                 anchors.right: parent.right
                 anchors.rightMargin: 5
                 spacing: 3
-
-                Label {
-                    id: reply_datelineLabel
-                    color: "gray"
-                    font.pixelSize: Qt.application.font.pixelSize * 0.9
-                }
 
                 Image {
                     height: Qt.application.font.pixelSize

@@ -24,11 +24,12 @@ Page {
             statusLabel.text = resourceData.data("tvstation") + " @" + resourceData.data("premiere") + " - " + resourceData.data("play_status")
             itemupdateLabel.text = "\u231A " + resourceData.data("updatetime")
             remarkLabel.text = resourceData.data("remark")
-            prevueLabel.text = "\u23F3 " + resourceData.data("prevue/play_time") + " " + resourceData.data("prevue/week") + " S" + resourceData.data("prevue/season") + "E" + resourceData.data("prevue/episode")
+            prevue_episode.text = resourceData.data("prevue_episode")
+            prevue_play_time.text = resourceData.data("prevue/play_time")
+            prevue_week.text = resourceData.data("prevue/week")
             favoritesLabel.text = "No." + resourceData.data("rank") + " \u2665 " + resourceData.data("favorites")
             scoreLabel.text = resourceData.data("score")
             content.text = resourceData.data("content")
-            prevueLabel.visible = resourceData.data("prevue/play_time") !== ""
             busyIndicator.running = false
             commentsCount = resourceData.data("comments_count")
             followed = database.hasFollowed(resourceData.data("id"))
@@ -128,7 +129,41 @@ Page {
         Label { id: statusLabel    ; width: parent.width; visible: text !== ""; wrapMode: Text.WordWrap; color: "#808080"; }
         Label { id: itemupdateLabel; width: parent.width; visible: text !== ""; wrapMode: Text.WordWrap; color: "#808080"; }
         Label { id: remarkLabel    ; width: parent.width; visible: text !== ""; wrapMode: Text.WordWrap; color: "#808080"; }
-        Label { id: prevueLabel    ; width: parent.width; visible: text !== ""; wrapMode: Text.WordWrap; color: "#808080"; }
+        Flow {
+            width: parent.width
+            spacing: Qt.application.font.pixelSize / 3
+
+            Label {
+                id: prevue_episode
+                visible: text !== ""
+                width: implicitWidth + font.pixelSize
+                height: implicitHeight + font.pixelSize / 2
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                color: "#FFFFFF";
+                background: Rectangle { radius: height / 3; color: "#F26B3A"; }
+            }
+            Label {
+                id: prevue_play_time
+                visible: text !== ""
+                width: implicitWidth + font.pixelSize
+                height: implicitHeight + font.pixelSize / 2
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                color: "#FFFFFF";
+                background: Rectangle { radius: height / 3; color: "#F26B3A"; }
+            }
+            Label {
+                id: prevue_week
+                visible: text !== ""
+                width: implicitWidth + font.pixelSize
+                height: implicitHeight + font.pixelSize / 2
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                color: "#FFFFFF";
+                background: Rectangle { radius: height / 3; color: "#F26B3A"; }
+            }
+        }
         Label { id: favoritesLabel ; width: parent.width; visible: text !== ""; wrapMode: Text.WordWrap; color: "#808080"; }
     }
 
@@ -148,7 +183,7 @@ Page {
         text: followed ? qsTr("Followed") : qsTr("Follow")
         icon.source: followed ? "images/followed.png" : "images/follow.png"
         highlighted: followed
-        onClicked: followed = database.addFollowed(resourceData.data("id"), resourceData.data("resource"), resourceData.data("lastvisit"))
+        onClicked: followed = database.addFollowed(resourceData.data("id"), resourceData.data("resource"), resourceData.data("prevue_play_time"), resourceData.data("lastvisit"))
     }
 
     // ---------------------------------------------------------------
@@ -331,7 +366,6 @@ Page {
                 p_avatar_s: avatar_s
                 p_replyShown: reply !== ""
                 p_reply_user: reply_nickname + " [" + reply_group_name + "]"
-                p_reply_dateline: reply_dateline + " "
                 p_reply_good: "("+(reply_good === "" ? 0 : reply_good)+") "
                 p_reply_bad: "("+(reply_bad===""?0:reply_bad)+")"
                 p_reply_avatar_s: reply_avatar_s
