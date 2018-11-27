@@ -16,7 +16,7 @@ Page {
 
         delegate: Rectangle {
             width: followedList.width
-            height: Math.max(posterImg.height, infoColumn.implicitHeight + infoColumn.anchors.topMargin)
+            height: Math.max(posterImg.height, infoColumn.implicitHeight + infoColumn.anchors.topMargin * 2)
 
             Item {
                 id: posterImg
@@ -52,7 +52,7 @@ Page {
                 Label {
                     text: enname
                     color: "gray"
-                    font.pixelSize: Qt.application.font.pixelSize * 0.9
+                    font.pixelSize: Qt.application.font.pixelSize
                     wrapMode: Text.WordWrap
                 }
 
@@ -68,6 +68,7 @@ Page {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         color: "#FFFFFF";
+                        font.pixelSize: Qt.application.font.pixelSize * 0.9
                         background: Rectangle { radius: height / 3; color: "#282828"; }
                     }
 
@@ -79,6 +80,7 @@ Page {
                         verticalAlignment: Text.AlignVCenter
                         color: "#FFFFFF";
                         background: Rectangle { radius: height / 3; color: "#282828"; }
+                        font.pixelSize: Qt.application.font.pixelSize * 0.9
                         text: category
                     }
 
@@ -90,6 +92,7 @@ Page {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         color: "#FFFFFF";
+                        font.pixelSize: Qt.application.font.pixelSize * 0.9
                         background: Rectangle { radius: height / 3; color: "#282828"; }
                     }
 
@@ -100,6 +103,7 @@ Page {
                         height: implicitHeight + font.pixelSize / 2
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
+                        font.pixelSize: Qt.application.font.pixelSize * 0.9
                         color: "#FFFFFF";
                         background: Rectangle { radius: height / 3; color: "#282828"; }
                     }
@@ -111,16 +115,40 @@ Page {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         color: "#FFFFFF";
+                        font.pixelSize: Qt.application.font.pixelSize * 0.9
                         background: Rectangle { radius: height / 3; color: "#282828"; }
                     }
 
                 }
 
-                Label {
-                    text: itemupdate + "  " + play_status
-                    color: "gray"
-                    font.pixelSize: Qt.application.font.pixelSize * 0.9
-                    wrapMode: Text.WordWrap
+                Flow {
+                    width: parent.width
+                    spacing: Qt.application.font.pixelSize / 3
+
+                    Label {
+                        text: itemupdate
+                        visible: text !== ""
+                        width: implicitWidth + font.pixelSize
+                        height: implicitHeight + font.pixelSize / 2
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        color: "#FFFFFF";
+                        font.pixelSize: Qt.application.font.pixelSize * 0.9
+                        background: Rectangle { radius: height / 3; color: "#26b47f"; }
+                    }
+
+                    Label {
+                        text: play_status
+                        visible: text !== ""
+                        width: implicitWidth + font.pixelSize
+                        height: implicitHeight + font.pixelSize / 2
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        font.pixelSize: Qt.application.font.pixelSize * 0.9
+                        color: "#FFFFFF";
+                        background: Rectangle { radius: height / 3; color: "#26b47f"; }
+                    }
+
                 }
 
                 Flow {
@@ -134,6 +162,7 @@ Page {
                         height: implicitHeight + font.pixelSize / 2
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
+                        font.pixelSize: Qt.application.font.pixelSize * 0.9
                         color: "#FFFFFF";
                         background: Rectangle { radius: height / 3; color: "#F26B3A"; }
                     }
@@ -143,6 +172,7 @@ Page {
                         width: implicitWidth + font.pixelSize
                         height: implicitHeight + font.pixelSize / 2
                         horizontalAlignment: Text.AlignHCenter
+                        font.pixelSize: Qt.application.font.pixelSize * 0.9
                         verticalAlignment: Text.AlignVCenter
                         color: "#FFFFFF";
                         background: Rectangle { radius: height / 3; color: "#F26B3A"; }
@@ -153,6 +183,7 @@ Page {
                         width: implicitWidth + font.pixelSize
                         height: implicitHeight + font.pixelSize / 2
                         horizontalAlignment: Text.AlignHCenter
+                        font.pixelSize: Qt.application.font.pixelSize * 0.9
                         verticalAlignment: Text.AlignVCenter
                         color: "#FFFFFF";
                         background: Rectangle { radius: height / 3; color: "#F26B3A"; }

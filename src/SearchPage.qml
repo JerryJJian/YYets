@@ -78,7 +78,7 @@ Page {
                 anchors.left: posterImg.right
                 anchors.right: parent.right; anchors.rightMargin: spacing
                 anchors.top: posterImg.top; anchors.topMargin: img.status === Image.Ready ? (posterImg.height - img.height)/2 : 20
-                spacing: Qt.application.font.pixelSize
+                spacing: Qt.application.font.pixelSize / 2
 
                 Label {
                     text: title
@@ -88,9 +88,16 @@ Page {
                 }
 
                 Flow {
+                    id: tagFlow
                     spacing: Qt.application.font.pixelSize / 2
+                    property int flowWidth: (channelLabel.visible ? channelLabel.width + spacing : 0) +
+                                            (prefixLabel.visible ? prefixLabel.width + spacing : 0) +
+                                            (suffixLabel.visible ? suffixLabel.width + spacing : 0)
+
+
 
                     Label {
+                        id: channelLabel
                         text: channel;
                         visible: channel !== ""
                         width: implicitWidth + font.pixelSize
@@ -106,6 +113,7 @@ Page {
                     }
 
                     Label {
+                        id: prefixLabel
                         text: prefix;
                         visible: prefix !== ""
                         width: implicitWidth + font.pixelSize
@@ -121,6 +129,7 @@ Page {
                     }
 
                     Label {
+                        id: suffixLabel
                         text: suffix;
                         visible: suffix !== ""
                         width: implicitWidth + font.pixelSize
@@ -138,7 +147,7 @@ Page {
                     Label {
                         text: character;
                         visible: character !== ""
-                        width: implicitWidth + font.pixelSize
+                        width: Math.min(implicitWidth + font.pixelSize, infoColumn.width - tagFlow.flowWidth)
                         height: implicitHeight + font.pixelSize / 2
                         font.pixelSize: Qt.application.font.pixelSize * 0.9;
                         verticalAlignment: Text.AlignVCenter

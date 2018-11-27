@@ -42,6 +42,10 @@ bool SQLDataAccess::connect(const QString &host,
     m_db.setConnectOptions("MYSQL_OPT_RECONNECT=1");
 #endif
 #ifdef DATABASE_SQLITE
+    Q_UNUSED(port)
+    Q_UNUSED(username)
+    Q_UNUSED(passwd)
+
     m_db.setDatabaseName(host);
     m_db.setHostName(dbname);
 #endif

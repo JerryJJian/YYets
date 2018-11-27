@@ -23,9 +23,10 @@ Page {
             channelLabel.text = resourceData.data("channel_cn")
             areaLabel.text = resourceData.data("area")
             langLabel.text = resourceData.data("lang")
-            statusLabel.text = resourceData.data("tvstation") + " @" + resourceData.data("premiere") + " - " + resourceData.data("play_status")
-            itemupdateLabel.text = "\u231A " + resourceData.data("dateline")
+            statusLabel.text = resourceData.data("tvstation") + " @" + resourceData.data("premiere")
+            itemupdateLabel.text = "\u231A " + resourceData.data("itemupdate")
             remarkLabel.text = resourceData.data("remark")
+            playStatusLabel.text = resourceData.data("play_status")
             prevue_episode.text = resourceData.data("prevue_episode")
             prevue_play_time.text = resourceData.data("prevue/play_time")
             prevue_week.text = resourceData.data("prevue/week")
@@ -131,6 +132,16 @@ Page {
         Label { id: statusLabel    ; width: parent.width; visible: text !== ""; wrapMode: Text.WordWrap; color: "#808080"; }
         Label { id: itemupdateLabel; width: parent.width; visible: text !== ""; wrapMode: Text.WordWrap; color: "#808080"; }
         Label { id: remarkLabel    ; width: parent.width; visible: text !== ""; wrapMode: Text.WordWrap; color: "#808080"; }
+        Label {
+            id: playStatusLabel
+            visible: text !== ""
+            width: implicitWidth + font.pixelSize
+            height: implicitHeight + font.pixelSize / 2
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            color: "#FFFFFF";
+            background: Rectangle { radius: height / 3; color: "#097bed"; }
+        }
         Flow {
             width: parent.width
             spacing: Qt.application.font.pixelSize / 3
