@@ -19,8 +19,8 @@ Page {
 
         model: resourceListModel
 
-        cellWidth: 150
-        cellHeight: 180
+        cellWidth: 120
+        cellHeight: 160
 
         delegate: Rectangle {
             width: resourcelist.cellWidth
@@ -28,8 +28,8 @@ Page {
 
             Item {
                 id: posterImg
-                width:  120
-                height: 120
+                width:  110
+                height: 110
                 anchors.left:  parent.left
                 anchors.right: parent.right
                 anchors.top:   parent.top
@@ -45,7 +45,7 @@ Page {
 
                 Image {
                     id: followFlag
-                    anchors.right: img.right; anchors.rightMargin: - width * 0.66
+                    anchors.right: img.right; anchors.rightMargin: - width * 0.33
                     anchors.bottom: parent.bottom
                     height: Qt.application.font.pixelSize * 2
                     width: height
@@ -55,8 +55,8 @@ Page {
 
                 Column {
                     anchors.top: img.top
-                    anchors.left: posterImg.left; anchors.leftMargin: 15
-                    spacing: Qt.application.font.pixelSize * 0.33
+                    anchors.left: posterImg.left; anchors.leftMargin: 5
+                    spacing: Qt.application.font.pixelSize * 0.1
                     Label {
                         width: implicitWidth + font.pixelSize
                         height: implicitHeight * 1.5
@@ -70,15 +70,15 @@ Page {
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
                         text: channel_cn
-                        font.pixelSize: Qt.application.font.pixelSize * 0.8
+                        font.pixelSize: Qt.application.font.pixelSize * 0.5
                     }
                     Label {
                         width: implicitWidth + font.pixelSize
                         height: implicitHeight * 1.5
                         background: Rectangle {
-                            color: "#4bbe93"
+                            color: "#78C257"
                             radius: height / 4
-                            border.color: "#9DC6F3"
+                            border.color: "#4bbe93"
                             border.width: 1
                         }
                         color: "white"
@@ -86,7 +86,7 @@ Page {
                         horizontalAlignment: Text.AlignHCenter
                         text: publish_year
                         visible: text !== ""
-                        font.pixelSize: Qt.application.font.pixelSize * 0.8
+                        font.pixelSize: Qt.application.font.pixelSize * 0.5
                     }
                 }
             }
@@ -106,7 +106,7 @@ Page {
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
                 text: score
-                font.pixelSize: Qt.application.font.pixelSize * 0.8
+                font.pixelSize: Qt.application.font.pixelSize * 0.5
             }
 
             Label {

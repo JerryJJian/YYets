@@ -34,8 +34,8 @@ Page {
                 anchors.top: parent.top; anchors.topMargin: 10
                 Label {
                     id: formatLabel;
-                    height: implicitHeight * 1.5
                     width: implicitWidth * 1.2
+                    height: formatTipLabel.height
                     background: Rectangle { color: "#5B5B5B" }
                     text: foramt
                     color: "white"
@@ -44,8 +44,8 @@ Page {
                 }
                 Label {
                     id: formatTipLabel;
-                    height: implicitHeight * 1.5
                     width: implicitWidth * 1.2
+                    height: implicitHeight * 1.5
                     background: Rectangle { color: "#282828" }
                     text: format_tip
                     color: "white"

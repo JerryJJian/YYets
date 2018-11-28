@@ -21,9 +21,9 @@ Rectangle {
 
     Label {
         id: userLabel
-        anchors.top: parent.top; anchors.topMargin: 10
+        anchors.top: parent.top; anchors.topMargin: 5
         anchors.left: parent.left;
-        anchors.leftMargin: avatarImg.status === Image.Ready ? Math.abs((avatarImg.width - avatarItem.width)/2) : 10
+        anchors.leftMargin: avatarImg.status === Image.Ready ? Math.abs((avatarImg.width - avatarItem.width)/2) : 5
 
         height: implicitHeight + font.pixelSize
         font.bold: true
@@ -40,33 +40,35 @@ Rectangle {
         Label {
             id: datelineLabel
             color: "gray"
-            font.pixelSize: Qt.application.font.pixelSize * 0.9
+            font.pixelSize: Qt.application.font.pixelSize * 0.66
         }
 
         Image {
-            height: Qt.application.font.pixelSize
+            height: goodLabel.font.pixelSize
             width: height
             source: "images/good.png"
             cache: false
         }
-        Label { id: goodLabel; color: "gray"; font.pixelSize: Qt.application.font.pixelSize * 0.9 }
+        Label { id: goodLabel; color: "gray"; font.pixelSize: Qt.application.font.pixelSize * 0.66 }
 
         Image {
-            height: Qt.application.font.pixelSize
+            height: badLabel.font.pixelSize
             width: height
             source: "images/bad.png"
             cache: false
         }
-        Label { id: badLabel; color: "gray"; font.pixelSize: Qt.application.font.pixelSize * 0.9 }
+        Label { id: badLabel; color: "gray"; font.pixelSize: Qt.application.font.pixelSize * 0.66 }
     }
 
-    Item {
+    Rectangle {
         id: avatarItem
-        width:  64
-        height: 64
+        width:  36
+        height: 36
+        radius: height / 2
+        clip: true
         anchors.left: userLabel.left
         anchors.top:  userLabel.bottom;
-        anchors.topMargin: avatarImg.status === Image.Ready ? (avatarImg.height - avatarItem.height) / 2 : 0
+        anchors.topMargin: avatarImg.status === Image.Ready ? (avatarImg.height - avatarItem.height) / 2 : 5
 
         Image {
             id: avatarImg
@@ -79,11 +81,11 @@ Rectangle {
 
     Column {
         id: sessionInfo
-        anchors.left: avatarItem.right
+        anchors.left: avatarItem.left; anchors.leftMargin: avatarImg.width / 2
         anchors.right: parent.right
         anchors.top: avatarItem.anchors.top
         anchors.topMargin: avatarItem.anchors.topMargin
-        spacing: Qt.application.font.pixelSize / 2
+        spacing: Qt.application.font.pixelSize / 3
 
         Label {
             id: contentLabel
@@ -96,7 +98,7 @@ Rectangle {
         Rectangle {
             id: replyArea
             width: parent.width - Qt.application.font.pixelSize * 2
-            height: visible ? (reUserLabel.implicitHeight + Math.max(reContentLabel.implicitHeight, reAvatarItem.height)) : 0
+            height: visible ? (reUserLabel.implicitHeight + Math.max(reContentLabel.implicitHeight, reAvatarItem.height)) : 5
             border.color: "#EEEEEE"
             border.width: 1
             radius: Qt.application.font.pixelSize / 3
@@ -105,20 +107,23 @@ Rectangle {
                 id: reUserLabel
                 anchors.top: parent.top
                 anchors.left: parent.left
-                anchors.leftMargin: reAvatarImg.status === Image.Ready ? Math.abs((reAvatarImg.width - reAvatarItem.width)/2) : 10
+                anchors.leftMargin: reAvatarImg.status === Image.Ready ? Math.abs((reAvatarImg.width - reAvatarItem.width)/2) : 5
                 padding: font.pixelSize / 3
                 font.bold: true
+                font.pixelSize: Qt.application.font.pixelSize * 0.9
                 color: "gray"
                 lineHeight: 1.5
             }
 
-            Item {
+            Rectangle {
                 id: reAvatarItem
-                width:  64
-                height: 64
+                width:  36
+                height: 36
                 anchors.left: reUserLabel.left
                 anchors.top:  reUserLabel.bottom
-                anchors.topMargin: reAvatarImg.status === Image.Ready ? (reAvatarImg.height - reAvatarItem.height) / 2 : 0
+                anchors.topMargin: reAvatarImg.status === Image.Ready ? (reAvatarImg.height - reAvatarItem.height) / 2 : 5
+                radius: height / 2
+                clip: true
 
                 Image {
                     id: reAvatarImg
@@ -138,20 +143,20 @@ Rectangle {
                 spacing: 3
 
                 Image {
-                    height: Qt.application.font.pixelSize
+                    height: replygoodLabel.font.pixelSize
                     width: height
                     source: "images/good.png"
                     cache: false
                 }
-                Label { id: replygoodLabel; color: "gray"; font.pixelSize: Qt.application.font.pixelSize * 0.9 }
+                Label { id: replygoodLabel; color: "gray"; font.pixelSize: Qt.application.font.pixelSize * 0.66 }
 
                 Image {
-                    height: Qt.application.font.pixelSize
+                    height: replybadLabel.font.pixelSize
                     width: height
                     source: "images/bad.png"
                     cache: false
                 }
-                Label { id: replybadLabel; color: "gray"; font.pixelSize: Qt.application.font.pixelSize * 0.9 }
+                Label { id: replybadLabel; color: "gray"; font.pixelSize: Qt.application.font.pixelSize * 0.66 }
             }
 
             Label {

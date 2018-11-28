@@ -54,20 +54,20 @@ Page {
         model: searchResourceModel
         delegate: Rectangle {
             width: searchResultList.width
-            height: Math.max(posterImg.height, infoColumn.implicitHeight + infoColumn.anchors.topMargin)
+            height: Math.max(posterImg.height, infoColumn.implicitHeight + infoColumn.anchors.topMargin * 2)
 
             Item {
                 id: posterImg
-                width:  120
-                height: 120
+                width:  100
+                height: 100
                 anchors.left:  parent.left
                 anchors.top:   parent.top
 
                 Image {
                     id: img
                     anchors.centerIn: parent
-                    width:  sourceSize.width > sourceSize.height ? 100 : sourceSize.width * height / sourceSize.height
-                    height: sourceSize.width < sourceSize.height ? 100 : sourceSize.height * width / sourceSize.width
+                    width:  sourceSize.width > sourceSize.height ? 90 : sourceSize.width * height / sourceSize.height
+                    height: sourceSize.width < sourceSize.height ? 90 : sourceSize.height * width / sourceSize.width
                     source: poster_m
                     cache:  true
                 }
@@ -77,13 +77,12 @@ Page {
                 id: infoColumn
                 anchors.left: posterImg.right
                 anchors.right: parent.right; anchors.rightMargin: spacing
-                anchors.top: posterImg.top; anchors.topMargin: img.status === Image.Ready ? (posterImg.height - img.height)/2 : 20
-                spacing: Qt.application.font.pixelSize / 2
+                anchors.top: posterImg.top; anchors.topMargin: 10
+                spacing: Qt.application.font.pixelSize / 3
 
                 Label {
                     text: title
                     width: parent.width
-                    font.bold: true
                     wrapMode: Text.WrapAnywhere
                 }
 
@@ -102,7 +101,7 @@ Page {
                         visible: channel !== ""
                         width: implicitWidth + font.pixelSize
                         height: implicitHeight + font.pixelSize / 2
-                        font.pixelSize: Qt.application.font.pixelSize * 0.9;
+                        font.pixelSize: Qt.application.font.pixelSize * 0.66;
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
                         color: "#FFFFFF"
@@ -118,7 +117,7 @@ Page {
                         visible: prefix !== ""
                         width: implicitWidth + font.pixelSize
                         height: implicitHeight + font.pixelSize / 2
-                        font.pixelSize: Qt.application.font.pixelSize * 0.9;
+                        font.pixelSize: Qt.application.font.pixelSize * 0.66;
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
                         color: "#FFFFFF"
@@ -134,7 +133,7 @@ Page {
                         visible: suffix !== ""
                         width: implicitWidth + font.pixelSize
                         height: implicitHeight + font.pixelSize / 2
-                        font.pixelSize: Qt.application.font.pixelSize * 0.9;
+                        font.pixelSize: Qt.application.font.pixelSize * 0.66;
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
                         color: "#FFFFFF"
@@ -149,13 +148,13 @@ Page {
                         visible: character !== ""
                         width: Math.min(implicitWidth + font.pixelSize, infoColumn.width - tagFlow.flowWidth)
                         height: implicitHeight + font.pixelSize / 2
-                        font.pixelSize: Qt.application.font.pixelSize * 0.9;
+                        font.pixelSize: Qt.application.font.pixelSize * 0.66;
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
                         wrapMode: Text.WrapAnywhere
                         color: "#FFFFFF"
                         background: Rectangle {
-                            radius: height / 3
+                            radius: Qt.application.font.pixelSize / 3
                             color: "#303030"
                         }
                     }
@@ -163,8 +162,8 @@ Page {
 
                 Label {
                     width: parent.width;
-                    text: uptime + " " + pubtime
-                    font.pixelSize: Qt.application.font.pixelSize * 0.9;
+                    text: uptime + " - " + pubtime
+                    font.pixelSize: font.pixelSize * 0.8;
                     color: "gray"
                 }
 

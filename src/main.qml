@@ -21,7 +21,7 @@ ApplicationWindow {
 
         ToolButton {
             id: toolButton
-            text: stackView.depth > 1 ? "\u25C0" : "\u2630"
+            icon.source: stackView.depth > 1 ? "images/back.png" : "images/menu.png"
             font.pixelSize: Qt.application.font.pixelSize * 1.6
             onClicked: {
                 if (stackView.depth > 1) {
@@ -104,6 +104,20 @@ ApplicationWindow {
                 onClicked: {
                     stackView.currentItem.currentView = "comments"
                     showArticleView("comments")
+                }
+            }
+            ToolButton {
+                id: followButton
+                icon.source: highlighted ? "images/followed.png" : "images/follow.png"
+                visible: stackView.currentItem.pageType === "resourcePage"
+                highlighted: false
+                onClicked: highlighted = database.addFollowed(resourceData.data("id"), resourceData.data("resource"), resourceData.data("prevue_play_time"), resourceData.data("lastvisit"))
+
+                Connections {
+                    target: resourceData
+                    onRefreshView: {
+                        highlighted = database.hasFollowed(resourceData.data("id"))
+                    }
                 }
             }
         }

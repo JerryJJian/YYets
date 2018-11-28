@@ -28,7 +28,7 @@ Page {
                 id: topList
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
-                columns: (width / 150 > 5 ? 10 : 5)
+                columns: (width / 120 > 5 ? 10 : 5)
 
                 Repeater {
                     model: indexModel
@@ -36,13 +36,13 @@ Page {
                     delegate: Rectangle {
                         id: delegate
                         color: "#F2F2F2"
-                        width:  150
-                        height: 150
+                        width:  120
+                        height: posterImg.height + titleLable.implicitHeight
 
                         Item {
                             id: posterImg
-                            width:  120
-                            height: 120
+                            width:  110
+                            height: 110
                             anchors.left:  parent.left
                             anchors.right: parent.right
                             anchors.top:   parent.top
@@ -58,6 +58,7 @@ Page {
                         }
 
                         Label {
+                            id: titleLable
                             anchors.horizontalCenter: parent.horizontalCenter
                             anchors.top: posterImg.bottom
                             anchors.bottom: parent.bottom
@@ -86,15 +87,15 @@ Page {
                 id: contents
                 anchors.top: parent.top; anchors.topMargin: 10
                 anchors.bottom: parent.bottom; anchors.bottomMargin: 10
-                anchors.left: parent.left; anchors.leftMargin: 20
-                anchors.right: parent.right; anchors.rightMargin: 20
-                spacing: 15
+                anchors.left: parent.left; anchors.leftMargin: 10
+                anchors.right: parent.right; anchors.rightMargin: 10
+                spacing: 10
 
                 Label {
                     width: parent.width
                     text: title
                     wrapMode: Text.WordWrap
-                    font.pixelSize: Qt.application.font.pixelSize * 1.6
+                    font.pixelSize: Qt.application.font.pixelSize
                     font.bold: true
                 }
 
@@ -103,6 +104,7 @@ Page {
                     text: intro
                     wrapMode: Text.WordWrap
                     color: "#9CA5B4"
+                    font.pixelSize: Qt.application.font.pixelSize * 0.8
                 }
 
                 Image {
@@ -117,6 +119,7 @@ Page {
                     text: type_cn + " " + dateline + qsTr(" views:(") + views + ")"
                     wrapMode: Text.WordWrap
                     color: "#9CA5B4"
+                    font.pixelSize: Qt.application.font.pixelSize * 0.8
                 }
 
                 Item {

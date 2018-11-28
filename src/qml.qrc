@@ -27,5 +27,7 @@
         <file>images/followed.png</file>
         <file>images/heart.png</file>
         <file>zh_CN.qm</file>
+        <file>images/back.png</file>
+        <file>images/menu.png</file>
     </qresource>
 </RCC>

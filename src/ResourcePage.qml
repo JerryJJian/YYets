@@ -24,18 +24,17 @@ Page {
             areaLabel.text = resourceData.data("area")
             langLabel.text = resourceData.data("lang")
             statusLabel.text = resourceData.data("tvstation") + " @" + resourceData.data("premiere")
-            itemupdateLabel.text = "\u231A " + resourceData.data("itemupdate")
+            itemupdateLabel.text = "\u231A " + resourceData.data("itemupdate") + " No." + resourceData.data("rank") + " \u2665 " + resourceData.data("favorites")
             remarkLabel.text = resourceData.data("remark")
             playStatusLabel.text = resourceData.data("play_status")
             prevue_episode.text = resourceData.data("prevue_episode")
             prevue_play_time.text = resourceData.data("prevue/play_time")
             prevue_week.text = resourceData.data("prevue/week")
-            favoritesLabel.text = "No." + resourceData.data("rank") + " \u2665 " + resourceData.data("favorites")
+//            favoritesLabel.text = "No." + resourceData.data("rank") + " \u2665 " + resourceData.data("favorites")
             scoreLabel.text = resourceData.data("score")
             content.text = resourceData.data("content")
             busyIndicator.running = false
             commentsCount = resourceData.data("comments_count")
-            followed = database.hasFollowed(resourceData.data("id"))
 
             if (key === "" || key === "season") {
                 seasonModel.clear()
@@ -62,7 +61,7 @@ Page {
 
     Item {
         id: posterImg
-        width: 240
+        width: 150
         height: width
         anchors.left: parent.left
         anchors.top: parent.top
@@ -70,7 +69,8 @@ Page {
 
         Image {
             id: img
-            anchors.centerIn: parent
+            anchors.top: parent.top; anchors.topMargin: 3
+            anchors.left: parent.left; anchors.leftMargin: 3
             width:  sourceSize.width > sourceSize.height ? posterImg.width : sourceSize.width * height / sourceSize.height
             height: sourceSize.width < sourceSize.height ? posterImg.width : sourceSize.height * width / sourceSize.width
             cache: true
@@ -79,10 +79,10 @@ Page {
 
     Column {
         id: metaInfo
-        anchors.left: posterImg.right; anchors.leftMargin: (posterImg.width > img.width ? (img.width - posterImg.width)/2 : 0) + 10
+        anchors.left: posterImg.right; anchors.leftMargin: (posterImg.width > img.width ? (img.width - posterImg.width) : 0) + 10
         anchors.right: parent.right;   anchors.rightMargin: 10
-        anchors.top: posterImg.top;   anchors.topMargin: 30
-        spacing: ennameLabel.height
+        anchors.top: posterImg.top;   anchors.topMargin: 10
+        spacing: 5
 
         Label { id: ennameLabel    ; width: parent.width; wrapMode: Text.WordWrap; }
         Flow {
@@ -96,6 +96,7 @@ Page {
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 color: "#FFFFFF";
+                font.pixelSize: Qt.application.font.pixelSize * 0.66
                 background: Rectangle { radius: height / 3; color: "#282828"; }
             }
             Label {
@@ -106,6 +107,7 @@ Page {
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 color: "#FFFFFF";
+                font.pixelSize: Qt.application.font.pixelSize * 0.66
                 background: Rectangle { radius: height / 3; color: "#282828"; }
             }
             Label {
@@ -116,6 +118,7 @@ Page {
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 color: "#FFFFFF";
+                font.pixelSize: Qt.application.font.pixelSize * 0.66
                 background: Rectangle { radius: height / 3; color: "#282828"; }
             }
             Label {
@@ -126,25 +129,29 @@ Page {
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 color: "#FFFFFF";
+                font.pixelSize: Qt.application.font.pixelSize * 0.66
                 background: Rectangle { radius: height / 3; color: "#282828"; }
             }
         }
-        Label { id: statusLabel    ; width: parent.width; visible: text !== ""; wrapMode: Text.WordWrap; color: "#808080"; }
-        Label { id: itemupdateLabel; width: parent.width; visible: text !== ""; wrapMode: Text.WordWrap; color: "#808080"; }
-        Label { id: remarkLabel    ; width: parent.width; visible: text !== ""; wrapMode: Text.WordWrap; color: "#808080"; }
-        Label {
-            id: playStatusLabel
-            visible: text !== ""
-            width: implicitWidth + font.pixelSize
-            height: implicitHeight + font.pixelSize / 2
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            color: "#FFFFFF";
-            background: Rectangle { radius: height / 3; color: "#097bed"; }
-        }
+        Label { id: statusLabel    ; width: parent.width; visible: text !== ""; wrapMode: Text.WordWrap; color: "#808080"; font.pixelSize: Qt.application.font.pixelSize * 0.66}
+        Label { id: itemupdateLabel; width: parent.width; visible: text !== ""; wrapMode: Text.WordWrap; color: "#808080"; font.pixelSize: Qt.application.font.pixelSize * 0.66}
+        Label { id: remarkLabel    ; width: parent.width; visible: text !== ""; wrapMode: Text.WordWrap; color: "#808080"; font.pixelSize: Qt.application.font.pixelSize * 0.66}
+
         Flow {
             width: parent.width
             spacing: Qt.application.font.pixelSize / 3
+
+            Label {
+                id: playStatusLabel
+                visible: text !== ""
+                width: implicitWidth + font.pixelSize
+                height: implicitHeight + font.pixelSize / 2
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                color: "#FFFFFF";
+                font.pixelSize: Qt.application.font.pixelSize * 0.66
+                background: Rectangle { radius: height / 3; color: "#097bed"; }
+            }
 
             Label {
                 id: prevue_episode
@@ -154,6 +161,7 @@ Page {
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 color: "#FFFFFF";
+                font.pixelSize: Qt.application.font.pixelSize * 0.66
                 background: Rectangle { radius: height / 3; color: "#F26B3A"; }
             }
             Label {
@@ -164,6 +172,7 @@ Page {
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 color: "#FFFFFF";
+                font.pixelSize: Qt.application.font.pixelSize * 0.66
                 background: Rectangle { radius: height / 3; color: "#F26B3A"; }
             }
             Label {
@@ -174,29 +183,20 @@ Page {
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 color: "#FFFFFF";
+                font.pixelSize: Qt.application.font.pixelSize * 0.66
                 background: Rectangle { radius: height / 3; color: "#F26B3A"; }
             }
         }
-        Label { id: favoritesLabel ; width: parent.width; visible: text !== ""; wrapMode: Text.WordWrap; color: "#808080"; }
+//        Label { id: favoritesLabel ; width: parent.width; visible: text !== ""; wrapMode: Text.WordWrap; color: "#808080"; font.pixelSize: Qt.application.font.pixelSize * 0.66}
     }
 
     Label {
         id: scoreLabel
         color: "#EC524B"
-        font.pixelSize: Qt.application.font.pixelSize * 1.6
+        font.pixelSize: Qt.application.font.pixelSize * 1.2
         font.bold: true
         anchors.top: metaInfo.top;
         anchors.right: metaInfo.right
-    }
-
-    ToolButton {
-        id: followButton
-        anchors.right: metaInfo.right
-        anchors.bottom: tabbar.top
-        text: followed ? qsTr("Followed") : qsTr("Follow")
-        icon.source: followed ? "images/followed.png" : "images/follow.png"
-        highlighted: followed
-        onClicked: followed = database.addFollowed(resourceData.data("id"), resourceData.data("resource"), resourceData.data("prevue_play_time"), resourceData.data("lastvisit"))
     }
 
     // ---------------------------------------------------------------
@@ -209,21 +209,25 @@ Page {
         TabButton {
             icon.source: "images/link.png"
             text: qsTr("Resources")
+            font.pixelSize: Qt.application.font.pixelSize * 0.9
         }
 
         TabButton {
             icon.source: "images/introduce.png"
             text: qsTr("Contents")
+            font.pixelSize: Qt.application.font.pixelSize * 0.9
         }
 
         TabButton {
             icon.source: "images/comment.png"
             text: qsTr("Commonts")
+	    font.pixelSize: Qt.application.font.pixelSize * 0.9
         }
 
         TabButton {
             icon.source: "images/link.png"
             text: qsTr("Articles")
+	    font.pixelSize: Qt.application.font.pixelSize * 0.9
             onClicked: {
                 searchResourceModel.clear()
                 searchResultList.pageNum = 1
@@ -308,8 +312,8 @@ Page {
                             color: "#4B8BD3"
                             font.bold: true
                             anchors.left: flag.right; anchors.leftMargin: 5
-                            anchors.top: parent.top; anchors.topMargin: 15
-                            font.pixelSize: Qt.application.font.pixelSize * 1.2
+                            anchors.top: parent.top; anchors.topMargin: 10
+                            font.pixelSize: Qt.application.font.pixelSize
                         }
 
                         Flow {
@@ -405,47 +409,47 @@ Page {
 
             delegate: Rectangle {
                 width: searchResultList.width
-                height: aPosterImg.height
+                height: Math.max(aPosterImg.height, columnInfo.implicitHeight + columnInfo.anchors.topMargin * 2)
 
                 Item {
                     id: aPosterImg
-                    width:  120
-                    height: 120
+                    width:  100
+                    height: 100
                     anchors.left:  parent.left
                     anchors.top:   parent.top
 
                     Image {
                         id: aImg
                         anchors.centerIn: parent
-                        width:  sourceSize.width > sourceSize.height ? 100 : sourceSize.width * height / sourceSize.height
-                        height: sourceSize.width < sourceSize.height ? 100 : sourceSize.height * width / sourceSize.width
+                        width:  sourceSize.width > sourceSize.height ? 90 : sourceSize.width * height / sourceSize.height
+                        height: sourceSize.width < sourceSize.height ? 90 : sourceSize.height * width / sourceSize.width
                         source: poster_m
                         cache:  true
                     }
                 }
 
                 Column {
+                    id: columnInfo
                     anchors.left: aPosterImg.right
-                    anchors.right: parent.right; anchors.rightMargin: 15
-                    anchors.top: aPosterImg.top; anchors.topMargin: aImg.status === Image.Ready ? (aPosterImg.height - aImg.height)/2 : 20
-                    spacing: Qt.application.font.pixelSize
+                    anchors.right: parent.right; anchors.rightMargin: 5
+                    anchors.top: aPosterImg.top; anchors.topMargin: 10
+                    spacing: Qt.application.font.pixelSize * 0.2
 
                     Label {
                         text: title
                         width: parent.width
-                        font.bold: true
                         wrapMode: Text.WrapAnywhere
                     }
 
                     Flow {
-                        spacing: Qt.application.font.pixelSize / 2
+                        spacing: Qt.application.font.pixelSize / 3
 
                         Label {
                             text: channel;
                             visible: channel !== ""
                             width: implicitWidth + font.pixelSize
                             height: implicitHeight + font.pixelSize / 2
-                            font.pixelSize: Qt.application.font.pixelSize * 0.9;
+                            font.pixelSize: Qt.application.font.pixelSize * 0.66;
                             verticalAlignment: Text.AlignVCenter
                             horizontalAlignment: Text.AlignHCenter
                             color: "#FFFFFF"
@@ -460,7 +464,7 @@ Page {
                             visible: prefix !== ""
                             width: implicitWidth + font.pixelSize
                             height: implicitHeight + font.pixelSize / 2
-                            font.pixelSize: Qt.application.font.pixelSize * 0.9;
+                            font.pixelSize: Qt.application.font.pixelSize * 0.66;
                             verticalAlignment: Text.AlignVCenter
                             horizontalAlignment: Text.AlignHCenter
                             color: "#FFFFFF"
@@ -475,7 +479,7 @@ Page {
                             visible: suffix !== ""
                             width: implicitWidth + font.pixelSize
                             height: implicitHeight + font.pixelSize / 2
-                            font.pixelSize: Qt.application.font.pixelSize * 0.9;
+                            font.pixelSize: Qt.application.font.pixelSize * 0.66;
                             verticalAlignment: Text.AlignVCenter
                             horizontalAlignment: Text.AlignHCenter
                             color: "#FFFFFF"
@@ -490,13 +494,13 @@ Page {
                             visible: character !== ""
                             width: implicitWidth + font.pixelSize
                             height: implicitHeight + font.pixelSize / 2
-                            font.pixelSize: Qt.application.font.pixelSize * 0.9;
+                            font.pixelSize: Qt.application.font.pixelSize * 0.66;
                             verticalAlignment: Text.AlignVCenter
                             horizontalAlignment: Text.AlignHCenter
                             wrapMode: Text.WrapAnywhere
                             color: "#FFFFFF"
                             background: Rectangle {
-                                radius: height / 3
+                                radius: font.pixelSize / 3
                                 color: "#303030"
                             }
                         }
@@ -505,7 +509,7 @@ Page {
                     Label {
                         width: parent.width;
                         text: pubtime;
-                        font.pixelSize: Qt.application.font.pixelSize * 0.9;
+                        font.pixelSize: Qt.application.font.pixelSize * 0.8;
                         color: "gray"
                     }
 
