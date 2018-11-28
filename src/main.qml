@@ -112,11 +112,10 @@ ApplicationWindow {
                 visible: stackView.currentItem.pageType === "resourcePage"
                 highlighted: false
                 onClicked: highlighted = database.addFollowed(resourceData.data("id"), resourceData.data("resource"), resourceData.data("prevue_play_time"), resourceData.data("lastvisit"))
-
                 Connections {
                     target: resourceData
                     onRefreshView: {
-                        highlighted = database.hasFollowed(resourceData.data("id"))
+                        followButton.highlighted = database.hasFollowed(resourceData.data("id"))
                     }
                 }
             }
