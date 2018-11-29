@@ -102,7 +102,7 @@ Page {
 
             Column {
                 id: articleContent
-                spacing: 15
+                spacing: 5
                 anchors.fill: parent
 
                 Item {
@@ -182,7 +182,7 @@ Page {
                         radius: Qt.application.font.pixelSize
                         color: "#ECECEC"
                         width: parent.width
-                        height: acontentLabel.implicitHeight + atrailerLabel.implicitHeight
+                        height: acontentLabel.implicitHeight + atrailerLabel.height
                         Label {
                             id: acontentLabel
                             anchors.top: parent.top
@@ -198,6 +198,7 @@ Page {
                             padding: font.pixelSize
                             text: aTrailer
                             visible: text !== ""
+                            height: visible ? implicitHeight : 0
                             width: parent.width
                             anchors.top: acontentLabel.bottom
                             anchors.left: parent.left

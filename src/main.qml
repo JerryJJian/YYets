@@ -1,5 +1,6 @@
 import QtQuick 2.11
 import QtQuick.Controls 2.4
+import QtQuick.Dialogs 1.2
 
 ApplicationWindow {
     id: window
@@ -120,7 +121,6 @@ ApplicationWindow {
                 }
             }
         }
-
     }
 
     property Component articlePage: ArticlePage {
@@ -204,7 +204,10 @@ ApplicationWindow {
         dragMargin: Qt.styleHints.startDragDistance
 
         Column {
-            anchors.fill: parent
+            anchors.top: parent.top
+            anchors.bottom: optionColumn.top
+            anchors.left: parent.left
+            anchors.right: parent.right
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -261,6 +264,30 @@ ApplicationWindow {
                 }
             }
         }
+
+
+        Column {
+            id: optionColumn
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+
+            ItemDelegate {
+                visible: false
+                text: qsTr("Settings")
+                icon.source: "images/settings.png"
+                width: parent.width
+                enabled: stackView.currentItem.pageType !== "followedListPage"
+                onClicked: {
+                    fileDialog.open()
+                }
+            }
+        }
+    }
+
+    FileDialog {
+        id: fileDialog
+        folder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
     }
 
     StackView {

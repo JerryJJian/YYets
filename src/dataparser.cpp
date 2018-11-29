@@ -477,10 +477,13 @@ QList<QVariantMap> DataParser::handleHtml(const QString text) const
     for (auto img : imgs)
     {
         int currPos = img.value("pos").toInt();
-        QVariantMap content;
-        content.insert("type", "text");
-        content.insert("value", newText.mid(pos, currPos - pos));
-        contents << content;
+        if (currPos > pos)
+        {
+            QVariantMap content;
+            content.insert("type", "text");
+            content.insert("value", newText.mid(pos, currPos - pos));
+            contents << content;
+        }
 
         QVariantMap imgContent;
         imgContent.insert("type", "image");

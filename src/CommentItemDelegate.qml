@@ -23,8 +23,7 @@ Rectangle {
         id: userLabel
         anchors.top: parent.top; anchors.topMargin: 5
         anchors.left: parent.left;
-        anchors.leftMargin: avatarImg.status === Image.Ready ? Math.abs((avatarImg.width - avatarItem.width)/2) : 5
-
+        anchors.leftMargin: 5
         height: implicitHeight + font.pixelSize
         font.bold: true
         verticalAlignment: Text.AlignVCenter
@@ -68,37 +67,32 @@ Rectangle {
         clip: true
         anchors.left: userLabel.left
         anchors.top:  userLabel.bottom;
-        anchors.topMargin: avatarImg.status === Image.Ready ? (avatarImg.height - avatarItem.height) / 2 : 5
 
         Image {
             id: avatarImg
-            anchors.centerIn: parent
-            width:  sourceSize.width > sourceSize.height ? avatarItem.width : sourceSize.width * height / sourceSize.height
-            height: sourceSize.width < sourceSize.height ? avatarItem.width : sourceSize.height * width / sourceSize.width
+            anchors.fill: parent
             cache:  true
         }
     }
 
     Column {
         id: sessionInfo
-        anchors.left: avatarItem.left; anchors.leftMargin: avatarImg.width / 2
-        anchors.right: parent.right
-        anchors.top: avatarItem.anchors.top
-        anchors.topMargin: avatarItem.anchors.topMargin
+        anchors.left: avatarItem.right; anchors.leftMargin: 10
+        anchors.right: parent.right; anchors.rightMargin: 10
+        anchors.top: userLabel.bottom
         spacing: Qt.application.font.pixelSize / 3
 
         Label {
             id: contentLabel
             width: parent.width
-            lineHeight: 1.5
-            padding: font.pixelSize
             wrapMode: Text.WrapAnywhere
+            lineHeight: 1.5
         }
 
         Rectangle {
             id: replyArea
             width: parent.width - Qt.application.font.pixelSize * 2
-            height: visible ? (reUserLabel.implicitHeight + Math.max(reContentLabel.implicitHeight, reAvatarItem.height)) : 5
+            height: visible ? (reUserLabel.implicitHeight + Math.max(reContentLabel.implicitHeight, reAvatarItem.height) + 10) : 5
             border.color: "#EEEEEE"
             border.width: 1
             radius: Qt.application.font.pixelSize / 3
@@ -107,7 +101,7 @@ Rectangle {
                 id: reUserLabel
                 anchors.top: parent.top
                 anchors.left: parent.left
-                anchors.leftMargin: reAvatarImg.status === Image.Ready ? Math.abs((reAvatarImg.width - reAvatarItem.width)/2) : 5
+                anchors.leftMargin: 5
                 padding: font.pixelSize / 3
                 font.bold: true
                 font.pixelSize: Qt.application.font.pixelSize * 0.9
@@ -121,15 +115,12 @@ Rectangle {
                 height: 36
                 anchors.left: reUserLabel.left
                 anchors.top:  reUserLabel.bottom
-                anchors.topMargin: reAvatarImg.status === Image.Ready ? (reAvatarImg.height - reAvatarItem.height) / 2 : 5
                 radius: height / 2
                 clip: true
 
                 Image {
                     id: reAvatarImg
-                    anchors.centerIn: parent
-                    width:  sourceSize.width > sourceSize.height ? reAvatarItem.width : sourceSize.width * height / sourceSize.height
-                    height: sourceSize.width < sourceSize.height ? reAvatarItem.width : sourceSize.height * width / sourceSize.width
+                    anchors.fill: parent
                     cache:  true
                 }
             }
@@ -139,7 +130,7 @@ Rectangle {
                 anchors.top: reUserLabel.top
                 anchors.topMargin: 5
                 anchors.right: parent.right
-                anchors.rightMargin: 5
+                anchors.rightMargin: 10
                 spacing: 3
 
                 Image {

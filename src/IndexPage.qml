@@ -17,10 +17,12 @@ Page {
 
         header: ScrollView {
             width: parent.width
-            height: topList.height
+            height: topList.height + 10
             implicitWidth: topList.width
             ScrollBar.horizontal.interactive: true
-            ScrollBar.vertical.interactive: true
+            ScrollBar.vertical.interactive: false
+            ScrollBar.horizontal.policy: ScrollBar.AsNeeded
+            ScrollBar.vertical.policy: ScrollBar.AlwaysOff
 
             onWidthChanged: topList.columns = (width / 150 >= 6 ? 10 : 5)
 
@@ -35,7 +37,6 @@ Page {
 
                     delegate: Rectangle {
                         id: delegate
-                        color: "#F2F2F2"
                         width:  120
                         height: posterImg.height + titleLable.implicitHeight
 

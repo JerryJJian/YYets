@@ -30,5 +30,6 @@
         <file>images/back.png</file>
         <file>images/menu.png</file>
         <file>images/close.png</file>
+        <file>images/settings.png</file>
     </qresource>
 </RCC>
