@@ -8,6 +8,8 @@
 #include <QJsonParseError>
 #include <QDateTime>
 #include <QtMath>
+#include <QApplication>
+#include <QDesktopWidget>
 #include "articlelistitem.h"
 #include "commentlistitem.h"
 #include "dataset.h"
@@ -291,6 +293,20 @@ void DataParser::dataReceived(int type, const QByteArray &data)
         articleData.insert("dateline", handleDatetime(articleData.value("dateline").toInt()));
         articleData.insert("updatetime", handleDatetime(articleData.value("dateline").toInt()));
         articleData.insert("comments_count", object.value("comments_count").toString());
+//        articleData.insert("content", object.value("content").toString()
+//                           .replace("<img", "<img width=\"100%\""));
+
+        QList<QVariantMap> contents = handleHtml(object.value("content").toString());
+        QStringList contentTypes;
+        QStringList contentValues;
+        for (auto content : contents)
+        {
+            contentTypes << content.value("type").toString();
+            contentValues << content.value("value").toString();
+        }
+        articleData.insert("content/types", contentTypes);
+        articleData.insert("content/values", contentValues);
+        articleData.insert("content/size", contentTypes.size());
 
         // extend content
         QJsonObject extendObject = object.value("extend").toObject();
@@ -426,3 +442,61 @@ QString DataParser::handleDatetime(qint64 secs, const QString &formatString) con
     return tr("%1 years ago").arg(years);
 }
 
+QList<QVariantMap> DataParser::handleHtml(const QString text) const
+{
+    // cleanup the html tag
+    QRegExp rxClear("<([a-z|A-Z]{1,9}).*>(.*)</([a-z|A-Z]{1,9})>");
+    rxClear.setMinimal(true);
+    int pos = 0;
+    QString newText;
+    while ((pos = rxClear.indexIn(text, pos)) != -1)
+    {
+         newText += rxClear.cap(2);
+         pos += rxClear.matchedLength();
+    }
+
+    // find all img tag
+    QList<QVariantMap> imgs;
+    QRegExp rx("<[img|IMG].*[src|SRC]=\\\"(.*)\\\".*>");
+    rx.setMinimal(true);
+    pos = 0;
+    while ((pos = rx.indexIn(newText, pos)) != -1)
+    {
+         QVariantMap img;
+         img.insert("pos", pos);
+         img.insert("len", rx.cap(0).length());
+         img.insert("img", rx.cap(1));
+         imgs << img;
+
+         pos += rx.matchedLength();
+    }
+
+    // split html content
+    QList<QVariantMap> contents;
+    pos = 0;
+    for (auto img : imgs)
+    {
+        int currPos = img.value("pos").toInt();
+        QVariantMap content;
+        content.insert("type", "text");
+        content.insert("value", newText.mid(pos, currPos - pos));
+        contents << content;
+
+        QVariantMap imgContent;
+        imgContent.insert("type", "image");
+        imgContent.insert("value", img.value("img"));
+        contents << imgContent;
+
+        pos = currPos + img.value("len").toInt();
+    }
+
+    if (pos < newText.length())
+    {
+        QVariantMap content;
+        content.insert("type", "text");
+        content.insert("value", newText.right(newText.length() - pos));
+        contents << content;
+    }
+
+    return contents;
+}

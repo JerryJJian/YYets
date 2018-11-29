@@ -17,7 +17,7 @@ Page {
         onRefreshView: {
             resourceId = resourceData.data("id")
             title = resourceData.data("cnname") === "" ? resourceData.data("enname") : resourceData.data("cnname")
-            img.source = resourceData.data("poster_b")
+            img.source = resourceData.data("poster_m")
             ennameLabel.text = resourceData.data("enname")
             categoryLabel.text = resourceData.data("category")
             channelLabel.text = resourceData.data("channel_cn")
@@ -75,11 +75,41 @@ Page {
             height: sourceSize.width < sourceSize.height ? posterImg.width : sourceSize.height * width / sourceSize.width
             cache: true
         }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                bigImagePopup.hdimagefile = resourceData.data("poster_n")
+                bigImagePopup.visible = true
+            }
+        }
+    }
+
+    Popup {
+        id: bigImagePopup
+        width: parent.width
+        height: parent.height
+        modal: true
+        focus: true
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+        property alias hdimagefile: hdimage.source
+
+        Image {
+            id: hdimage
+            anchors.fill: parent
+        }
+
+        ToolButton {
+            anchors.top: parent.top; anchors.topMargin: 10
+            anchors.right: parent.right; anchors.rightMargin: 10
+            icon.source: "images/close.png"
+            onClicked: bigImagePopup.close()
+        }
     }
 
     Column {
         id: metaInfo
-        anchors.left: posterImg.right; anchors.leftMargin: (posterImg.width > img.width ? (img.width - posterImg.width) : 0) + 10
+        anchors.left: posterImg.right; anchors.leftMargin: (posterImg.width > img.width ? (img.width - posterImg.width) : posterImg.width) + 10
         anchors.right: parent.right;   anchors.rightMargin: 10
         anchors.top: posterImg.top;   anchors.topMargin: 10
         spacing: 5

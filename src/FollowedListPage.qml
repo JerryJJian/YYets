@@ -45,7 +45,7 @@ Page {
                 Label {
                     text: cnname
                     wrapMode: Text.WordWrap
-                    font.pixelSize: Qt.application.font.pixelSize * 1.2
+                    font.pixelSize: Qt.application.font.pixelSize
                     font.bold: true
                 }
 
@@ -61,6 +61,7 @@ Page {
                     spacing: Qt.application.font.pixelSize / 3
 
                     Label {
+                        id: channelCNLabel
                         text: channel_cn
                         visible: text !== ""
                         width: implicitWidth + font.pixelSize
@@ -85,8 +86,9 @@ Page {
                     }
 
                     Label {
+                        id: areaLabel
                         text: area
-                        visible: text !== ""
+                        visible: text !== "" && text.charAt(0) !== channelCNLabel.text.charAt(0)
                         width: implicitWidth + font.pixelSize
                         height: implicitHeight + font.pixelSize / 2
                         horizontalAlignment: Text.AlignHCenter

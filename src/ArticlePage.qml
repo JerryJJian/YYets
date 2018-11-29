@@ -19,10 +19,18 @@ Page {
                 authorLabel.text  = articleData.data("author")
                 timeLabel.text    = articleData.data("dateline") + "/" +  qsTr("Views ") + articleData.data("views")
                 introLabel.text   = articleData.data("intro")
-                contentLabel.text = articleData.data("content")
+//                contentLabel.text = articleData.data("content")
                 commentsCount     = articleData.data("comments_count")
 
-                for (var i=0; i<articleData.data("extend"); ++i) {
+                for (var i=0; i<articleData.data("content/size"); ++i) {
+                    console.log(articleData.dataListAt("content/types", i))
+                    contentModel.append({
+                                            "type": articleData.dataListAt("content/types", i),
+                                            "value": articleData.dataListAt("content/values", i)
+                                        })
+                }
+
+                for (i=0; i<articleData.data("extend"); ++i) {
                     extentContentModel.append({
                                                   "aContent": articleData.dataListAt("extend/articleContent", i),
                                                   "aTrailer": articleData.dataListAt("extend/article_trailer", i),
@@ -61,6 +69,7 @@ Page {
         }
     }
 
+    ListModel { id: contentModel         }
     ListModel { id: extentContentModel   }
     ListModel { id: relatedResourceModel }
     ListModel { id: relatedArticleModel  }
@@ -126,18 +135,44 @@ Page {
                     }
                 }
 
-                Label {
-                    id: contentLabel
-                    wrapMode: Text.Wrap
-                    width: parent.width
-                    font.pixelSize: Qt.application.font.pixelSize * 1.2
+//                Label {
+//                    id: contentLabel
+//                    wrapMode: Text.Wrap
+//                    width: parent.width
+//                    font.pixelSize: Qt.application.font.pixelSize
+//                }
+
+                Repeater {
+                    id: contentArea
+                    model: contentModel
+                    Item {
+
+                        width: parent.width
+                        height: textLabel.implicitHeight + imageLabel.height
+
+                        Label {
+                            id: textLabel
+                            text: value
+                            visible: type === "text"
+                            width: parent.width
+                            wrapMode: Text.WordWrap
+                        }
+
+                        Image {
+                            id: imageLabel
+                            source: value
+                            visible: type === "image"
+                            width: Math.min(parent.width, sourceSize.width)
+                            height: parent.width > sourceSize.width ? sourceSize.height : (sourceSize.height * width / sourceSize.width)
+                        }
+                    }
                 }
 
                 Label {
                     id: extendContentLabel
                     wrapMode: Text.Wrap
                     width: parent.width
-                    font.pixelSize: Qt.application.font.pixelSize * 1.2
+                    font.pixelSize: Qt.application.font.pixelSize
                 }
 
                 Repeater {
@@ -246,7 +281,7 @@ Page {
                             Label {
                                 id: cnnameLabel
                                 text: cnname
-                                font.pixelSize: Qt.application.font.pixelSize * 1.2
+                                font.pixelSize: Qt.application.font.pixelSize
                                 font.bold: true
                                 padding: font.pixelSize / 4
                                 width: parent.width
@@ -259,7 +294,7 @@ Page {
                                 wrapMode: Text.WrapAnywhere
                                 padding: font.pixelSize / 4
                                 color: "gray"
-                                font.pixelSize: Qt.application.font.pixelSize * 0.9
+                                font.pixelSize: Qt.application.font.pixelSize * 0.8
                             }
                             Label {
                                 id: remarkLabel
@@ -268,7 +303,7 @@ Page {
                                 wrapMode: Text.WrapAnywhere
                                 padding: font.pixelSize / 4
                                 color: "gray"
-                                font.pixelSize: Qt.application.font.pixelSize * 0.9
+                                font.pixelSize: Qt.application.font.pixelSize * 0.8
                             }
                         }
 
@@ -281,7 +316,7 @@ Page {
                             color: "white"
                             padding: font.pixelSize / 3
                             background: Rectangle { color: "#097BED"; radius: height / 3; }
-                            font.pixelSize: Qt.application.font.pixelSize * 0.9
+                            font.pixelSize: Qt.application.font.pixelSize * 0.8
                         }
 
                         MouseArea {
@@ -331,8 +366,8 @@ Page {
                             Image {
                                 id: aImage
                                 anchors.centerIn: parent
-                                width:  sourceSize.width > sourceSize.height ? 64 : sourceSize.width * height / sourceSize.height
-                                height: sourceSize.width < sourceSize.height ? 64 : sourceSize.height * width / sourceSize.width
+                                width:  sourceSize.width > sourceSize.height ? 72 : sourceSize.width * height / sourceSize.height
+                                height: sourceSize.width < sourceSize.height ? 72 : sourceSize.height * width / sourceSize.width
                                 cache:  true
                                 source: poster_m
                             }
@@ -347,7 +382,7 @@ Page {
 
                             Label {
                                 text: title
-                                font.pixelSize: Qt.application.font.pixelSize * 1.2
+                                font.pixelSize: Qt.application.font.pixelSize
                                 font.bold: true
                                 padding: font.pixelSize / 4
                                 width: parent.width
@@ -355,10 +390,11 @@ Page {
                             }
                             Label {
                                 text: dateline
+                                visible: text !== ""  && text !== ""
                                 width: parent.width
                                 wrapMode: Text.WrapAnywhere
                                 padding: font.pixelSize / 4
-                                font.pixelSize: Qt.application.font.pixelSize * 0.9
+                                font.pixelSize: Qt.application.font.pixelSize * 0.8
                                 color: "gray"
                             }
                         }
