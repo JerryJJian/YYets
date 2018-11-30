@@ -71,8 +71,8 @@ Page {
             id: img
             anchors.top: parent.top; anchors.topMargin: 3
             anchors.left: parent.left; anchors.leftMargin: 3
-            width:  sourceSize.width > sourceSize.height ? posterImg.width : sourceSize.width * height / sourceSize.height
-            height: sourceSize.width < sourceSize.height ? posterImg.width : sourceSize.height * width / sourceSize.width
+            width:  sourceSize.width > sourceSize.height ? posterImg.width : sourceSize.width * posterImg.height / sourceSize.height
+            height: sourceSize.width < sourceSize.height ? posterImg.height : sourceSize.height * posterImg.width / sourceSize.width
             cache: true
         }
 
@@ -96,7 +96,9 @@ Page {
 
         Image {
             id: hdimage
-            anchors.fill: parent
+            anchors.centerIn: parent
+            width:  sourceSize.width > sourceSize.height ? parent.width : sourceSize.width * parent.height / sourceSize.height
+            height: sourceSize.width < sourceSize.height ? parent.height : sourceSize.height * parent.width / sourceSize.width
         }
 
         ToolButton {
@@ -109,7 +111,7 @@ Page {
 
     Column {
         id: metaInfo
-        anchors.left: posterImg.right; anchors.leftMargin: (posterImg.width > img.width ? (img.width - posterImg.width) : posterImg.width) + 10
+        anchors.left: posterImg.right; anchors.leftMargin: (posterImg.width > img.width ? (img.width - posterImg.width) : 0) + 10
         anchors.right: parent.right;   anchors.rightMargin: 10
         anchors.top: posterImg.top;   anchors.topMargin: 10
         spacing: 5
@@ -232,7 +234,8 @@ Page {
     // ---------------------------------------------------------------
     TabBar {
         id: tabbar
-        anchors.top: posterImg.height > metaInfo.height ? posterImg.bottom : metaInfo.bottom
+        anchors.top: img.height > metaInfo.height ? posterImg.bottom : metaInfo.bottom
+        anchors.topMargin: img.height > metaInfo.height ? img.height - posterImg.height : 0
         anchors.left: parent.left
         anchors.right: parent.right
 
