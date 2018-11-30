@@ -112,7 +112,12 @@ ApplicationWindow {
                 icon.source: highlighted ? "images/followed.png" : "images/follow.png"
                 visible: stackView.currentItem.pageType === "resourcePage"
                 highlighted: false
-                onClicked: highlighted = database.addFollowed(resourceData.data("id"), resourceData.data("resource"), resourceData.data("prevue_play_time"), resourceData.data("lastvisit"))
+                onClicked: highlighted = database.addFollowed(resourceData.data("id"),
+                                                              resourceData.data("resource"),
+                                                              resourceData.data("prevue_play_time") === ""
+                                                              ? resourceData.data("itemupdate_day")
+                                                              : resourceData.data("prevue_play_time"),
+                                                              resourceData.data("lastvisit"))
                 Connections {
                     target: resourceData
                     onRefreshView: {

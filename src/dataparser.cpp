@@ -179,11 +179,14 @@ void DataParser::dataReceived(int type, const QByteArray &data)
         if (ObjectPool::instance()->sqlDataAccess()->hasFollowed(resHash.value("id").toInt()))
             ObjectPool::instance()->sqlDataAccess()->updateFollowed(resHash.value("id").toInt(),
                                                                     QJsonDocument::fromVariant(resHash).toJson(),
-                                                                    resHash.value("prevue_play_time").toString());
+                                                                    resHash.value("prevue_play_time").toString().isEmpty()
+                                                                    ? handleDatetime(resHash.value("itemupdate").toInt(), "yyyy-MM-dd")
+                                                                    : resHash.value("prevue_play_time").toString());
         resHash.insert("resource",  QJsonDocument::fromVariant(resHash).toJson());
 
         resHash.insert("dateline",   handleDatetime(resHash.value("dateline").toInt()));
         resHash.insert("itemupdate", handleDatetime(resHash.value("itemupdate").toInt()));
+        resHash.insert("itemupdate_day", handleDatetime(resHash.value("itemupdate").toInt(), "yyyy-MM-dd"));
         resHash.insert("close_time", handleDatetime(resHash.value("close_time").toInt()));
         resHash.insert("updatetime", handleDatetime(resHash.value("updatetime").toInt()));
         resHash.insert("premiere_time", handleDatetime(resHash.value("updatetime").toInt(), "yyyy/MM/dd"));
