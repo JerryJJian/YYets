@@ -1,6 +1,6 @@
-GET: http://mobil.allappapi.com/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=resource_list&g=api%2Fv1&area=&sort=update&page=1&channel=&year=&limit=30
+**GET**: http://mobil.allappapi.com/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=resource_list&g=api%2Fv1&area=&sort=update&page=1&channel=&year=&limit=30
 
-Header:
+**Header**:
 
 | key             | value        |      |
 | --------------- | ------------ | ---- |
@@ -8,7 +8,7 @@ Header:
 | Connection      | Keep-Alive   |      |
 | User-Agent      | okhttp/3.5.0 |      |
 
-Response:
+**Response**:
 
 ```json
 {

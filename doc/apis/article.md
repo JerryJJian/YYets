@@ -1,6 +1,6 @@
-GET: http://mobil.allappapi.com/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=article&g=api/v1&id=31551
+**GET**: http://mobil.allappapi.com/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=article&g=api/v1&id=31551
 
-Header:
+**Header**:
 
 | key             | value        |      |
 | --------------- | ------------ | ---- |
@@ -8,7 +8,7 @@ Header:
 | Connection      | Keep-Alive   |      |
 | User-Agent      | okhttp/3.5.0 |      |
 
-Response: 
+**Response**: 
 
 ```json
 {
@@ -83,7 +83,7 @@ Response:
 }
 ```
 
-response: [extend节点]
+**response**: [extend节点]
 
 ```json
 {

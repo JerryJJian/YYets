@@ -1,8 +1,8 @@
-GET: http://mobil.allappapi.com/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=search&st=resource&page=1&g=api/v1&k=生活大爆炸&limit=10
+**GET**: http://mobil.allappapi.com/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=search&st=resource&page=1&g=api/v1&k=生活大爆炸&limit=10
 
 * 搜索类型：st=resource|article
 
-Header:
+**Header**:
 
 | key             | value        |      |
 | --------------- | ------------ | ---- |
@@ -10,7 +10,7 @@ Header:
 | Connection      | Keep-Alive   |      |
 | User-Agent      | okhttp/3.5.0 |      |
 
-Response: 
+**Response**: 
 
 * st=resource
 
