@@ -8,7 +8,7 @@
 #include <QNetworkRequest>
 #include <QUrl>
 
-const QString DataRequestPrivate::RequestURL("http://api1.ousns.net/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&%1&g=api/v1");
+const QString DataRequestPrivate::RequestURL("http://mobil.allappapi.com/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&%1&g=api/v1");
 
 DataRequest::DataRequest(QNetworkAccessManager *network, QObject *parent)
     : QObject(*(new DataRequestPrivate(network)), parent)
