@@ -28,11 +28,11 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "api1.ousns.net/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=index&m=index&tlimit=10&g=api/v1&alimit=10",
+					"raw": "mobil.allappapi.com/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=index&m=index&tlimit=10&g=api/v1&alimit=10",
 					"host": [
-						"api1",
-						"ousns",
-						"net"
+						"mobil",
+						"allappapi",
+						"com"
 					],
 					"path": [
 						"index.php"
@@ -94,11 +94,11 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "api1.ousns.net/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=resource_item&season=2&m=index&episode=6&id=35642&g=api/v1",
+					"raw": "mobil.allappapi.com/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=resource_item&season=102&m=index&episode=2&id=36138&g=api/v1",
 					"host": [
-						"api1",
-						"ousns",
-						"net"
+						"mobil",
+						"allappapi",
+						"com"
 					],
 					"path": [
 						"index.php"
@@ -118,7 +118,7 @@
 						},
 						{
 							"key": "season",
-							"value": "2"
+							"value": "102"
 						},
 						{
 							"key": "m",
@@ -126,11 +126,11 @@
 						},
 						{
 							"key": "episode",
-							"value": "6"
+							"value": "2"
 						},
 						{
 							"key": "id",
-							"value": "35642"
+							"value": "36138"
 						},
 						{
 							"key": "g",
@@ -164,11 +164,11 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "api1.ousns.net/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=resource&m=index&id=37054&g=api/v1",
+					"raw": "mobil.allappapi.com/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=resource&m=index&id=35760&g=api/v1",
 					"host": [
-						"api1",
-						"ousns",
-						"net"
+						"mobil",
+						"allappapi",
+						"com"
 					],
 					"path": [
 						"index.php"
@@ -192,7 +192,7 @@
 						},
 						{
 							"key": "id",
-							"value": "37054"
+							"value": "35760"
 						},
 						{
 							"key": "g",
@@ -226,11 +226,11 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "api1.ousns.net/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=search&st=article&page=1&g=api/v1&k= 生&limit=5",
+					"raw": "mobil.allappapi.com/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=search&st=resource&page=1&g=api/v1&k=蓝色星球&limit=5",
 					"host": [
-						"api1",
-						"ousns",
-						"net"
+						"mobil",
+						"allappapi",
+						"com"
 					],
 					"path": [
 						"index.php"
@@ -250,7 +250,7 @@
 						},
 						{
 							"key": "st",
-							"value": "article",
+							"value": "resource",
 							"description": "resource|article"
 						},
 						{
@@ -263,7 +263,7 @@
 						},
 						{
 							"key": "k",
-							"value": " 生"
+							"value": "蓝色星球"
 						},
 						{
 							"key": "limit",
@@ -284,12 +284,11 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://api1.ousns.net/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=resource_list&g=api%2Fv1&area=&sort=update&page=1&channel=&year=&limit=30",
-					"protocol": "http",
+					"raw": "mobil.allappapi.com/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=resource_list&g=api%2Fv1&area=&sort=update&page=1&channel=&year=&limit=30",
 					"host": [
-						"api1",
-						"ousns",
-						"net"
+						"mobil",
+						"allappapi",
+						"com"
 					],
 					"path": [
 						"index.php"
@@ -350,11 +349,11 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "api1.ousns.net/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=article_list&g=api/v1&page=2",
+					"raw": "mobil.allappapi.com/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=article_list&g=api/v1&page=2",
 					"host": [
-						"api1",
-						"ousns",
-						"net"
+						"mobil",
+						"allappapi",
+						"com"
 					],
 					"path": [
 						"index.php"
@@ -395,11 +394,11 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "api1.ousns.net/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=article&g=api/v1&id=31502",
+					"raw": "mobil.allappapi.com/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=article&g=api/v1&id=31551",
 					"host": [
-						"api1",
-						"ousns",
-						"net"
+						"mobil",
+						"allappapi",
+						"com"
 					],
 					"path": [
 						"index.php"
@@ -423,8 +422,101 @@
 						},
 						{
 							"key": "id",
-							"value": "31502",
+							"value": "31551",
 							"description": "31538(包含extend 节点)"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "article_extend",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://api1.ousns.net/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=article&id=31538&g=api/v1",
+					"protocol": "http",
+					"host": [
+						"api1",
+						"ousns",
+						"net"
+					],
+					"path": [
+						"index.php"
+					],
+					"query": [
+						{
+							"key": "accesskey",
+							"value": "519fc5ab85c8015b175449477561a827"
+						},
+						{
+							"key": "client",
+							"value": "2"
+						},
+						{
+							"key": "a",
+							"value": "article"
+						},
+						{
+							"key": "id",
+							"value": "31538",
+							"description": "31538"
+						},
+						{
+							"key": "g",
+							"value": "api/v1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "resource_pc",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://pc.allappapi.com/index.php?g=api/pv2&m=index&a=resource&accesskey=519f9cab85c8059d17544947k361a827&id=11057",
+					"protocol": "http",
+					"host": [
+						"pc",
+						"allappapi",
+						"com"
+					],
+					"path": [
+						"index.php"
+					],
+					"query": [
+						{
+							"key": "g",
+							"value": "api/pv2"
+						},
+						{
+							"key": "m",
+							"value": "index"
+						},
+						{
+							"key": "a",
+							"value": "resource"
+						},
+						{
+							"key": "accesskey",
+							"value": "519f9cab85c8059d17544947k361a827"
+						},
+						{
+							"key": "id",
+							"value": "11057"
 						}
 					]
 				}
