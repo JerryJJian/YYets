@@ -361,6 +361,9 @@ void DataParser::dataReceived(int type, const QByteArray &data)
         {
             QJsonObject relatedObj = related.toObject();
             QString id(relatedObj.value("id").toString());
+            if (id.isEmpty() || id.toInt() == 0)
+                continue ;
+
             relatedArticles << id;
             articleData.insert("relative/"+id+"/poster_s", relatedObj.value("poster_s").toString());
             articleData.insert("relative/"+id+"/poster_b", relatedObj.value("poster_b").toString());

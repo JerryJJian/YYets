@@ -118,7 +118,7 @@ Page {
 
     Column {
         id: metaInfo
-        anchors.left: posterImg.right; anchors.leftMargin: (posterImg.width > img.width ? (img.width - posterImg.width) : 0) + 10
+        anchors.left: posterImg.right; anchors.leftMargin: (posterImg.width > img.width ? (img.width - posterImg.width) : posterImg.width) + 10
         anchors.right: parent.right;   anchors.rightMargin: 10
         anchors.top: posterImg.top;   anchors.topMargin: 10
         spacing: 5
@@ -241,7 +241,7 @@ Page {
     // ---------------------------------------------------------------
     TabBar {
         id: tabbar
-        anchors.top: img.height > metaInfo.height ? posterImg.bottom : metaInfo.bottom
+        anchors.top: img.height > metaInfo.height + metaInfo.anchors.topMargin * 1.5 ? posterImg.bottom : metaInfo.bottom
         anchors.topMargin: img.height > metaInfo.height ? img.height - posterImg.height : 0
         anchors.left: parent.left
         anchors.right: parent.right
