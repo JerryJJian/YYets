@@ -192,6 +192,9 @@ ApplicationWindow {
             dataRequest.requestResource(id)
         }
     }
+    property Component settingsPage: SettingsPage {
+        property string pageType: "settingsPage"
+    }
 
     Drawer {
         id: drawer
@@ -277,17 +280,14 @@ ApplicationWindow {
                 text: qsTr("Settings")
                 icon.source: "images/settings.png"
                 width: parent.width
-                enabled: stackView.currentItem.pageType !== "followedListPage"
+                enabled: stackView.currentItem.pageType !== "settingsPage"
                 onClicked: {
-                    fileDialog.open()
+                    stackView.pop()
+                    stackView.push(settingsPage)
+                    if (inPortrait) drawer.close()
                 }
             }
         }
-    }
-
-    FileDialog {
-        id: fileDialog
-        folder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
     }
 
     StackView {

@@ -31,5 +31,6 @@
         <file>images/menu.png</file>
         <file>images/close.png</file>
         <file>images/settings.png</file>
+        <file>SettingsPage.qml</file>
     </qresource>
 </RCC>

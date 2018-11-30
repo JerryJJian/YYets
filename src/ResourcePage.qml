@@ -101,6 +101,13 @@ Page {
             height: sourceSize.width < sourceSize.height ? parent.height : sourceSize.height * parent.width / sourceSize.width
         }
 
+        ProgressBar {
+            id: loadingProgress
+            value: hdimage.progress
+            visible: hdimage.status !== Image.Ready
+            anchors.centerIn: parent
+        }
+
         ToolButton {
             anchors.top: parent.top; anchors.topMargin: 10
             anchors.right: parent.right; anchors.rightMargin: 10
