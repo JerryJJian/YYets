@@ -183,13 +183,7 @@ void DataRequest::setIsUpdatingIndex(bool value)
 }
 
 DataRequestPrivate::DataRequestPrivate(QNetworkAccessManager *network)
-    : m_isUpdatingIndex(false),
-      m_isUpdatingResItem(false),
-      m_isUpdatingResList(false),
-      m_isSearching(false),
-      m_articlePage(0),
-      m_resourcePage(0),
-      m_network(network)
+    : m_network(network)
 {
 
 }

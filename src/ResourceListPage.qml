@@ -1,5 +1,5 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.4
+import QtQuick 2.13
+import QtQuick.Controls 2.13
 
 Page {
     id: reslistpage
@@ -136,7 +136,7 @@ Page {
         states: [
             State {
                 name: "refresh"
-                when: resourcelist.contentY < -64
+                when: !resourcelist.dragging && resourcelist.contentY < -64
                 StateChangeScript {
                     script: {
                         dataRequest.resourcePage = 1
@@ -152,7 +152,7 @@ Page {
             },
             State {
                 name: "loadmore"
-                when: resourcelist.contentHeight > 0 && (resourcelist.contentY > resourcelist.contentHeight - resourcelist.height + 64)
+                when: !resourcelist.dragging && resourcelist.contentHeight > 0 && (resourcelist.contentY > resourcelist.contentHeight - resourcelist.height + 64)
                 StateChangeScript {
                     script: {
                         if (!dataRequest.isUpdatingResList)

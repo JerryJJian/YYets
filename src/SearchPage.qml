@@ -1,5 +1,5 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.4
+import QtQuick 2.13
+import QtQuick.Controls 2.13
 
 
 Page {
@@ -188,7 +188,7 @@ Page {
             },
             State {
                 name: "loadmore"
-                when: !dataRequest.isSearching && searchResultList.contentHeight > 0 && (searchResultList.contentY > searchResultList.contentHeight - searchResultList.height + 64)
+                when: !!searchResultList.dragging && !dataRequest.isSearching && searchResultList.contentHeight > 0 && (searchResultList.contentY > searchResultList.contentHeight - searchResultList.height + 64)
                 StateChangeScript {
                     script: {
                         if (searchText.text === "" || searchResourceModel.count % pageSize !== 0)

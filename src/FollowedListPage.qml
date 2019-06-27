@@ -1,5 +1,5 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.4
+import QtQuick 2.13
+import QtQuick.Controls 2.13
 
 Page {
     id: followedPage
@@ -222,7 +222,7 @@ Page {
         states: [
             State {
                 name: "refresh"
-                when: followedList.contentY < -64
+                when: !followedList.dragging && followedList.contentY < -64
                 StateChangeScript {
                     script: {
                         pageNum = 1
@@ -232,7 +232,7 @@ Page {
             },
             State {
                 name: "loadmore"
-                when: followedList.contentHeight > 0 && (followedList.contentY > followedList.contentHeight - followedList.height + 64)
+                when: !followedList.dragging && followedList.contentHeight > 0 && (followedList.contentY > followedList.contentHeight - followedList.height + 64)
                 StateChangeScript {
                     script: {
                         dataRequest.requestFollowedList(pageNum + 1, pageSize)

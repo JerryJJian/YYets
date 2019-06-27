@@ -1,5 +1,5 @@
-import QtQuick 2.11
-import QtQuick.Controls 2.4
+import QtQuick 2.13
+import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.3
 
 Page {
@@ -284,7 +284,7 @@ Page {
         anchors.bottom: parent.bottom
         currentIndex: tabbar.currentIndex
 
-        ScrollView {
+        Flickable {
             id: resourceArea
             width: parent.width
             height: parent.height
@@ -394,7 +394,7 @@ Page {
             }
         }
 
-        ScrollView {
+        Flickable {
             contentWidth: width
             clip: true
             ScrollBar.horizontal.interactive: true
@@ -572,7 +572,7 @@ Page {
                 },
                 State {
                     name: "loadmore"
-                    when: !dataRequest.isSearching && searchResultList.contentHeight > 0 && (searchResultList.contentY > searchResultList.contentHeight - searchResultList.height + 64)
+                    when: !searchResultList.dragging && !dataRequest.isSearching && searchResultList.contentHeight > 0 && (searchResultList.contentY > searchResultList.contentHeight - searchResultList.height + 64)
                     StateChangeScript {
                         script: {
                             if (searchResourceModel.count % searchResultList.pageSize !== 0)

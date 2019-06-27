@@ -1,5 +1,5 @@
 import QtQuick 2.11
-import QtQuick.Controls 2.4
+import QtQuick.Controls 2.13
 
 Page {
     id: root
@@ -146,8 +146,8 @@ Page {
     states: [
         State {
             name: "loadmore"
-            when: !dataRequest.isUpdatingIndex && articleList.contentHeight > 0
-                  && (articleList.contentY > articleList.contentHeight - articleList.height - articleList.headerItem.height + 64)
+            when: !articleList.dragging && !dataRequest.isUpdatingIndex && articleList.contentHeight > 0
+                  && (articleList.contentY > (articleList.contentHeight - articleList.height - articleList.headerItem.height + 64))
             StateChangeScript {
                 script: {
                     console.log("loadmore")
@@ -158,7 +158,7 @@ Page {
         },
         State {
             name: "refresh"
-            when: !dataRequest.isUpdatingIndex && articleList.contentY < -64 - articleList.headerItem.height
+            when: !articleList.dragging && !dataRequest.isUpdatingIndex && articleList.contentY < (-64 - articleList.headerItem.height)
             StateChangeScript {
                 script: {
                     console.log("refresh")

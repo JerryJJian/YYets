@@ -1,5 +1,5 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.4
+import QtQuick 2.13
+import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.3
 
 Page {
@@ -94,11 +94,10 @@ Page {
         }
 
         // show article content
-        ScrollView {
+        Flickable {
             contentWidth: width
             ScrollBar.horizontal.interactive: true
             ScrollBar.vertical.interactive: true
-            focusReason: Qt.TabFocus
 
             Column {
                 id: articleContent
@@ -216,7 +215,7 @@ Page {
 
         }
 
-        ScrollView {
+        Flickable {
             contentWidth: width
             ScrollBar.horizontal.interactive: true
             ScrollBar.vertical.interactive: true
