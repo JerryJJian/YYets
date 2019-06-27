@@ -1,6 +1,7 @@
 import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.3
+import QtGraphicalEffects 1.13
 
 Page {
 
@@ -94,7 +95,7 @@ Page {
         }
 
         // show article content
-        Flickable {
+        ScrollView {
             contentWidth: width
             ScrollBar.horizontal.interactive: true
             ScrollBar.vertical.interactive: true
@@ -163,6 +164,15 @@ Page {
                             visible: type === "image"
                             width: Math.min(parent.width, sourceSize.width)
                             height: parent.width > sourceSize.width ? sourceSize.height : (sourceSize.height * width / sourceSize.width)
+                            layer.enabled: true
+                            layer.effect: DropShadow {
+                                horizontalOffset: 3
+                                verticalOffset: 3
+                                radius: 8.0
+                                opacity: 0.33
+                                samples: 17
+                                color: "black"
+                            }
                         }
                     }
                 }
@@ -215,7 +225,7 @@ Page {
 
         }
 
-        Flickable {
+        ScrollView {
             contentWidth: width
             ScrollBar.horizontal.interactive: true
             ScrollBar.vertical.interactive: true
@@ -267,6 +277,16 @@ Page {
                                 height: sourceSize.width < sourceSize.height ? 64 : sourceSize.height * width / sourceSize.width
                                 cache:  true
                                 source: poster_s
+
+                                layer.enabled: true
+                                layer.effect: DropShadow {
+                                    horizontalOffset: 3
+                                    verticalOffset: 3
+                                    radius: 8.0
+                                    opacity: 0.33
+                                    samples: 17
+                                    color: "black"
+                                }
                             }
                         }
 
@@ -370,6 +390,16 @@ Page {
                                 height: sourceSize.width < sourceSize.height ? 72 : sourceSize.height * width / sourceSize.width
                                 cache:  true
                                 source: poster_m
+
+                                layer.enabled: true
+                                layer.effect: DropShadow {
+                                    horizontalOffset: 3
+                                    verticalOffset: 3
+                                    radius: 8.0
+                                    opacity: 0.33
+                                    samples: 17
+                                    color: "black"
+                                }
                             }
                         }
 

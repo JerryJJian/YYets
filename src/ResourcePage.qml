@@ -1,6 +1,7 @@
 import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.3
+import QtGraphicalEffects 1.13
 
 Page {
 
@@ -74,6 +75,16 @@ Page {
             width:  sourceSize.width > sourceSize.height ? posterImg.width : sourceSize.width * posterImg.height / sourceSize.height
             height: sourceSize.width < sourceSize.height ? posterImg.height : sourceSize.height * posterImg.width / sourceSize.width
             cache: true
+
+            layer.enabled: true
+            layer.effect: DropShadow {
+                horizontalOffset: 3
+                verticalOffset: 3
+                radius: 8.0
+                opacity: 0.33
+                samples: 17
+                color: "black"
+            }
         }
 
         MouseArea {
@@ -284,7 +295,7 @@ Page {
         anchors.bottom: parent.bottom
         currentIndex: tabbar.currentIndex
 
-        Flickable {
+        ScrollView {
             id: resourceArea
             width: parent.width
             height: parent.height
@@ -394,7 +405,7 @@ Page {
             }
         }
 
-        Flickable {
+        ScrollView {
             contentWidth: width
             clip: true
             ScrollBar.horizontal.interactive: true
@@ -465,6 +476,16 @@ Page {
                         height: sourceSize.width < sourceSize.height ? 90 : sourceSize.height * width / sourceSize.width
                         source: poster_m
                         cache:  true
+
+                        layer.enabled: true
+                        layer.effect: DropShadow {
+                            horizontalOffset: 3
+                            verticalOffset: 3
+                            radius: 8.0
+                            opacity: 0.33
+                            samples: 17
+                            color: "black"
+                        }
                     }
                 }
 

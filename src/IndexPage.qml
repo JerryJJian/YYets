@@ -1,5 +1,6 @@
 import QtQuick 2.11
 import QtQuick.Controls 2.13
+import QtGraphicalEffects 1.13
 
 Page {
     id: root
@@ -55,6 +56,16 @@ Page {
                                 height: sourceSize.width < sourceSize.height ? 100 : sourceSize.height * width / sourceSize.width
                                 source: poster_m
                                 cache:  true
+
+                                layer.enabled: true
+                                layer.effect: DropShadow {
+                                    horizontalOffset: 3
+                                    verticalOffset: 3
+                                    radius: 8.0
+                                    opacity: 0.33
+                                    samples: 17
+                                    color: "black"
+                                }
                             }
                         }
 
@@ -113,6 +124,16 @@ Page {
                     width: parent.width > 480 ? 480 : parent.width
                     height: width * 9 / 16
                     cache: true
+
+                    layer.enabled: true
+                    layer.effect: DropShadow {
+                        horizontalOffset: 3
+                        verticalOffset: 3
+                        radius: 8.0
+                        opacity: 0.33
+                        samples: 17
+                        color: "black"
+                    }
                 }
 
                 Label {
