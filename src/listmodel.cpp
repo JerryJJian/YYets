@@ -206,9 +206,6 @@ QModelIndex ListModel::indexFromItem(const ListItem *item) const
 
 void ListModel::clear()
 {
-    if (rowCount() <= 0)
-        return ;
-
     beginResetModel();
     qDeleteAll(m_list);
     m_list.clear();

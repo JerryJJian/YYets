@@ -255,7 +255,7 @@ Page {
     TabBar {
         id: tabbar
         anchors.top: img.height > metaInfo.height + metaInfo.anchors.topMargin * 1.5 ? posterImg.bottom : metaInfo.bottom
-        anchors.topMargin: img.height > metaInfo.height ? img.height - posterImg.height : 0
+        anchors.topMargin: (img.height > metaInfo.height ? img.height - posterImg.height : 0) + 20
         anchors.left: parent.left
         anchors.right: parent.right
 

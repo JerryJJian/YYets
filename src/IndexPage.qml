@@ -163,28 +163,27 @@ Page {
 
     states: [
         State {
-            name: "loadmore"
-            when: !articleList.dragging && !dataRequest.isUpdatingIndex && articleList.contentHeight > 0
-                  && (articleList.contentY > (articleList.contentHeight - articleList.height - articleList.headerItem.height + 80))
-            StateChangeScript {
-                script: {
-                    console.log("loadmore")
-                    if (!dataRequest.isUpdatingIndex) {
-                        dataRequest.requestArticleList(dataRequest.articlePage + 1)
-                    }
-                }
-            }
-        },
-        State {
             name: "refresh"
-            when: !articleList.dragging && !dataRequest.isUpdatingIndex && articleList.contentY < -80-articleList.headerItem.height
+            when: !articleList.dragging && !dataRequest.isUpdatingIndex && articleList.contentY < (-80-articleList.headerItem.height)
             StateChangeScript {
                 script: {
                     console.log("refresh")
                     if (!dataRequest.isUpdatingIndex) {
                         articlesModel.clear()
-                        dataRequest.articlePage = 0
+                        dataRequest.articlePage = Math.ceil(articlesModel.count / 10)
                         dataRequest.requestIndex()
+                    }
+                }
+            }
+        },
+        State {
+            name: "loadmore"
+            when: !articleList.dragging && !dataRequest.isUpdatingIndex && articleList.contentY > 80 + articleList.headerItem.height
+            StateChangeScript {
+                script: {
+                    console.log("loadmore")
+                    if (!dataRequest.isUpdatingIndex) {
+                        dataRequest.requestArticleList(dataRequest.articlePage + 1)
                     }
                 }
             }

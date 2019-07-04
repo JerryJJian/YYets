@@ -45,6 +45,7 @@ ApplicationWindow {
             anchors.verticalCenter: parent.verticalCenter
             clip: true
             horizontalAlignment: Text.AlignHCenter
+            color: "white"
         }
 
         Row {
