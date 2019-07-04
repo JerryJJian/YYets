@@ -23,7 +23,7 @@ Page {
         cellWidth: 120
         cellHeight: 160
 
-        delegate: Rectangle {
+        delegate: Item {
             width: resourcelist.cellWidth
             height: resourcelist.cellHeight
 
@@ -45,8 +45,8 @@ Page {
 
                     layer.enabled: true
                     layer.effect: DropShadow {
-                        horizontalOffset: 3
-                        verticalOffset: 3
+                        horizontalOffset: 0
+                        verticalOffset: 4
                         radius: 8.0
                         opacity: 0.33
                         samples: 17
@@ -130,7 +130,7 @@ Page {
 
             Label {
                 anchors.horizontalCenter: parent.horizontalCenter
-                anchors.top: cnnamelabel.bottom; anchors.topMargin: 10
+                anchors.top: cnnamelabel.bottom; anchors.topMargin: 3
                 text: enname
                 color: "gray"
                 font.pixelSize: Qt.application.font.pixelSize * 0.9
@@ -147,7 +147,7 @@ Page {
         states: [
             State {
                 name: "refresh"
-                when: !resourcelist.dragging && resourcelist.contentY < -64
+                when: !resourcelist.dragging && resourcelist.contentY < -80
                 StateChangeScript {
                     script: {
                         dataRequest.resourcePage = 1
@@ -163,7 +163,7 @@ Page {
             },
             State {
                 name: "loadmore"
-                when: !resourcelist.dragging && resourcelist.contentHeight > 0 && (resourcelist.contentY > resourcelist.contentHeight - resourcelist.height + 64)
+                when: !resourcelist.dragging && resourcelist.contentHeight > 0 && (resourcelist.contentY > resourcelist.contentHeight - resourcelist.height + 80)
                 StateChangeScript {
                     script: {
                         if (!dataRequest.isUpdatingResList)

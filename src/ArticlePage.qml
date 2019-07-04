@@ -1,5 +1,6 @@
 import QtQuick 2.13
 import QtQuick.Controls 2.13
+import QtQuick.Controls.Material 2.13
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.13
 
@@ -120,8 +121,8 @@ Page {
                     }
                 }
 
-                Rectangle {
-                    color: "#EBECF0"
+                Item {
+//                    color: "#EBECF0"
                     width: parent.width
                     height: introLabel.implicitHeight
 
@@ -162,12 +163,12 @@ Page {
                             id: imageLabel
                             source: value
                             visible: type === "image"
-                            width: Math.min(parent.width, sourceSize.width)
-                            height: parent.width > sourceSize.width ? sourceSize.height : (sourceSize.height * width / sourceSize.width)
+                            width: Math.min(parent.width, sourceSize.width) -20
+                            fillMode: Image.PreserveAspectFit
                             layer.enabled: true
                             layer.effect: DropShadow {
-                                horizontalOffset: 3
-                                verticalOffset: 3
+                                horizontalOffset: 0
+                                verticalOffset: 4
                                 radius: 8.0
                                 opacity: 0.33
                                 samples: 17
@@ -187,9 +188,9 @@ Page {
                 Repeater {
                     model: extentContentModel
 
-                    Rectangle {
-                        radius: Qt.application.font.pixelSize
-                        color: "#ECECEC"
+                    Item {
+//                        radius: Qt.application.font.pixelSize
+//                        color: "#ECECEC"
                         width: parent.width
                         height: acontentLabel.implicitHeight + atrailerLabel.height
                         Label {
@@ -214,6 +215,13 @@ Page {
                             anchors.right: parent.right
                             wrapMode: Text.WrapAnywhere
                             horizontalAlignment: Text.AlignRight
+                        }
+
+                        Rectangle {
+                            width: parent.width
+                            height: 1
+                            opacity: 0.33
+                            color: Material.accentColor
                         }
                     }
 
@@ -258,35 +266,30 @@ Page {
                 Repeater {
                     model: relatedResourceModel
 
-                    Rectangle {
-                        color: "#F3F3F3"
+                    Item {
+//                        color: "#F3F3F3"
                         width: parent.width
-                        height: Math.max(resPoster.height, resInfo.implicitHeight + resInfo.anchors.topMargin * 2)
+                        height: Math.max(resPoster.height + 20, resInfo.implicitHeight + resInfo.anchors.topMargin * 2)
 
-                        Item {
+                        Image {
                             id: resPoster
                             width:  80
                             height: 80
                             anchors.left: parent.left
                             anchors.top:  parent.top
 
-                            Image {
-                                id: resImage
-                                anchors.centerIn: parent
-                                width:  sourceSize.width > sourceSize.height ? 64 : sourceSize.width * height / sourceSize.height
-                                height: sourceSize.width < sourceSize.height ? 64 : sourceSize.height * width / sourceSize.width
-                                cache:  true
-                                source: poster_s
+                            cache:  true
+                            source: poster_s
+                            fillMode: Image.PreserveAspectFit
 
-                                layer.enabled: true
-                                layer.effect: DropShadow {
-                                    horizontalOffset: 3
-                                    verticalOffset: 3
-                                    radius: 8.0
-                                    opacity: 0.33
-                                    samples: 17
-                                    color: "black"
-                                }
+                            layer.enabled: true
+                            layer.effect: DropShadow {
+                                horizontalOffset: 0
+                                verticalOffset: 4
+                                radius: 8.0
+                                opacity: 0.33
+                                samples: 17
+                                color: "black"
                             }
                         }
 
@@ -352,13 +355,14 @@ Page {
                     width: parent.width
                     height: articleLabel.implicitHeight
 
-                    Rectangle {
+                    Item {
                         anchors.left: parent.left
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
                         width: 3
-                        color: "#26B47F";
-                        radius: height / 3
+                        opacity: 0.33
+//                        color: Material.backgroundColor
+//                        radius: height / 3
                     }
 
                     Label {
@@ -371,35 +375,28 @@ Page {
                 Repeater {
                     model: relatedArticleModel
 
-                    Rectangle {
-                        color: "#F3F3F3"
+                    Item {
                         width: parent.width
-                        height: Math.max(aPoster.height, aInfo.implicitHeight + aInfo.anchors.topMargin * 2)
+                        height: Math.max(aPoster.height + 20, aInfo.implicitHeight + aInfo.anchors.topMargin * 2)
 
-                        Item {
+                        Image {
                             id: aPoster
                             width:  80
                             height: 80
                             anchors.left: parent.left
                             anchors.top:  parent.top
 
-                            Image {
-                                id: aImage
-                                anchors.centerIn: parent
-                                width:  sourceSize.width > sourceSize.height ? 72 : sourceSize.width * height / sourceSize.height
-                                height: sourceSize.width < sourceSize.height ? 72 : sourceSize.height * width / sourceSize.width
-                                cache:  true
-                                source: poster_m
+                            cache:  true
+                            source: poster_m
 
-                                layer.enabled: true
-                                layer.effect: DropShadow {
-                                    horizontalOffset: 3
-                                    verticalOffset: 3
-                                    radius: 8.0
-                                    opacity: 0.33
-                                    samples: 17
-                                    color: "black"
-                                }
+                            layer.enabled: true
+                            layer.effect: DropShadow {
+                                horizontalOffset: 0
+                                verticalOffset: 4
+                                radius: 8.0
+                                opacity: 0.33
+                                samples: 17
+                                color: "black"
                             }
                         }
 
@@ -427,6 +424,13 @@ Page {
                                 font.pixelSize: Qt.application.font.pixelSize * 0.8
                                 color: "gray"
                             }
+                        }
+
+                        Rectangle {
+                            width: parent.width
+                            height: 1
+                            opacity: 0.33
+                            color: Material.accentColor
                         }
 
                         MouseArea {

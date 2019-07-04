@@ -30,7 +30,7 @@ Page {
         states: [
             State {
                 name: "loadmore"
-                when: !commentList.dragging && commentList.contentHeight > 0 && (commentList.contentY > commentList.contentHeight - commentList.height - commentList.headerItem.height + 64)
+                when: !commentList.dragging && commentList.contentHeight > 0 && (commentList.contentY > commentList.contentHeight - commentList.height - commentList.headerItem.height + 80)
                 StateChangeScript {
                     script: {
                         console.log("loadmore")
@@ -39,7 +39,7 @@ Page {
             },
             State {
                 name: "refresh"
-                when: !commentList.dragging && commentList.contentY < -64 - commentList.headerItem.height
+                when: !commentList.dragging && commentList.contentY < -80 - commentList.headerItem.height
                 StateChangeScript {
                     script: {
                         console.log("refresh")

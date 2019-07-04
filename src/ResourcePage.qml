@@ -1,5 +1,6 @@
 import QtQuick 2.13
 import QtQuick.Controls 2.13
+import QtQuick.Controls.Material 2.13
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.13
 
@@ -70,16 +71,17 @@ Page {
 
         Image {
             id: img
-            anchors.top: parent.top; anchors.topMargin: 3
-            anchors.left: parent.left; anchors.leftMargin: 3
-            width:  sourceSize.width > sourceSize.height ? posterImg.width : sourceSize.width * posterImg.height / sourceSize.height
-            height: sourceSize.width < sourceSize.height ? posterImg.height : sourceSize.height * posterImg.width / sourceSize.width
+            anchors.top: parent.top; anchors.topMargin: 10
+            anchors.left: parent.left; anchors.leftMargin: 10
+            width:  (sourceSize.width > sourceSize.height ? posterImg.width : sourceSize.width * posterImg.height / sourceSize.height) - 20
+            height: (sourceSize.width < sourceSize.height ? posterImg.height : sourceSize.height * posterImg.width / sourceSize.width) - 20
             cache: true
+            fillMode: Image.PreserveAspectFit
 
             layer.enabled: true
             layer.effect: DropShadow {
-                horizontalOffset: 3
-                verticalOffset: 3
+                horizontalOffset: 0
+                verticalOffset: 4
                 radius: 8.0
                 opacity: 0.33
                 samples: 17
@@ -129,7 +131,7 @@ Page {
 
     Column {
         id: metaInfo
-        anchors.left: posterImg.right; anchors.leftMargin: (posterImg.width > img.width ? (img.width - posterImg.width) : posterImg.width) + 10
+        anchors.left: posterImg.right; anchors.leftMargin: (posterImg.width > img.width ? (img.width - posterImg.width) : posterImg.width) + 20
         anchors.right: parent.right;   anchors.rightMargin: 10
         anchors.top: posterImg.top;   anchors.topMargin: 10
         spacing: 5
@@ -323,7 +325,7 @@ Page {
                 }
             ]
 
-            Rectangle {
+            Item {
                 id: singleEpisodeResource
                 anchors.fill: parent
                 visible: false
@@ -377,12 +379,12 @@ Page {
                                 id: episodeRepeator
                                 model: episode
                                 delegate: RoundButton {
+                                    id: btn
                                     flat: true
                                     width: height
                                     background: Rectangle {
                                         radius: parent.width / 2
-                                        anchors.fill: parent
-                                        color: hovered || pressed ? "#e3e3e3" : "#F3F3F3"
+                                        color: btn.hovered || btn.pressed ? Material.accentColor : (btn.highlighted ? Material.backgroundDimColor : Material.backgroundColor)
                                     }
                                     highlighted: resourceData.dataListContains("season/"+season+"/visit", text)
                                     hoverEnabled: true
@@ -458,42 +460,36 @@ Page {
             property int pageNum: 1
             property int pageSize: 30
 
-            delegate: Rectangle {
+            delegate: Item {
                 width: searchResultList.width
-                height: Math.max(aPosterImg.height, columnInfo.implicitHeight + columnInfo.anchors.topMargin * 2)
+                height: Math.max(aPosterImg.height + 20, columnInfo.implicitHeight + columnInfo.anchors.topMargin * 2)
 
-                Item {
+                Image {
                     id: aPosterImg
-                    width:  100
-                    height: 100
-                    anchors.left:  parent.left
-                    anchors.top:   parent.top
+                    width:  80
+                    height: 80
+                    anchors.left:  parent.left; anchors.leftMargin: 10
+                    anchors.verticalCenter: parent.verticalCenter
+                    fillMode: Image.PreserveAspectFit
+                    source: poster_m
+                    cache:  true
 
-                    Image {
-                        id: aImg
-                        anchors.centerIn: parent
-                        width:  sourceSize.width > sourceSize.height ? 90 : sourceSize.width * height / sourceSize.height
-                        height: sourceSize.width < sourceSize.height ? 90 : sourceSize.height * width / sourceSize.width
-                        source: poster_m
-                        cache:  true
-
-                        layer.enabled: true
-                        layer.effect: DropShadow {
-                            horizontalOffset: 3
-                            verticalOffset: 3
-                            radius: 8.0
-                            opacity: 0.33
-                            samples: 17
-                            color: "black"
-                        }
+                    layer.enabled: true
+                    layer.effect: DropShadow {
+                        horizontalOffset: 0
+                        verticalOffset: 4
+                        radius: 8.0
+                        opacity: 0.33
+                        samples: 17
+                        color: "black"
                     }
                 }
 
                 Column {
                     id: columnInfo
-                    anchors.left: aPosterImg.right
-                    anchors.right: parent.right; anchors.rightMargin: 5
-                    anchors.top: aPosterImg.top; anchors.topMargin: 10
+                    anchors.left: aPosterImg.right; anchors.leftMargin: 10
+                    anchors.right: parent.right; anchors.rightMargin: 10
+                    anchors.verticalCenter: parent.verticalCenter
                     spacing: Qt.application.font.pixelSize * 0.2
 
                     Label {
@@ -593,7 +589,7 @@ Page {
                 },
                 State {
                     name: "loadmore"
-                    when: !searchResultList.dragging && !dataRequest.isSearching && searchResultList.contentHeight > 0 && (searchResultList.contentY > searchResultList.contentHeight - searchResultList.height + 64)
+                    when: !searchResultList.dragging && !dataRequest.isSearching && searchResultList.contentHeight > 0 && (searchResultList.contentY > searchResultList.contentHeight - searchResultList.height + 80)
                     StateChangeScript {
                         script: {
                             if (searchResourceModel.count % searchResultList.pageSize !== 0)

@@ -20,7 +20,7 @@ Page {
             verticalAlignment: Text.AlignVCenter
         }
 
-        delegate: Rectangle {
+        delegate: Item {
 
             id: delegate
             width: parent.width

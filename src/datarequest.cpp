@@ -198,7 +198,7 @@ bool DataRequestPrivate::startRequest(int type, const QUrl &url)
     QNetworkRequest request(url);
 
     QNetworkReply *reply = m_network->get(request);
-    if (reply == NULL)
+    if (reply == nullptr)
         return false;
 
     reply->setReadBufferSize(0);

@@ -32,5 +32,7 @@
         <file>images/close.png</file>
         <file>images/settings.png</file>
         <file>SettingsPage.qml</file>
+        <file>images/moon.png</file>
+        <file>images/sun.png</file>
     </qresource>
 </RCC>
