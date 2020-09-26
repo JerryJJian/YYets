@@ -55,7 +55,7 @@ Page {
                             source: poster_m
                             cache:  true
 
-                            layer.enabled: true
+                            layer.enabled: false
                             layer.effect: DropShadow {
                                 horizontalOffset: 0
                                 verticalOffset: 4
@@ -122,7 +122,7 @@ Page {
                     cache: true
                     fillMode: Image.PreserveAspectFit
 
-                    layer.enabled: true
+                    layer.enabled: false
                     layer.effect: DropShadow {
                         horizontalOffset: 0
                         verticalOffset: 4

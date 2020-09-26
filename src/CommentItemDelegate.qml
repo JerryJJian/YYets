@@ -76,7 +76,7 @@ Item {
             anchors.fill: parent
             cache:  true
 
-            layer.enabled: true
+            layer.enabled: false
             layer.effect: DropShadow {
                 horizontalOffset: 0
                 verticalOffset: 4

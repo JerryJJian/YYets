@@ -68,7 +68,7 @@ Page {
                 source: "android/res/drawable-mdpi/icon.png"
                 cache:  true
 
-                layer.enabled: true
+                layer.enabled: false
                 layer.effect: DropShadow {
                     horizontalOffset: 0
                     verticalOffset: 4

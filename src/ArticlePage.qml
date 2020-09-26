@@ -165,7 +165,7 @@ Page {
                             visible: type === "image"
                             width: Math.min(parent.width, sourceSize.width) -20
                             fillMode: Image.PreserveAspectFit
-                            layer.enabled: true
+                            layer.enabled: false
                             layer.effect: DropShadow {
                                 horizontalOffset: 0
                                 verticalOffset: 4
@@ -282,7 +282,7 @@ Page {
                             source: poster_s
                             fillMode: Image.PreserveAspectFit
 
-                            layer.enabled: true
+                            layer.enabled: false
                             layer.effect: DropShadow {
                                 horizontalOffset: 0
                                 verticalOffset: 4
@@ -389,7 +389,7 @@ Page {
                             cache:  true
                             source: poster_m
 
-                            layer.enabled: true
+                            layer.enabled: false
                             layer.effect: DropShadow {
                                 horizontalOffset: 0
                                 verticalOffset: 4
