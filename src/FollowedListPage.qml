@@ -1,5 +1,6 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.4
+import QtQuick 2.13
+import QtQuick.Controls 2.13
+import QtGraphicalEffects 1.13
 
 Page {
     id: followedPage
@@ -14,31 +15,36 @@ Page {
 
         model: followedListModel
 
-        delegate: Rectangle {
+        delegate: Item {
             width: followedList.width
-            height: Math.max(posterImg.height, infoColumn.implicitHeight + infoColumn.anchors.topMargin * 2)
+            height: Math.max(posterImg.height + 20, infoColumn.implicitHeight + infoColumn.anchors.topMargin * 2)
 
-            Item {
+            Image {
                 id: posterImg
-                width:  100
-                height: 100
-                anchors.left: parent.left
-                anchors.top:  parent.top
+                width:  80
+                height: 80
+                anchors.left: parent.left;
+                anchors.leftMargin: 10
+                anchors.verticalCenter: parent.verticalCenter
+                fillMode: Image.PreserveAspectFit
+                source: poster_m
+                cache:  true
 
-                Image {
-                    id: img
-                    anchors.centerIn: parent
-                    width:  sourceSize.width > sourceSize.height ? 90 : sourceSize.width * height / sourceSize.height
-                    height: sourceSize.width < sourceSize.height ? 90 : sourceSize.height * width / sourceSize.width
-                    source: poster_m
-                    cache:  true
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    horizontalOffset: 0
+                    verticalOffset: 4
+                    radius: 8.0
+                    opacity: 0.33
+                    samples: 17
+                    color: "black"
                 }
             }
 
             Column {
                 id: infoColumn
-                anchors.top: parent.top; anchors.topMargin: img.status === Image.Ready ? Math.abs(img.height - posterImg.height) / 2 : Qt.application.font.pixelSize
-                anchors.left: posterImg.right
+                anchors.top: parent.top; anchors.topMargin: posterImg.status === Image.Ready ? Math.abs(posterImg.height - posterImg.implicitHeight) / 2 : Qt.application.font.pixelSize
+                anchors.left: posterImg.right; anchors.leftMargin: 10
                 anchors.right: parent.right
                 spacing: Qt.application.font.pixelSize / 3
 
@@ -222,7 +228,7 @@ Page {
         states: [
             State {
                 name: "refresh"
-                when: followedList.contentY < -64
+                when: !followedList.dragging && followedList.contentY < -80
                 StateChangeScript {
                     script: {
                         pageNum = 1
@@ -232,7 +238,7 @@ Page {
             },
             State {
                 name: "loadmore"
-                when: followedList.contentHeight > 0 && (followedList.contentY > followedList.contentHeight - followedList.height + 64)
+                when: !followedList.dragging && followedList.contentHeight > 0 && (followedList.contentY > followedList.contentHeight - followedList.height + 80)
                 StateChangeScript {
                     script: {
                         dataRequest.requestFollowedList(pageNum + 1, pageSize)

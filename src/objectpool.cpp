@@ -16,6 +16,13 @@ ObjectPool::ObjectPool(QObject *parent)
 #else
     m_sqlDataAccess->connect(QCoreApplication::applicationDirPath() + "/yyets.db", "yyets-database");
 #endif
+
+    m_settings = new Settings(this);
+}
+
+Settings *ObjectPool::settings() const
+{
+    return m_settings;
 }
 
 

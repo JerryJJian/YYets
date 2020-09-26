@@ -56,7 +56,7 @@ QVariant ListModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
     ListItem *item = m_list.at(index.row());
-    if (item == NULL)
+    if (item == nullptr)
         return QVariant();
 
     return item->data(role);
@@ -68,7 +68,7 @@ bool ListModel::setData(const QModelIndex &index, const QVariant &value, int rol
         return false;
 
     ListItem *item = m_list.at(index.row());
-    if (item == NULL)
+    if (item == nullptr)
         return false;
 
     return item->setData(role, value);
@@ -93,7 +93,7 @@ void ListModel::prependRows(const QList<ListItem *> &items)
     for (int i=items.size() - 1; i>=0; i--)
     {
         ListItem *item = items.at(i);
-        if (item == NULL)
+        if (item == nullptr)
             continue;
         connect(item, SIGNAL(dataChanged()), SLOT(handleItemChange()));
         m_list.prepend(item);
@@ -108,7 +108,7 @@ void ListModel::prependRows(const QList<ListItem *> &items)
 
 void ListModel::appendRow(ListItem *item)
 {
-    if (item == NULL)
+    if (item == nullptr)
         return ;
 
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
@@ -130,7 +130,7 @@ void ListModel::appendRows(const QList<ListItem *> &items)
     beginInsertRows(QModelIndex(), rowCount(), rowCount()+items.size()-1);
     foreach(ListItem *item, items)
     {
-        if (item == NULL)
+        if (item == nullptr)
             continue;
         connect(item, SIGNAL(dataChanged()), SLOT(handleItemChange()));
         m_list.append(item);
@@ -144,7 +144,7 @@ void ListModel::appendRows(const QList<ListItem *> &items)
 
 void ListModel::insertRow(int row, ListItem *item)
 {
-    if (item == NULL)
+    if (item == nullptr)
         return ;
 
     beginInsertRows(QModelIndex(), row, row);
@@ -159,7 +159,7 @@ void ListModel::insertRow(int row, ListItem *item)
 void ListModel::handleItemChange()
 {
     ListItem *item = qobject_cast<ListItem *> (sender());
-    if (item == NULL)
+    if (item == nullptr)
         return ;
 
     // watch the changing of selected items' number
@@ -183,7 +183,7 @@ ListItem *ListModel::find(const QString &id) const
 {
     foreach(ListItem *item, m_list)
     {
-        if(item != NULL && item->id() == id)
+        if(item != nullptr && item->id() == id)
             return item;
     }
 
@@ -192,7 +192,7 @@ ListItem *ListModel::find(const QString &id) const
 
 QModelIndex ListModel::indexFromItem(const ListItem *item) const
 {
-    if (item == NULL)
+    if (item == nullptr)
         return QModelIndex();
 
     for(int row=0; row<m_list.size(); ++row)
@@ -206,9 +206,6 @@ QModelIndex ListModel::indexFromItem(const ListItem *item) const
 
 void ListModel::clear()
 {
-    if (rowCount() <= 0)
-        return ;
-
     beginResetModel();
     qDeleteAll(m_list);
     m_list.clear();
@@ -220,7 +217,7 @@ void ListModel::cancelSlectectMode()
 {
     foreach (ListItem *item, m_selectedItem.keys())
     {
-        if (item != NULL)
+        if (item != nullptr)
             item->setSelected(false);
     }
 
@@ -240,7 +237,7 @@ bool ListModel::removeRow(int row, const QModelIndex &parent)
     beginRemoveRows(QModelIndex(), row, row);
     ListItem *item = m_list.takeAt(row);
     m_selectedItem.remove(item);
-    if (item != NULL)
+    if (item != nullptr)
         item->deleteLater();
 
     endRemoveRows();
@@ -262,7 +259,7 @@ bool ListModel::removeRows(int row, int count, const QModelIndex &parent)
     {
         ListItem *item = m_list.takeAt(row);
         m_selectedItem.remove(item);
-        if (item != NULL)
+        if (item != nullptr)
             item->deleteLater();
     }
 
@@ -360,7 +357,7 @@ QStringList ListModel::selectedItems()
     QStringList ids;
 
     foreach (ListItem *item, m_selectedItem.keys())
-        if (item != NULL) ids.append(item->id());
+        if (item != nullptr) ids.append(item->id());
 
     return ids;
 }

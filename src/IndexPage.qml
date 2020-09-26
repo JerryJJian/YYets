@@ -1,5 +1,7 @@
 import QtQuick 2.11
-import QtQuick.Controls 2.4
+import QtQuick.Controls 2.13
+import QtGraphicalEffects 1.13
+import QtQuick.Controls.Material 2.13
 
 Page {
     id: root
@@ -37,31 +39,37 @@ Page {
 
                     delegate: Rectangle {
                         id: delegate
+                        color: Material.backgroundColor
                         width:  120
-                        height: posterImg.height + titleLable.implicitHeight
+                        height: posterImg.height + titleLable.implicitHeight + 20
 
-                        Item {
+                        Image {
                             id: posterImg
-                            width:  110
-                            height: 110
+                            width:  100
+                            height: 100
                             anchors.left:  parent.left
                             anchors.right: parent.right
                             anchors.top:   parent.top
+                            fillMode: Image.PreserveAspectFit
 
-                            Image {
-                                id: img
-                                anchors.centerIn: parent
-                                width:  sourceSize.width > sourceSize.height ? 100 : sourceSize.width * height / sourceSize.height
-                                height: sourceSize.width < sourceSize.height ? 100 : sourceSize.height * width / sourceSize.width
-                                source: poster_m
-                                cache:  true
+                            source: poster_m
+                            cache:  true
+
+                            layer.enabled: true
+                            layer.effect: DropShadow {
+                                horizontalOffset: 0
+                                verticalOffset: 4
+                                radius: 8.0
+                                opacity: 0.33
+                                samples: 17
+                                color: "black"// Material.foreground
                             }
                         }
 
                         Label {
                             id: titleLable
                             anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.top: posterImg.bottom
+                            anchors.top: posterImg.bottom; anchors.topMargin: 10
                             anchors.bottom: parent.bottom
                             verticalAlignment: Text.AlignTop
                             text: cnname
@@ -81,7 +89,7 @@ Page {
         }
 
         model: articlesModel
-        delegate: Rectangle {
+        delegate: Item {
             width: parent.width
             height: contents.implicitHeight
             Column {
@@ -111,8 +119,18 @@ Page {
                 Image {
                     source: poster_b
                     width: parent.width > 480 ? 480 : parent.width
-                    height: width * 9 / 16
                     cache: true
+                    fillMode: Image.PreserveAspectFit
+
+                    layer.enabled: true
+                    layer.effect: DropShadow {
+                        horizontalOffset: 0
+                        verticalOffset: 4
+                        radius: 8.0
+                        opacity: 0.33
+                        samples: 17
+                        color: "black"
+                    }
                 }
 
                 Label {
@@ -145,26 +163,27 @@ Page {
 
     states: [
         State {
-            name: "loadmore"
-            when: !dataRequest.isUpdatingIndex && articleList.contentHeight > 0
-                  && (articleList.contentY > articleList.contentHeight - articleList.height - articleList.headerItem.height + 64)
-            StateChangeScript {
-                script: {
-                    console.log("loadmore")
-                    if (!dataRequest.isUpdatingIndex)
-                        dataRequest.requestArticleList(dataRequest.articlePage + 1)
-                }
-            }
-        },
-        State {
             name: "refresh"
-            when: !dataRequest.isUpdatingIndex && articleList.contentY < -64 - articleList.headerItem.height
+            when: !articleList.dragging && !dataRequest.isUpdatingIndex && articleList.contentY < (-80-articleList.headerItem.height)
             StateChangeScript {
                 script: {
                     console.log("refresh")
                     if (!dataRequest.isUpdatingIndex) {
                         articlesModel.clear()
+                        dataRequest.articlePage = Math.ceil(articlesModel.count / 10)
                         dataRequest.requestIndex()
+                    }
+                }
+            }
+        },
+        State {
+            name: "loadmore"
+            when: !articleList.dragging && !dataRequest.isUpdatingIndex && articleList.contentY > 80 + articleList.headerItem.height
+            StateChangeScript {
+                script: {
+                    console.log("loadmore")
+                    if (!dataRequest.isUpdatingIndex) {
+                        dataRequest.requestArticleList(dataRequest.articlePage + 1)
                     }
                 }
             }

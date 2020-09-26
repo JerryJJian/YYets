@@ -16,13 +16,13 @@ public:
 
     bool startRequest(int type, const QUrl &url);
 
-    bool m_isUpdatingIndex;
-    bool m_isUpdatingResItem;
-    bool m_isUpdatingArticle;
-    bool m_isUpdatingResList;
-    bool m_isSearching;
-    int  m_articlePage;
-    int  m_resourcePage;
+    bool m_isUpdatingIndex   = false;
+    bool m_isUpdatingResItem = false;
+    bool m_isUpdatingArticle = false;
+    bool m_isUpdatingResList = false;
+    bool m_isSearching       = false;
+    int  m_articlePage       = 0;
+    int  m_resourcePage      = 0;
 
     QNetworkAccessManager *m_network;
     QNetworkRequest *m_request;

@@ -1,6 +1,6 @@
-import QtQuick 2.11
-import QtQuick.Controls 2.4
-import QtQuick.Dialogs 1.2
+import QtQuick 2.13
+import QtQuick.Controls 2.13
+import QtQuick.Controls.Material 2.13
 
 ApplicationWindow {
     id: window
@@ -12,6 +12,8 @@ ApplicationWindow {
     signal showFilterPopup()
     signal setSearchType(string type)
     signal showArticleView(string type)
+
+    Material.theme: settings.theme === 0 ? Material.Light : Material.Dark
 
     header: ToolBar {
         anchors.left: parent.left
@@ -43,6 +45,7 @@ ApplicationWindow {
             anchors.verticalCenter: parent.verticalCenter
             clip: true
             horizontalAlignment: Text.AlignHCenter
+            color: "white"
         }
 
         Row {
@@ -279,6 +282,28 @@ ApplicationWindow {
             anchors.bottom: parent.bottom
             anchors.left: parent.left
             anchors.right: parent.right
+
+            ItemDelegate {
+                text: qsTr("Light")
+                icon.source: "images/sun.png"
+                width: parent.width
+                enabled: window.Material.theme !== Material.Light
+                onClicked: {
+                    window.Material.theme = Material.Light
+                    settings.theme = 0
+                }
+            }
+
+            ItemDelegate {
+                text: qsTr("Dark")
+                icon.source: "images/moon.png"
+                width: parent.width
+                enabled: window.Material.theme !== Material.Dark
+                onClicked: {
+                    window.Material.theme = Material.Dark
+                    settings.theme = 1
+                }
+            }
 
             ItemDelegate {
                 visible: false

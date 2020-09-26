@@ -1,6 +1,7 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.4
-
+import QtQuick 2.13
+import QtQuick.Controls 2.13
+import QtQuick.Controls.Material 2.13
+import QtGraphicalEffects 1.13
 
 Page {
     title: qsTr("Search")
@@ -52,32 +53,37 @@ Page {
         anchors.bottom: parent.bottom
         clip: true
         model: searchResourceModel
-        delegate: Rectangle {
+        delegate: Item {
             width: searchResultList.width
-            height: Math.max(posterImg.height, infoColumn.implicitHeight + infoColumn.anchors.topMargin * 2)
+            height: Math.max(posterImg.height + 20, infoColumn.implicitHeight + infoColumn.anchors.topMargin * 2)
 
-            Item {
+            Image {
                 id: posterImg
-                width:  100
-                height: 100
+                width:  80
+                height: 80
                 anchors.left:  parent.left
-                anchors.top:   parent.top
+                anchors.leftMargin: 10
+                anchors.verticalCenter: parent.verticalCenter
+                fillMode: Image.PreserveAspectFit
+                source: "android/res/drawable-mdpi/icon.png"
+                cache:  true
 
-                Image {
-                    id: img
-                    anchors.centerIn: parent
-                    width:  sourceSize.width > sourceSize.height ? 90 : sourceSize.width * height / sourceSize.height
-                    height: sourceSize.width < sourceSize.height ? 90 : sourceSize.height * width / sourceSize.width
-                    source: poster_m
-                    cache:  true
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    horizontalOffset: 0
+                    verticalOffset: 4
+                    radius: 8.0
+                    opacity: 0.33
+                    samples: 17
+                    color: "black"
                 }
             }
 
             Column {
                 id: infoColumn
-                anchors.left: posterImg.right
+                anchors.left: posterImg.right; anchors.leftMargin: 10
                 anchors.right: parent.right; anchors.rightMargin: spacing
-                anchors.top: posterImg.top; anchors.topMargin: 10
+                anchors.top: posterImg.top; anchors.topMargin: (posterImg.height - posterImg.implicitHeight) / 2
                 spacing: Qt.application.font.pixelSize / 3
 
                 Label {
@@ -104,10 +110,10 @@ Page {
                         font.pixelSize: Qt.application.font.pixelSize * 0.66;
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
-                        color: "#FFFFFF"
+                        color: Material.backgroundColor // "#FFFFFF"
                         background: Rectangle {
                             radius: height / 3
-                            color: "#303030"
+                            color: Material.foreground // "#303030"
                         }
                     }
 
@@ -120,10 +126,10 @@ Page {
                         font.pixelSize: Qt.application.font.pixelSize * 0.66;
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
-                        color: "#FFFFFF"
+                        color: Material.backgroundColor // "#FFFFFF"
                         background: Rectangle {
                             radius: height / 3
-                            color: "#303030"
+                            color: Material.foreground // "#303030"
                         }
                     }
 
@@ -136,10 +142,10 @@ Page {
                         font.pixelSize: Qt.application.font.pixelSize * 0.66;
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
-                        color: "#FFFFFF"
+                        color: Material.backgroundColor // "#FFFFFF"
                         background: Rectangle {
                             radius: height / 3
-                            color: "#303030"
+                            color: Material.foreground // "#303030"
                         }
                     }
 
@@ -152,10 +158,10 @@ Page {
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
                         wrapMode: Text.WrapAnywhere
-                        color: "#FFFFFF"
+                        color: Material.backgroundColor // "#FFFFFF"
                         background: Rectangle {
                             radius: Qt.application.font.pixelSize / 3
-                            color: "#303030"
+                            color: Material.foreground // "#303030"
                         }
                     }
                 }
@@ -163,7 +169,7 @@ Page {
                 Label {
                     width: parent.width;
                     text: uptime + " - " + pubtime
-                    font.pixelSize: font.pixelSize * 0.8;
+                    font.pixelSize: Qt.application.font.pixelSize * 0.8;
                     color: "gray"
                 }
 
@@ -188,7 +194,7 @@ Page {
             },
             State {
                 name: "loadmore"
-                when: !dataRequest.isSearching && searchResultList.contentHeight > 0 && (searchResultList.contentY > searchResultList.contentHeight - searchResultList.height + 64)
+                when: !!searchResultList.dragging && !dataRequest.isSearching && searchResultList.contentHeight > 0 && (searchResultList.contentY > searchResultList.contentHeight - searchResultList.height + 80)
                 StateChangeScript {
                     script: {
                         if (searchText.text === "" || searchResourceModel.count % pageSize !== 0)

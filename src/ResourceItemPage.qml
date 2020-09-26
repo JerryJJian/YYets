@@ -1,5 +1,5 @@
-import QtQuick 2.11
-import QtQuick.Controls 2.4
+import QtQuick 2.13
+import QtQuick.Controls 2.13
 
 Page {
     title: (resourceData.data("cnname") === "" ? resourceData.data("enname") : resourceData.data("cnname"))
@@ -20,7 +20,7 @@ Page {
             verticalAlignment: Text.AlignVCenter
         }
 
-        delegate: Rectangle {
+        delegate: Item {
 
             id: delegate
             width: parent.width

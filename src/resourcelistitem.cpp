@@ -75,7 +75,7 @@ void ResourceListItem::initRoles()
     setRoleName(UpdatetimeRole,      "updatetime"       );
     setRoleName(PosterMRole,         "poster_m"         );
     setRoleName(FollowedRole,        "followed"         );
-    setRoleName(PrevueEpisodeRole,   "prevue_episode");
-    setRoleName(PrevuePlaytimeRole,  "prevue_play_time");
-    setRoleName(PrevueWeekRole,      "prevue_week");
+    setRoleName(PrevueEpisodeRole,   "prevue_episode"   );
+    setRoleName(PrevuePlaytimeRole,  "prevue_play_time" );
+    setRoleName(PrevueWeekRole,      "prevue_week"      );
 }

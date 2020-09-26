@@ -1,9 +1,11 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.4
+import QtQuick 2.13
+import QtQuick.Controls 2.13
+import QtQuick.Controls.Material 2.13
+import QtGraphicalEffects 1.13
 
-Rectangle {
+Item {
 
-    height: Math.max(sessionInfo.implicitHeight, avatarItem.height) + userLabel.implicitHeight + 30
+    height: Math.max(sessionInfo.implicitHeight, avatarItem.height + 20) + userLabel.implicitHeight + 30
 
     property alias p_user: userLabel.text
     property alias p_dateline: datelineLabel.text
@@ -67,11 +69,22 @@ Rectangle {
         clip: true
         anchors.left: userLabel.left
         anchors.top:  userLabel.bottom;
+        color: Material.backgroundColor
 
         Image {
             id: avatarImg
             anchors.fill: parent
             cache:  true
+
+            layer.enabled: true
+            layer.effect: DropShadow {
+                horizontalOffset: 0
+                verticalOffset: 4
+                radius: 8.0
+                opacity: 0.33
+                samples: 17
+                color: "black"
+            }
         }
     }
 
@@ -89,13 +102,13 @@ Rectangle {
             lineHeight: 1.5
         }
 
-        Rectangle {
+        Item {
             id: replyArea
             width: parent.width - Qt.application.font.pixelSize * 2
-            height: visible ? (reUserLabel.implicitHeight + Math.max(reContentLabel.implicitHeight, reAvatarItem.height) + 10) : 5
-            border.color: "#EEEEEE"
-            border.width: 1
-            radius: Qt.application.font.pixelSize / 3
+            height: visible ? (reUserLabel.implicitHeight + Math.max(reContentLabel.implicitHeight, reAvatarItem.height + 20) + 10) : 5
+//            border.color: "#EEEEEE"
+//            border.width: 1
+//            radius: Qt.application.font.pixelSize / 3
 
             Label {
                 id: reUserLabel
@@ -109,13 +122,13 @@ Rectangle {
                 lineHeight: 1.5
             }
 
-            Rectangle {
+            Item {
                 id: reAvatarItem
                 width:  36
                 height: 36
                 anchors.left: reUserLabel.left
                 anchors.top:  reUserLabel.bottom
-                radius: height / 2
+//                radius: height / 2
                 clip: true
 
                 Image {
@@ -165,6 +178,6 @@ Rectangle {
         }
     }
 
-    Rectangle { width: parent.width; height: 1; color: "#ECECEC"; anchors.bottom: parent.bottom }
+    Rectangle { width: parent.width; height: 1; opacity: 0.33; color: Material.accent; anchors.bottom: parent.bottom }
 
 }
