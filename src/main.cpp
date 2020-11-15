@@ -32,8 +32,15 @@ int main(int argc, char *argv[])
     int fontID = QFontDatabase::addApplicationFont("/system/fonts/DroidSansFallback.ttf");
     QStringList fontFamilies(QFontDatabase::applicationFontFamilies(fontID));
 
-    if (!fontFamilies.isEmpty())
-        app.setFont(QFont(fontFamilies.at(0), app.font().pixelSize() * 1.2));
+    if (!fontFamilies.isEmpty()) {
+        QFont font(fontFamilies.at(0), app.font().pointSize() * 1.2, app.font().weight() * 2);
+        font.setBold(true);
+        app.setFont(font);
+    } else {
+        QFont font(app.font());
+        font.setBold(true);
+        app.setFont(font);
+    }
 
     QTranslator translator;
     if (translator.load(QString(":/%1.qm").arg(QLocale::system().name())))

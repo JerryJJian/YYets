@@ -26,7 +26,7 @@ Page {
             areaLabel.text = resourceData.data("area")
             langLabel.text = resourceData.data("lang")
             statusLabel.text = resourceData.data("tvstation") + " @" + resourceData.data("premiere")
-            itemupdateLabel.text = "\u231A " + resourceData.data("itemupdate") + " No." + resourceData.data("rank") + " \u2665 " + resourceData.data("favorites")
+            itemupdateLabel.text = resourceData.data("itemupdate") + " Rank:" + resourceData.data("rank") + " Like:" + resourceData.data("favorites")
             remarkLabel.text = resourceData.data("remark")
             playStatusLabel.text = resourceData.data("play_status")
             prevue_episode.text = resourceData.data("prevue_episode")

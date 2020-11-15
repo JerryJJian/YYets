@@ -19,6 +19,13 @@ public:
 
     int theme() const;
 
+    enum FontSize {
+        TagFontSize = 0,
+        TextFontSize,
+        TitleFontSize
+    };
+    Q_ENUM(FontSize)
+
 signals:
     void themeChanged(int theme);
 
