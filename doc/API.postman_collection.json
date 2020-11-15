@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "46697772-8c2f-9cf5-afa5-8eebaa79ba09",
+		"_postman_id": "b38e82a1-58fa-45f2-9093-9da6adab6e3d",
 		"name": "人人影视API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -23,10 +23,6 @@
 						"value": "okhttp/3.5.0"
 					}
 				],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
 				"url": {
 					"raw": "mobil.allappapi.com/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=index&m=index&tlimit=10&g=api/v1&alimit=10",
 					"host": [
@@ -89,10 +85,6 @@
 						"value": "okhttp/3.5.0"
 					}
 				],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
 				"url": {
 					"raw": "mobil.allappapi.com/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=resource_item&season=102&m=index&episode=2&id=36138&g=api/v1",
 					"host": [
@@ -159,10 +151,6 @@
 						"value": "okhttp/3.5.0"
 					}
 				],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
 				"url": {
 					"raw": "mobil.allappapi.com/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=resource&m=index&id=35760&g=api/v1",
 					"host": [
@@ -221,10 +209,6 @@
 						"value": "okhttp/3.5.0"
 					}
 				],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
 				"url": {
 					"raw": "mobil.allappapi.com/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=search&st=resource&page=1&g=api/v1&k=蓝色星球&limit=5",
 					"host": [
@@ -279,10 +263,6 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
 				"url": {
 					"raw": "mobil.allappapi.com/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=resource_list&g=api%2Fv1&area=&sort=update&page=1&channel=&year=&limit=30",
 					"host": [
@@ -344,10 +324,6 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
 				"url": {
 					"raw": "mobil.allappapi.com/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=article_list&g=api/v1&page=2",
 					"host": [
@@ -389,10 +365,6 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
 				"url": {
 					"raw": "mobil.allappapi.com/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=article&g=api/v1&id=31551",
 					"host": [
@@ -435,10 +407,6 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
 				"url": {
 					"raw": "http://api1.ousns.net/index.php?accesskey=519fc5ab85c8015b175449477561a827&client=2&a=article&id=31538&g=api/v1",
 					"protocol": "http",
@@ -482,16 +450,12 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
 				"url": {
-					"raw": "http://pc.allappapi.com/index.php?g=api/pv2&m=index&a=resource&accesskey=519f9cab85c8059d17544947k361a827&id=11057",
+					"raw": "http://pc.zmzapi.com/index.php?g=api/pv2&m=index&a=resource&accesskey=519f9cab85c8059d17544947k361a827&id=11057",
 					"protocol": "http",
 					"host": [
 						"pc",
-						"allappapi",
+						"zmzapi",
 						"com"
 					],
 					"path": [
@@ -517,6 +481,72 @@
 						{
 							"key": "id",
 							"value": "11057"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "comment_list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://pc.zmzapi.com/index.php?g=api/pv3&m=index&client=5&accesskey=519f9cab85c8059d17544947k361a827&a=comments_list&limit=10&page=1&uid=&token=&channel=tv&itemid=40595",
+					"protocol": "http",
+					"host": [
+						"pc",
+						"zmzapi",
+						"com"
+					],
+					"path": [
+						"index.php"
+					],
+					"query": [
+						{
+							"key": "g",
+							"value": "api/pv3"
+						},
+						{
+							"key": "m",
+							"value": "index"
+						},
+						{
+							"key": "client",
+							"value": "5"
+						},
+						{
+							"key": "accesskey",
+							"value": "519f9cab85c8059d17544947k361a827"
+						},
+						{
+							"key": "a",
+							"value": "comments_list"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						},
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "uid",
+							"value": ""
+						},
+						{
+							"key": "token",
+							"value": ""
+						},
+						{
+							"key": "channel",
+							"value": "tv"
+						},
+						{
+							"key": "itemid",
+							"value": "40595"
 						}
 					]
 				}
