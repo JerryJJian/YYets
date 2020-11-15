@@ -1,7 +1,7 @@
-import QtQuick 2.13
-import QtQuick.Controls 2.13
-import QtQuick.Controls.Material 2.13
-import QtGraphicalEffects 1.13
+import QtQuick 2.12
+import QtQuick.Controls 2.12
+import QtQuick.Controls.Material 2.12
+import QtGraphicalEffects 1.12
 
 Item {
 
@@ -40,7 +40,7 @@ Item {
 
         Label {
             id: datelineLabel
-            color: "gray"
+//            color: Material.foreground
             font.pixelSize: Qt.application.font.pixelSize * 0.66
         }
 
@@ -50,7 +50,7 @@ Item {
             source: "images/good.png"
             cache: false
         }
-        Label { id: goodLabel; color: "gray"; font.pixelSize: Qt.application.font.pixelSize * 0.66 }
+        Label { id: goodLabel; /*color: Material.foreground;*/ font.pixelSize: Qt.application.font.pixelSize * 0.66 }
 
         Image {
             height: badLabel.font.pixelSize
@@ -58,7 +58,7 @@ Item {
             source: "images/bad.png"
             cache: false
         }
-        Label { id: badLabel; color: "gray"; font.pixelSize: Qt.application.font.pixelSize * 0.66 }
+        Label { id: badLabel; /*color: Material.foreground;*/ font.pixelSize: Qt.application.font.pixelSize * 0.66 }
     }
 
     Rectangle {
@@ -118,7 +118,7 @@ Item {
                 padding: font.pixelSize / 3
                 font.bold: true
                 font.pixelSize: Qt.application.font.pixelSize * 0.9
-                color: "gray"
+//                color: Material.foreground
                 lineHeight: 1.5
             }
 
@@ -152,7 +152,7 @@ Item {
                     source: "images/good.png"
                     cache: false
                 }
-                Label { id: replygoodLabel; color: "gray"; font.pixelSize: Qt.application.font.pixelSize * 0.66 }
+                Label { id: replygoodLabel; /*color: Material.foreground;*/ font.pixelSize: Qt.application.font.pixelSize * 0.66 }
 
                 Image {
                     height: replybadLabel.font.pixelSize
@@ -160,7 +160,7 @@ Item {
                     source: "images/bad.png"
                     cache: false
                 }
-                Label { id: replybadLabel; color: "gray"; font.pixelSize: Qt.application.font.pixelSize * 0.66 }
+                Label { id: replybadLabel; /*color: Material.foreground;*/ font.pixelSize: Qt.application.font.pixelSize * 0.66 }
             }
 
             Label {
@@ -173,7 +173,7 @@ Item {
                 anchors.rightMargin: 10
                 anchors.top: reUserLabel.bottom
                 lineHeight: 1.5
-                color: "gray"
+//                color: Material.foreground
             }
         }
     }

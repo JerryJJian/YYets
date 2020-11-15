@@ -54,7 +54,7 @@ RESOURCES += qml.qrc
 TRANSLATIONS += zh_CN.ts
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
-QML_IMPORT_PATH =
+QML_IMPORT_PATH = C:/Qt/5.12.10/android_armv7/qml/
 
 # Additional import path used to resolve QML modules just for Qt Quick Designer
 QML_DESIGNER_IMPORT_PATH =
@@ -70,14 +70,20 @@ else: win32: target.path = $$PWD/../bin
 
 DISTFILES += \
     android/AndroidManifest.xml \
+    android/build.gradle \
     android/gradle/wrapper/gradle-wrapper.jar \
+    android/gradle/wrapper/gradle-wrapper.jar \
+    android/gradle/wrapper/gradle-wrapper.properties \
     android/gradlew \
+    android/gradlew \
+    android/gradlew.bat \
     android/res/values/libs.xml \
     android/build.gradle \
     android/gradle/wrapper/gradle-wrapper.properties \
-    android/gradlew.bat
+    android/gradlew.bat \
+    font/Microsoft_YaHei.ttf
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
-ANDROID_ABIS = armeabi-v7a
-
+ANDROID_EXTRA_LIBS =
+android: include(/home/jerry/Qt/Tools/Android/openssl/openssl.pri)

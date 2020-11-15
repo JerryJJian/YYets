@@ -1,7 +1,7 @@
 import QtQuick 2.11
-import QtQuick.Controls 2.13
-import QtGraphicalEffects 1.13
-import QtQuick.Controls.Material 2.13
+import QtQuick.Controls 2.12
+import QtGraphicalEffects 1.12
+import QtQuick.Controls.Material 2.12
 
 Page {
     id: root
@@ -33,6 +33,7 @@ Page {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
                 columns: (width / 120 > 5 ? 10 : 5)
+                clip: true
 
                 Repeater {
                     model: indexModel

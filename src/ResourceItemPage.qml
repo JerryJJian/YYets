@@ -1,5 +1,5 @@
-import QtQuick 2.13
-import QtQuick.Controls 2.13
+import QtQuick 2.12
+import QtQuick.Controls 2.12
 
 Page {
     title: (resourceData.data("cnname") === "" ? resourceData.data("enname") : resourceData.data("cnname"))
@@ -125,7 +125,7 @@ Page {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 height: 1
-                color: "gray"
+//                color: Material.foreground
             }
         }
     }

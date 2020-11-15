@@ -1,8 +1,8 @@
-import QtQuick 2.13
-import QtQuick.Controls 2.13
-import QtQuick.Controls.Material 2.13
-import QtQuick.Layouts 1.3
-import QtGraphicalEffects 1.13
+import QtQuick 2.12
+import QtQuick.Controls 2.12
+import QtQuick.Controls.Material 2.12
+import QtQuick.Layouts 1.12
+import QtGraphicalEffects 1.12
 
 Page {
 
@@ -111,12 +111,12 @@ Page {
                     height: authorLabel.contentHeight
                     Label {
                         id: authorLabel
-                        color: "gray"
+                        color: Material.foregroundground
                         anchors.left: parent.left
                     }
                     Label {
                         id: timeLabel
-                        color: "gray"
+//                        color: Material.foreground
                         anchors.right: parent.right
                     }
                 }
@@ -129,7 +129,7 @@ Page {
                     Label {
                         id: introLabel
                         padding: font.pixelSize
-                        color: "gray"
+//                        color: Material.foreground
                         visible: text !== ""
                         anchors.fill: parent
                         wrapMode: Text.WordWrap
@@ -316,7 +316,7 @@ Page {
                                 width: parent.width
                                 wrapMode: Text.WrapAnywhere
                                 padding: font.pixelSize / 4
-                                color: "gray"
+//                                color: Material.foreground
                                 font.pixelSize: Qt.application.font.pixelSize * 0.8
                             }
                             Label {
@@ -325,7 +325,7 @@ Page {
                                 width: parent.width
                                 wrapMode: Text.WrapAnywhere
                                 padding: font.pixelSize / 4
-                                color: "gray"
+//                                color: Material.foreground
                                 font.pixelSize: Qt.application.font.pixelSize * 0.8
                             }
                         }
@@ -422,7 +422,7 @@ Page {
                                 wrapMode: Text.WrapAnywhere
                                 padding: font.pixelSize / 4
                                 font.pixelSize: Qt.application.font.pixelSize * 0.8
-                                color: "gray"
+//                                color: Material.foreground
                             }
                         }
 

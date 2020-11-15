@@ -1,8 +1,8 @@
-import QtQuick 2.13
-import QtQuick.Controls 2.13
-import QtQuick.Controls.Material 2.13
-import QtQuick.Layouts 1.3
-import QtGraphicalEffects 1.13
+import QtQuick 2.12
+import QtQuick.Controls 2.12
+import QtQuick.Controls.Material 2.12
+import QtQuick.Layouts 1.12
+import QtGraphicalEffects 1.12
 
 Page {
 
@@ -567,7 +567,7 @@ Page {
                         width: parent.width;
                         text: pubtime;
                         font.pixelSize: Qt.application.font.pixelSize * 0.8;
-                        color: "gray"
+//                        color: Material.foreground
                     }
 
                 }

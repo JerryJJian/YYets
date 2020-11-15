@@ -1,6 +1,6 @@
-import QtQuick 2.13
-import QtQuick.Controls 2.13
-import QtQuick.Controls.Material 2.13
+import QtQuick 2.12
+import QtQuick.Controls 2.12
+import QtQuick.Controls.Material 2.12
 
 ApplicationWindow {
     id: window
@@ -25,7 +25,7 @@ ApplicationWindow {
         ToolButton {
             id: toolButton
             icon.source: stackView.depth > 1 ? "images/back.png" : "images/menu.png"
-            font.pixelSize: Qt.application.font.pixelSize * 1.6
+            font.pixelSize: Qt.application.font.pixelSize * 1.2
             onClicked: {
                 if (stackView.depth > 1) {
                     stackView.pop()

@@ -1,7 +1,7 @@
-import QtQuick 2.13
-import QtQuick.Controls 2.13
-import QtQuick.Controls.Material 2.13
-import QtGraphicalEffects 1.13
+import QtQuick 2.12
+import QtQuick.Controls 2.12
+import QtQuick.Controls.Material 2.12
+import QtGraphicalEffects 1.12
 
 Page {
     title: qsTr("Search")
@@ -170,7 +170,7 @@ Page {
                     width: parent.width;
                     text: uptime + " - " + pubtime
                     font.pixelSize: Qt.application.font.pixelSize * 0.8;
-                    color: "gray"
+//                    color: Material.foreground
                 }
 
             }

@@ -1,6 +1,6 @@
-import QtQuick 2.13
-import QtQuick.Controls 2.13
-import QtGraphicalEffects 1.13
+import QtQuick 2.12
+import QtQuick.Controls 2.12
+import QtGraphicalEffects 1.12
 
 Page {
     id: reslistpage
@@ -132,7 +132,7 @@ Page {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: cnnamelabel.bottom; anchors.topMargin: 3
                 text: enname
-                color: "gray"
+//                color: Material.foreground
                 font.pixelSize: Qt.application.font.pixelSize * 0.9
                 wrapMode: Text.WordWrap
             }

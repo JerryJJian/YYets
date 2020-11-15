@@ -1,31 +1,39 @@
+#include "articlelistitem.h"
+#include "clipboardproxy.h"
+#include "commentlistitem.h"
+#include "dataparser.h"
+#include "datarequest.h"
+#include "dataset.h"
+#include "listmodel.h"
+#include "movielistitem.h"
+#include "objectpool.h"
+#include "resitemlistitem.h"
+#include "resourcelistitem.h"
+#include "searchresourcelistitem.h"
+#include "settings.h"
+#include <QDebug>
+#include <QFont>
+#include <QFontDatabase>
 #include <QGuiApplication>
 #include <QJsonDocument>
+#include <QLocale>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QTranslator>
-#include <QLocale>
-#include "dataparser.h"
-#include "datarequest.h"
-#include "listmodel.h"
-#include "movielistitem.h"
-#include "dataset.h"
-#include "resitemlistitem.h"
-#include "articlelistitem.h"
-#include "clipboardproxy.h"
-#include "resourcelistitem.h"
-#include "searchresourcelistitem.h"
-#include "commentlistitem.h"
-#include "objectpool.h"
-#include "settings.h"
-#include <QDebug>
 
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QGuiApplication app(argc, argv);
+
+    int fontID = QFontDatabase::addApplicationFont("/system/fonts/DroidSansFallback.ttf");
+    QStringList fontFamilies(QFontDatabase::applicationFontFamilies(fontID));
+
+    if (!fontFamilies.isEmpty())
+        app.setFont(QFont(fontFamilies.at(0), app.font().pixelSize() * 1.2));
 
     QTranslator translator;
     if (translator.load(QString(":/%1.qm").arg(QLocale::system().name())))
